@@ -1,29 +1,24 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
+    "target": "es5",
+    "allowJs": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "noEmit": true,
+    "jsx": "preserve",
+    "lib": ["dom", "dom.iterable", "esnext"]
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "filesGlob": ["typings/index.d.ts", "src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["target", "dist", "node_modules", "__tests__"],
+  "typeRoots": ["./typings", "./@types", "./node_modules/@types"],
+  "types": ["node", "webpack", "react", "react-dom", "reactstrap"],
+  "include": ["src", "**/*.ts"],
+  "compileOnSave": true
 }

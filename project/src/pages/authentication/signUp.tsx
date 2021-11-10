@@ -1,6 +1,10 @@
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import * as yup from "yup";
 
+import { useRouter } from "next/router";
+
+import { useAuth } from "../../hooks/useAuth";
+
 interface SignUpFormValues {
   firstName: string;
   lastName: string;
@@ -9,6 +13,9 @@ interface SignUpFormValues {
 }
 
 export default function Login() {
+  const { signIn, user } = useAuth();
+  const router = useRouter();
+
   const initialValues: SignUpFormValues = {
     firstName: "",
     lastName: "",
@@ -35,11 +42,15 @@ export default function Login() {
       .required("Password is a required field!"),
   });
 
-  const handleSignUp = (
+  const handleSignUp = async (
     values: SignUpFormValues,
     action: FormikHelpers<SignUpFormValues>
   ) => {
-    console.log("The sign up was successfully maden!", values);
+    const response = await signIn(values);
+
+    if (!response.error && user) {
+      router.push("/");
+    }
 
     return action.resetForm();
   };
@@ -60,6 +71,10 @@ export default function Login() {
                 type="text"
                 name="firstName"
                 placeholder="Type your first name..."
+                spellCheck={false}
+                tabIndex={1}
+                required
+                aria-required
               />
               <ErrorMessage
                 className="error-message"
@@ -73,6 +88,10 @@ export default function Login() {
                 type="text"
                 name="lastName"
                 placeholder="Type your last name..."
+                spellCheck={false}
+                tabIndex={2}
+                required
+                aria-required
               />
               <ErrorMessage
                 className="error-message"
@@ -86,6 +105,10 @@ export default function Login() {
                 type="email"
                 name="email"
                 placeholder="Type your e-mail..."
+                spellCheck={false}
+                tabIndex={3}
+                required
+                aria-required
               />
               <ErrorMessage
                 className="error-message"
@@ -99,6 +122,10 @@ export default function Login() {
                 type="password"
                 name="password"
                 placeholder="Type your password..."
+                spellCheck={false}
+                tabIndex={4}
+                required
+                aria-required
               />
               <ErrorMessage
                 className="error-message"
@@ -106,7 +133,7 @@ export default function Login() {
                 component="span"
               />
             </div>
-            <button className="submit-button" type="submit">
+            <button className="submit-button" type="submit" tabIndex={5}>
               Sign Up
             </button>
           </Form>
