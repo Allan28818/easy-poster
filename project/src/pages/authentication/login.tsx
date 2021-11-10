@@ -2,6 +2,8 @@ import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import { useRouter } from "next/router";
 import * as yup from "yup";
 import { useAuth } from "../../hooks/useAuth";
+import { FcGoogle } from "react-icons/fc";
+import { GrFacebook } from "react-icons/gr";
 
 interface LoginFormValues {
   email: string;
@@ -9,7 +11,7 @@ interface LoginFormValues {
 }
 
 export default function Login() {
-  const { login, user } = useAuth();
+  const { loginWithEmailAndPassword, user } = useAuth();
   const history = useRouter();
 
   const initialValues: LoginFormValues = {
@@ -32,7 +34,7 @@ export default function Login() {
     values: LoginFormValues,
     actions: FormikHelpers<LoginFormValues>
   ) => {
-    const response = await login(values);
+    const response = await loginWithEmailAndPassword(values);
 
     if (!response.error && user) {
       history.push("/");
@@ -83,6 +85,21 @@ export default function Login() {
                 name="password"
                 component="span"
               />
+            </div>
+
+            <div className="login-options">
+              <button className="google-button">
+                <div className="google-icon">
+                  <FcGoogle />
+                </div>
+                <span>Login with Google</span>
+              </button>
+              <button className="facebook-button">
+                <div className="facebook-icon">
+                  <GrFacebook />
+                </div>
+                <span>Login with Facebook</span>
+              </button>
             </div>
 
             <button className="submit-button" type="submit" tabIndex={3}>

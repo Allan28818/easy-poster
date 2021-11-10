@@ -5,6 +5,9 @@ import { useRouter } from "next/router";
 
 import { useAuth } from "../../hooks/useAuth";
 
+import { FcGoogle } from "react-icons/fc";
+import { GrFacebook } from "react-icons/gr";
+
 interface SignUpFormValues {
   firstName: string;
   lastName: string;
@@ -13,7 +16,7 @@ interface SignUpFormValues {
 }
 
 export default function Login() {
-  const { signIn, user } = useAuth();
+  const { signUpWithEmailAndPassword, signInWithGoogle, user } = useAuth();
   const router = useRouter();
 
   const initialValues: SignUpFormValues = {
@@ -46,13 +49,21 @@ export default function Login() {
     values: SignUpFormValues,
     action: FormikHelpers<SignUpFormValues>
   ) => {
-    const response = await signIn(values);
+    const response = await signUpWithEmailAndPassword(values);
 
     if (!response.error && user) {
       router.push("/");
     }
 
     return action.resetForm();
+  };
+
+  const handleSignInWithGoogle = async () => {
+    const response = await signInWithGoogle();
+
+    if (response.user.emailVerified) {
+      router.push("/");
+    }
   };
 
   return (
@@ -132,6 +143,24 @@ export default function Login() {
                 name="password"
                 component="span"
               />
+            </div>
+
+            <div className="sign-up-options">
+              <button
+                className="google-button"
+                onClick={handleSignInWithGoogle}
+              >
+                <div className="google-icon">
+                  <FcGoogle />
+                </div>
+                <span>Sign Up with Google</span>
+              </button>
+              <button className="facebook-button">
+                <div className="facebook-icon">
+                  <GrFacebook />
+                </div>
+                <span>Sign Up with Facebook</span>
+              </button>
             </div>
             <button className="submit-button" type="submit" tabIndex={5}>
               Sign Up
