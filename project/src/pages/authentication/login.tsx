@@ -1,5 +1,7 @@
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
+import { useRouter } from "next/router";
 import * as yup from "yup";
+import { useAuth } from "../../hooks/useAuth";
 
 interface LoginFormValues {
   email: string;
@@ -7,6 +9,9 @@ interface LoginFormValues {
 }
 
 export default function Login() {
+  const { login, user } = useAuth();
+  const history = useRouter();
+
   const initialValues: LoginFormValues = {
     email: "",
     password: "",
@@ -23,11 +28,15 @@ export default function Login() {
       .required("Password is a required field!"),
   });
 
-  const handleLogin = (
+  const handleLogin = async (
     values: LoginFormValues,
     actions: FormikHelpers<LoginFormValues>
   ) => {
-    console.log("Login has been successfuly maden", values);
+    const response = await login(values);
+
+    if (!response.error && user) {
+      history.push("/");
+    }
 
     return actions.resetForm();
   };
@@ -48,6 +57,10 @@ export default function Login() {
                 type="email"
                 name="email"
                 placeholder="Type your e-mail..."
+                tabIndex={1}
+                spellCheck={false}
+                required
+                aria-required
               />
               <ErrorMessage
                 className="error-message"
@@ -61,6 +74,9 @@ export default function Login() {
                 type="password"
                 name="password"
                 placeholder="Type your password..."
+                tabIndex={2}
+                required
+                aria-required
               />
               <ErrorMessage
                 className="error-message"
@@ -69,7 +85,7 @@ export default function Login() {
               />
             </div>
 
-            <button className="submit-button" type="submit">
+            <button className="submit-button" type="submit" tabIndex={3}>
               Login
             </button>
           </Form>
