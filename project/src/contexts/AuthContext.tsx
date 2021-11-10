@@ -5,9 +5,12 @@ import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
+  UserCredential,
 } from "firebase/auth";
 
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
 import { auth, firestore } from "../services/config/firebase";
 import { UserLogin, UserSignUp } from "../models/UserModel";
@@ -20,14 +23,17 @@ interface AuthContextProps {
 interface AuthenticationUser {
   email: string | null | undefined;
   uid: string | null | undefined;
+  photoURL?: string;
+  displayName?: string;
 }
 
 interface AuthContextInt {
   user: AuthenticationUser;
-  signIn: (props: UserSignUp) => Promise<FunctionMessage>;
-  login: (props: UserLogin) => Promise<FunctionMessage>;
+  signUpWithEmailAndPassword: (props: UserSignUp) => Promise<FunctionMessage>;
+  loginWithEmailAndPassword: (props: UserLogin) => Promise<FunctionMessage>;
   resetPassword: (email: string) => Promise<FunctionMessage>;
   logOut: () => Promise<FunctionMessage>;
+  signInWithGoogle: () => Promise<UserCredential>;
 }
 
 export const AuthContext = createContext({} as AuthContextInt);
@@ -49,7 +55,38 @@ export function AuthContextProvider({ children }: AuthContextProps) {
     setLoading(false);
   }, []);
 
-  async function signIn(props: UserSignUp): Promise<FunctionMessage> {
+  async function signInWithGoogle(): Promise<UserCredential> {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+
+    if (result.user) {
+      const { displayName, photoURL, uid, email } = result.user;
+
+      if (!displayName || !photoURL) {
+        throw new Error("Error! Missing Google account information!");
+      }
+
+      await setDoc(doc(firestore, "users", uid), {
+        id: uid,
+        displayName,
+        email,
+        photoURL,
+      });
+
+      setUser({
+        uid,
+        email,
+        photoURL,
+        displayName,
+      });
+    }
+
+    return result;
+  }
+
+  async function signUpWithEmailAndPassword(
+    props: UserSignUp
+  ): Promise<FunctionMessage> {
     const { firstName, lastName, email, password } = props;
 
     try {
@@ -77,7 +114,7 @@ export function AuthContextProvider({ children }: AuthContextProps) {
     return { message: "Welcome to Easy Poster!" };
   }
 
-  async function login({
+  async function loginWithEmailAndPassword({
     email,
     password,
   }: UserLogin): Promise<FunctionMessage> {
@@ -135,7 +172,14 @@ export function AuthContextProvider({ children }: AuthContextProps) {
 
   return (
     <AuthContext.Provider
-      value={{ user, signIn, login, resetPassword, logOut }}
+      value={{
+        user,
+        signUpWithEmailAndPassword,
+        loginWithEmailAndPassword,
+        resetPassword,
+        logOut,
+        signInWithGoogle,
+      }}
     >
       {children}
     </AuthContext.Provider>
