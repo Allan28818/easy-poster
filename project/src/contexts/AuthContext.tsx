@@ -14,7 +14,10 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 
 import { auth, firestore } from "../services/config/firebase";
 import { UserLogin, UserSignUp } from "../models/UserModel";
-import { FunctionMessage } from "../models/FunctionMessage";
+import {
+  FunctionMessage,
+  popUpFunctionMessage,
+} from "../models/FunctionMessage";
 
 interface AuthContextProps {
   children: ReactNode;
@@ -33,7 +36,7 @@ interface AuthContextInt {
   loginWithEmailAndPassword: (props: UserLogin) => Promise<FunctionMessage>;
   resetPassword: (email: string) => Promise<FunctionMessage>;
   logOut: () => Promise<FunctionMessage>;
-  signInWithGoogle: () => Promise<UserCredential>;
+  signInWithGoogle: () => Promise<popUpFunctionMessage>;
 }
 
 export const AuthContext = createContext({} as AuthContextInt);
@@ -55,33 +58,46 @@ export function AuthContextProvider({ children }: AuthContextProps) {
     setLoading(false);
   }, []);
 
-  async function signInWithGoogle(): Promise<UserCredential> {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
+  async function signInWithGoogle(): Promise<popUpFunctionMessage> {
+    let result = {} as UserCredential;
+    try {
+      const provider = new GoogleAuthProvider();
+      result = await signInWithPopup(auth, provider);
 
-    if (result.user) {
-      const { displayName, photoURL, uid, email } = result.user;
+      if (result.user) {
+        const { displayName, photoURL, uid, email } = result.user;
 
-      if (!displayName || !photoURL) {
-        throw new Error("Error! Missing Google account information!");
+        if (!displayName || !photoURL) {
+          throw new Error("Error! Missing Google account information!");
+        }
+
+        await setDoc(doc(firestore, "users", uid), {
+          id: uid,
+          displayName,
+          email,
+          photoURL,
+        });
+
+        setUser({
+          uid,
+          email,
+          photoURL,
+          displayName,
+        });
       }
-
-      await setDoc(doc(firestore, "users", uid), {
-        id: uid,
-        displayName,
-        email,
-        photoURL,
-      });
-
-      setUser({
-        uid,
-        email,
-        photoURL,
-        displayName,
-      });
+    } catch (error: any) {
+      return {
+        result: null,
+        message: "It wasn't possible to finish the pop-up operation",
+        error,
+        errorCode: error.code,
+        errorMessage: error.message,
+      };
     }
-
-    return result;
+    return {
+      result,
+      message: "The pop-up authetication was successfully finished!",
+    };
   }
 
   async function signUpWithEmailAndPassword(
@@ -106,8 +122,8 @@ export function AuthContextProvider({ children }: AuthContextProps) {
       return {
         message: "It wasn't possible to sign the user up!",
         error: error,
-        errorCode: error.errorCode,
-        errorMessage: error.errorMessage,
+        errorCode: error.code,
+        errorMessage: error.message,
       };
     }
 
@@ -124,8 +140,8 @@ export function AuthContextProvider({ children }: AuthContextProps) {
       return {
         message: "It wasn't possible to login the user!",
         error: error,
-        errorCode: error.errorCode,
-        errorMessage: error.errorMessage,
+        errorCode: error.code,
+        errorMessage: error.message,
       };
     }
 
@@ -139,8 +155,8 @@ export function AuthContextProvider({ children }: AuthContextProps) {
       return {
         message: "It wasn't possible to send the reset password request!",
         error: error,
-        errorCode: error.errorCode,
-        errorMessage: error.errorMessage,
+        errorCode: error.code,
+        errorMessage: error.message,
       };
     }
 
@@ -154,8 +170,8 @@ export function AuthContextProvider({ children }: AuthContextProps) {
       return {
         message: "It wasn't possible to log the user out!",
         error: error,
-        errorCode: error.errorCode,
-        errorMessage: error.errorMessage,
+        errorCode: error.code,
+        errorMessage: error.message,
       };
     }
 
