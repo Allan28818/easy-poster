@@ -4,6 +4,7 @@ import * as yup from "yup";
 import { useAuth } from "../../hooks/useAuth";
 import { FcGoogle } from "react-icons/fc";
 import { GrFacebook } from "react-icons/gr";
+import { useState } from "react";
 
 interface LoginFormValues {
   email: string;
@@ -13,6 +14,9 @@ interface LoginFormValues {
 export default function Login() {
   const { loginWithEmailAndPassword, user } = useAuth();
   const history = useRouter();
+  const [failedOperationMessage, setFailedOperationMessage] = useState<
+    string | undefined
+  >("");
 
   const initialValues: LoginFormValues = {
     email: "",
@@ -38,6 +42,9 @@ export default function Login() {
 
     if (!response.error && user) {
       history.push("/");
+    } else {
+      console.error(response);
+      setFailedOperationMessage(response?.message);
     }
 
     return actions.resetForm();
@@ -47,6 +54,11 @@ export default function Login() {
     <>
       <div className="form-wrapper">
         <h1>Login</h1>
+        {failedOperationMessage && (
+          <div className="operation-failed-wrapper">
+            <span>{failedOperationMessage}</span>
+          </div>
+        )}
         <Formik
           initialValues={initialValues}
           onSubmit={handleLogin}

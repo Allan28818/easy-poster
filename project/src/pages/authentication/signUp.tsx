@@ -60,8 +60,9 @@ export default function Login() {
 
   const handleSignInWithGoogle = async () => {
     const response = await signInWithGoogle();
+    console.log("response", response);
 
-    if (response.user.emailVerified) {
+    if (response.result?.user.emailVerified) {
       router.push("/");
     }
   };
