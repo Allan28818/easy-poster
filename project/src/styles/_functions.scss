@@ -1,0 +1,4 @@
+@function convertToRem($valueToConvert) {
+  $valueToReturn: $valueToConvert / 16;
+  @return $valueToReturn;
+}
