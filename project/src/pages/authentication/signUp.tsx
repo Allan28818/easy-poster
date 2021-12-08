@@ -16,8 +16,13 @@ interface SignUpFormValues {
 }
 
 export default function Login() {
-  const { signUpWithEmailAndPassword, signInWithGoogle, user } = useAuth();
-  const router = useRouter();
+  const {
+    signUpWithEmailAndPassword,
+    signInWithGoogle,
+    signInWithFacebook,
+    user,
+  } = useAuth();
+  const history = useRouter();
 
   const initialValues: SignUpFormValues = {
     firstName: "",
@@ -52,7 +57,7 @@ export default function Login() {
     const response = await signUpWithEmailAndPassword(values);
 
     if (!response.error && user) {
-      router.push("/");
+      history.push("/");
     }
 
     return action.resetForm();
@@ -60,10 +65,17 @@ export default function Login() {
 
   const handleSignInWithGoogle = async () => {
     const response = await signInWithGoogle();
-    console.log("response", response);
 
     if (response.result?.user.emailVerified) {
-      router.push("/");
+      history.push("/");
+    }
+  };
+
+  const handleSignInWithFacebook = async () => {
+    const response = await signInWithFacebook();
+    console.log(response);
+    if (response.result?.user) {
+      history.push("/");
     }
   };
 
@@ -156,7 +168,10 @@ export default function Login() {
                 </div>
                 <span>Sign Up with Google</span>
               </button>
-              <button className="facebook-button">
+              <button
+                className="facebook-button"
+                onClick={handleSignInWithFacebook}
+              >
                 <div className="facebook-icon">
                   <GrFacebook />
                 </div>
