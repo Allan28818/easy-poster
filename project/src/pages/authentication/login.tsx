@@ -12,7 +12,12 @@ interface LoginFormValues {
 }
 
 export default function Login() {
-  const { loginWithEmailAndPassword, signInWithGoogle, user } = useAuth();
+  const {
+    loginWithEmailAndPassword,
+    signInWithGoogle,
+    signInWithFacebook,
+    user,
+  } = useAuth();
   const history = useRouter();
   const [failedOperationMessage, setFailedOperationMessage] = useState<
     string | undefined
@@ -54,6 +59,14 @@ export default function Login() {
     const response = await signInWithGoogle();
 
     if (response.result?.user.emailVerified) {
+      history.push("/");
+    }
+  };
+
+  const handleSignInWithFacebook = async () => {
+    const response = await signInWithFacebook();
+    console.log(response);
+    if (response.result?.user.email) {
       history.push("/");
     }
   };
@@ -117,7 +130,10 @@ export default function Login() {
                 </div>
                 <span>Login with Google</span>
               </button>
-              <button className="facebook-button">
+              <button
+                className="facebook-button"
+                onClick={handleSignInWithFacebook}
+              >
                 <div className="facebook-icon">
                   <GrFacebook />
                 </div>
