@@ -27,6 +27,8 @@ import {
   popUpFunctionMessage,
 } from "../models/FunctionMessage";
 
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+
 interface AuthContextProps {
   children: ReactNode;
 }
@@ -233,7 +235,9 @@ export function AuthContextProvider({ children }: AuthContextProps) {
   if (loading) {
     return (
       <>
-        <h1>Carregando</h1>
+        <div className="loadingWrapper">
+          <AiOutlineLoading3Quarters className="loadingIcon" />
+        </div>
       </>
     );
   }

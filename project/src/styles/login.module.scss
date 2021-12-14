@@ -1,7 +1,7 @@
 @import "./functions";
 @import "./_variables.scss";
 
-.form-wrapper {
+.formWrapper {
   width: auto;
   min-width: convertToRem(250rem);
   max-width: convertToRem(750rem);
@@ -24,7 +24,7 @@
     cursor: default;
   }
 
-  .operation-failed-wrapper {
+  .operationFailedWrapper {
     font-size: convertToRem(15.5rem);
     font-weight: normal;
     font-family: "Roboto Mono", monospace;
@@ -32,7 +32,7 @@
     display: flex;
   }
 
-  .submit-button {
+  .submitButton {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -54,18 +54,18 @@
     margin-top: 5%;
   }
 
-  .submit-button:hover {
+  .submitButton:hover {
     box-shadow: 0px 2.5px 10px 0px $black-transparent;
     opacity: 0.8;
   }
 
-  .submit-button:active {
+  .submitButton:active {
     color: $blue-cyanite;
     background: $white-anti-flash;
   }
 }
 
-.input-wrapper {
+.inputWrapper {
   label {
     display: block;
     font-size: clamp(convertToRem(15.5rem), 45.5%, convertToRem(25.5rem));
@@ -104,7 +104,7 @@
     border: 1px solid $blue-light;
   }
 
-  .error-message {
+  .errorMessage {
     font-size: clamp(convertToRem(16rem), 50%, convertToRem(30rem));
     font-family: "Roboto Mono", monospace;
     font-weight: normal;
@@ -113,7 +113,7 @@
   }
 }
 
-.login-options {
+.loginOptions {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -145,34 +145,34 @@
     opacity: 0.7;
   }
 
-  .google-button {
+  .googleButton {
     color: $gray-peace;
     background: $white-anti-flash;
-    .google-icon {
+    .googleIcon {
       font-size: clamp(convertToRem(30rem), 45%, convertToRem(55rem));
     }
   }
 
-  .google-button:active {
+  .googleButton:active {
     color: white;
     background: $gray-peace;
-    .google-icon {
+    .googleIcon {
       opacity: 0.7;
     }
   }
 
-  .facebook-button {
+  .facebookButton {
     color: white;
     background: $blue-light;
-    .facebook-icon {
+    .facebookIcon {
       font-size: clamp(convertToRem(30rem), 45%, convertToRem(55rem));
     }
   }
 
-  .facebook-button:active {
+  .facebookButton:active {
     color: $blue-light;
     background: white;
-    .facebook-icon {
+    .facebookIcon {
       color: $blue-light;
     }
   }

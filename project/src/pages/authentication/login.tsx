@@ -6,6 +6,8 @@ import { FcGoogle } from "react-icons/fc";
 import { GrFacebook } from "react-icons/gr";
 import { useState } from "react";
 
+import styles from "../../styles/login.module.scss";
+
 interface LoginFormValues {
   email: string;
   password: string;
@@ -73,10 +75,10 @@ export default function Login() {
 
   return (
     <>
-      <div className="form-wrapper">
+      <div className={styles.formWrapper}>
         <h1>Login</h1>
         {failedOperationMessage && (
-          <div className="operation-failed-wrapper">
+          <div className={styles.operationFailedWrapper}>
             <span>{failedOperationMessage}</span>
           </div>
         )}
@@ -86,7 +88,7 @@ export default function Login() {
           validationSchema={schema}
         >
           <Form>
-            <div className="input-wrapper">
+            <div className={styles.inputWrapper}>
               <label htmlFor="email">Email</label>
               <Field
                 type="email"
@@ -98,12 +100,12 @@ export default function Login() {
                 aria-required
               />
               <ErrorMessage
-                className="error-message"
+                className={styles.errorMessage}
                 name="email"
                 component="span"
               />
             </div>
-            <div className="input-wrapper">
+            <div className={styles.inputWrapper}>
               <label htmlFor="password">Password</label>
               <Field
                 type="password"
@@ -114,34 +116,34 @@ export default function Login() {
                 aria-required
               />
               <ErrorMessage
-                className="error-message"
+                className={styles.errorMessage}
                 name="password"
                 component="span"
               />
             </div>
 
-            <div className="login-options">
+            <div className={styles.loginOptions}>
               <button
-                className="google-button"
+                className={styles.googleButton}
                 onClick={handleSignInWithGoogle}
               >
-                <div className="google-icon">
+                <div className={styles.googleIcon}>
                   <FcGoogle />
                 </div>
                 <span>Login with Google</span>
               </button>
               <button
-                className="facebook-button"
+                className={styles.facebookButton}
                 onClick={handleSignInWithFacebook}
               >
-                <div className="facebook-icon">
+                <div className={styles.facebookIcon}>
                   <GrFacebook />
                 </div>
                 <span>Login with Facebook</span>
               </button>
             </div>
 
-            <button className="submit-button" type="submit" tabIndex={3}>
+            <button className={styles.submitButton} type="submit" tabIndex={3}>
               Login
             </button>
           </Form>
