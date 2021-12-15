@@ -16,6 +16,7 @@ import {
   FacebookAuthProvider,
   signInWithPopup,
   UserCredential,
+  updateProfile,
 } from "firebase/auth";
 
 import { doc, setDoc } from "firebase/firestore";
@@ -62,6 +63,7 @@ export function AuthContextProvider({ children }: AuthContextProps) {
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       setUser({
+        displayName: user?.displayName,
         email: user?.email,
         uid: user?.uid,
       });
@@ -165,6 +167,8 @@ export function AuthContextProvider({ children }: AuthContextProps) {
         email,
         password
       );
+
+      updateProfile(user, { displayName: `${firstName} ${lastName}` });
 
       await setDoc(doc(firestore, "users", user.uid), {
         id: user.uid,

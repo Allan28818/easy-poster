@@ -1,26 +1,25 @@
-@import "./functions";
-@import "./_variables.scss";
+@import "../functions";
+@import "../variables";
 
 .formWrapper {
-  width: auto;
   min-width: convertToRem(250rem);
   max-width: convertToRem(750rem);
   height: auto;
   min-height: convertToRem(300rem);
   max-height: convertToRem(650rem);
   padding: convertToRem(20rem);
-  border: convertToRem(2.5rem) solid $blue-free-speech;
+  border: convertToRem(2.5rem) solid $orange-synthetic-pumpkin;
   border-radius: convertToRem(20rem);
   margin: auto;
 
   h1 {
-    font-family: "Baloo", sans-serif;
+    font-family: "Baloo Bhaijaan 2", sans-serif;
     font-size: clamp(convertToRem(25rem), 70%, convertToRem(50rem));
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: $blue-dark-periwinkle;
+    color: $orange-synthetic-pumpkin;
     cursor: default;
   }
 
@@ -43,7 +42,7 @@
     max-height: convertToRem(45rem);
     border-radius: convertToRem(30rem);
     font-size: clamp(convertToRem(17.5rem), 45.5%, convertToRem(55rem));
-    font-family: "Baloo", sans-serif;
+    font-family: "Baloo Bhaijaan 2", sans-serif;
     font-weight: bolder;
     color: $white-anti-flash;
     background: $blue-cyanite;
@@ -62,6 +61,31 @@
   .submitButton:active {
     color: $blue-cyanite;
     background: $white-anti-flash;
+  }
+
+  .link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(convertToRem(17.5rem), 45%, convertToRem(25rem));
+    font-family: "Robot Mono", monospace;
+    color: $gray-peace;
+    margin-top: 3%;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .link:hover {
+    text-decoration: underline;
+    color: $blue-cyanite;
+  }
+  .description {
+    font-size: clamp(convertToRem(16rem), 50%, convertToRem(30rem));
+    font-family: "Baloo Bhaijaan 2", sans-serif;
+    font-weight: normal;
+    color: $black-pearl;
+    cursor: default;
   }
 }
 
@@ -83,7 +107,7 @@
     background: $blue-coastal-breeze;
     border-radius: convertToRem(25rem);
     font-size: clamp(convertToRem(13.5rem), 40%, convertToRem(27.5rem));
-    font-family: "Baloo", sans-serif;
+    font-family: "Baloo Bhaijaan 2", sans-serif;
     font-weight: normal;
     color: $blue-deep-koamaru;
     padding: convertToRem(10rem);
@@ -113,7 +137,7 @@
   }
 }
 
-.loginOptions {
+.signUpOptions {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -129,7 +153,7 @@
     align-items: center;
     justify-content: center;
     font-size: clamp(convertToRem(15rem), 30%, convertToRem(20rem));
-    font-family: "Baloo", sans-serif;
+    font-family: "Baloo Bhaijaan 2", sans-serif;
     font-weight: bolder;
     cursor: pointer;
     border-radius: convertToRem(7.5rem);
