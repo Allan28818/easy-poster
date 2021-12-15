@@ -2,33 +2,31 @@ import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import * as yup from "yup";
 
 import { useRouter } from "next/router";
+import { useAuth } from "../../../hooks/useAuth";
+import { useState } from "react";
 
-import { useAuth } from "../../hooks/useAuth";
+import Link from "next/link";
 
 import { FcGoogle } from "react-icons/fc";
 import { GrFacebook } from "react-icons/gr";
 
+import styles from "../../../styles/authentication/sign-up.module.scss";
+
 interface SignUpFormValues {
   firstName: string;
   lastName: string;
-  email: string;
-  password: string;
 }
 
-export default function Login() {
-  const {
-    signUpWithEmailAndPassword,
-    signInWithGoogle,
-    signInWithFacebook,
-    user,
-  } = useAuth();
+export default function SignUp() {
+  const { signInWithGoogle, signInWithFacebook, user } = useAuth();
   const history = useRouter();
+  const [failedOperationMessage, setFailedOperationMessage] = useState<
+    string | undefined
+  >("");
 
   const initialValues: SignUpFormValues = {
     firstName: "",
     lastName: "",
-    email: "",
-    password: "",
   };
 
   const schema = yup.object().shape({
@@ -40,24 +38,17 @@ export default function Login() {
       .string()
       .min(3, "Your last name must contain at least 3 characters")
       .required("Last name is a required field!"),
-    email: yup
-      .string()
-      .email("Type a valid e-mail!")
-      .required("E-mail is a required field!"),
-    password: yup
-      .string()
-      .min(8, "Your passwrod must contain at least 8 characters!")
-      .required("Password is a required field!"),
   });
 
   const handleSignUp = async (
     values: SignUpFormValues,
     action: FormikHelpers<SignUpFormValues>
   ) => {
-    const response = await signUpWithEmailAndPassword(values);
-
-    if (!response.error && user) {
-      history.push("/");
+    if (values) {
+      history.push({
+        pathname: "/authentication/step2/signUp",
+        query: { firstName: values.firstName, lastName: values.lastName },
+      });
     }
 
     return action.resetForm();
@@ -68,6 +59,7 @@ export default function Login() {
 
     if (response.result?.user.emailVerified) {
       history.push("/");
+      setFailedOperationMessage(response?.message);
     }
   };
 
@@ -76,20 +68,27 @@ export default function Login() {
     console.log(response);
     if (response.result?.user) {
       history.push("/");
+    } else {
+      setFailedOperationMessage(response?.message);
     }
   };
 
   return (
     <>
-      <div className="form-wrapper">
+      <div className={styles.formWrapper}>
         <h1>Sign Up</h1>
+        {failedOperationMessage && (
+          <div className={styles.operationFailedWrapper}>
+            <span>{failedOperationMessage}</span>
+          </div>
+        )}
         <Formik
           initialValues={initialValues}
           onSubmit={handleSignUp}
           validationSchema={schema}
         >
           <Form>
-            <div className="input-wrapper">
+            <div className={styles.inputWrapper}>
               <label htmlFor="firstName">First Name</label>
               <Field
                 type="text"
@@ -98,15 +97,16 @@ export default function Login() {
                 spellCheck={false}
                 tabIndex={1}
                 required
+                autoComplete="off"
                 aria-required
               />
               <ErrorMessage
-                className="error-message"
+                className={styles.errorMessage}
                 name="firstName"
                 component="span"
               />
             </div>
-            <div className="input-wrapper">
+            <div className={styles.inputWrapper}>
               <label htmlFor="lastName">Last Name</label>
               <Field
                 type="text"
@@ -115,71 +115,45 @@ export default function Login() {
                 spellCheck={false}
                 tabIndex={2}
                 required
+                autoComplete="off"
                 aria-required
               />
               <ErrorMessage
-                className="error-message"
+                className={styles.errorMessage}
                 name="lastName"
                 component="span"
               />
             </div>
-            <div className="input-wrapper">
-              <label htmlFor="email">E-mail</label>
-              <Field
-                type="email"
-                name="email"
-                placeholder="Type your e-mail..."
-                spellCheck={false}
-                tabIndex={3}
-                required
-                aria-required
-              />
-              <ErrorMessage
-                className="error-message"
-                name="email"
-                component="span"
-              />
-            </div>
-            <div className="input-wrapper">
-              <label htmlFor="password">Password</label>
-              <Field
-                type="password"
-                name="password"
-                placeholder="Type your password..."
-                spellCheck={false}
-                tabIndex={4}
-                required
-                aria-required
-              />
-              <ErrorMessage
-                className="error-message"
-                name="password"
-                component="span"
-              />
-            </div>
 
-            <div className="sign-up-options">
+            <div className={styles.signUpOptions}>
               <button
-                className="google-button"
+                className={styles.googleButton}
                 onClick={handleSignInWithGoogle}
               >
-                <div className="google-icon">
+                <div className={styles.googleIcon}>
                   <FcGoogle />
                 </div>
                 <span>Sign Up with Google</span>
               </button>
               <button
-                className="facebook-button"
+                className={styles.facebookButton}
                 onClick={handleSignInWithFacebook}
               >
-                <div className="facebook-icon">
+                <div className={styles.facebookIcon}>
                   <GrFacebook />
                 </div>
                 <span>Sign Up with Facebook</span>
               </button>
             </div>
-            <button className="submit-button" type="submit" tabIndex={5}>
-              Sign Up
+
+            <Link href={"/authentication/login"}>
+              <span className={styles.link}>
+                Do you already have an account?{" "}
+              </span>
+            </Link>
+
+            <button className={styles.submitButton} type="submit" tabIndex={5}>
+              Next
             </button>
           </Form>
         </Formik>

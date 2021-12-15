@@ -1,0 +1,197 @@
+@import "../functions";
+@import "../_variables.scss";
+
+.formWrapper {
+  width: auto;
+  min-width: convertToRem(250rem);
+  max-width: convertToRem(750rem);
+  height: auto;
+  min-height: convertToRem(300rem);
+  max-height: convertToRem(650rem);
+  padding: convertToRem(20rem);
+  border: convertToRem(2.5rem) solid $blue-free-speech;
+  border-radius: convertToRem(20rem);
+  margin: auto;
+
+  h1 {
+    font-family: "Baloo Bhaijaan 2", sans-serif;
+    font-size: clamp(convertToRem(25rem), 70%, convertToRem(50rem));
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $blue-dark-periwinkle;
+    cursor: default;
+  }
+
+  .operationFailedWrapper {
+    font-size: convertToRem(15.5rem);
+    font-weight: normal;
+    font-family: "Roboto Mono", monospace;
+    color: $orange-sunset;
+    display: flex;
+  }
+
+  .submitButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    width: 50%;
+    height: auto;
+    min-height: convertToRem(30rem);
+    max-height: convertToRem(45rem);
+    border-radius: convertToRem(30rem);
+    font-size: clamp(convertToRem(17.5rem), 45.5%, convertToRem(55rem));
+    font-family: "Baloo Bhaijaan 2", sans-serif;
+    font-weight: bolder;
+    color: $white-anti-flash;
+    background: $blue-cyanite;
+    cursor: pointer;
+    box-shadow: 0px 2.5px 5px 0px $black-transparent;
+    transition: all 0.5s ease;
+    padding: convertToRem(20rem);
+    margin-top: 5%;
+  }
+
+  .submitButton:hover {
+    box-shadow: 0px 2.5px 10px 0px $black-transparent;
+    opacity: 0.8;
+  }
+
+  .submitButton:active {
+    color: $blue-cyanite;
+    background: $white-anti-flash;
+  }
+
+  .link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(convertToRem(17.5rem), 45%, convertToRem(25rem));
+    font-family: "Robot Mono", monospace;
+    color: $gray-peace;
+    margin-top: 3%;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .link:hover {
+    text-decoration: underline;
+    color: $blue-cyanite;
+  }
+}
+
+.inputWrapper {
+  label {
+    display: block;
+    font-size: clamp(convertToRem(15.5rem), 45.5%, convertToRem(25.5rem));
+    font-family: "Fira Sans", sans-serif;
+    color: $black-pearl;
+    font-weight: normal;
+  }
+
+  input {
+    width: 100%;
+    height: convertToRem(35rem);
+    border: none;
+    margin-top: 1.5%;
+    margin-bottom: 2.5%;
+    background: $blue-coastal-breeze;
+    border-radius: convertToRem(25rem);
+    font-size: clamp(convertToRem(13.5rem), 40%, convertToRem(27.5rem));
+    font-family: "Baloo Bhaijaan 2", sans-serif;
+    font-weight: normal;
+    color: $blue-deep-koamaru;
+    padding: convertToRem(10rem);
+    transition: all 0.4s ease;
+  }
+
+  input:focus {
+    border-radius: 15px 15px 0 0;
+    border-bottom: convertToRem(2rem) solid $blue-free-speech;
+  }
+
+  input:hover {
+    opacity: 0.7;
+  }
+
+  input:active {
+    color: $blue-light;
+    border: 1px solid $blue-light;
+  }
+
+  .errorMessage {
+    font-size: clamp(convertToRem(16rem), 50%, convertToRem(30rem));
+    font-family: "Roboto Mono", monospace;
+    font-weight: normal;
+    color: $orange-sunset;
+    cursor: default;
+  }
+}
+
+.loginOptions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  button {
+    width: auto;
+    min-width: convertToRem(100rem);
+    max-width: convertToRem(320rem);
+    height: auto;
+    max-height: convertToRem(30rem);
+    padding: convertToRem(30rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(convertToRem(15rem), 30%, convertToRem(20rem));
+    font-family: "Baloo Bhaijaan 2", sans-serif;
+    font-weight: bolder;
+    cursor: pointer;
+    border-radius: convertToRem(7.5rem);
+    box-shadow: 0px 2.5px 5px 0px $black-transparent;
+    transition: all 0.5s ease;
+
+    span {
+      margin-left: convertToRem(20rem);
+    }
+  }
+
+  button:hover {
+    opacity: 0.7;
+  }
+
+  .googleButton {
+    color: $gray-peace;
+    background: $white-anti-flash;
+    .googleIcon {
+      font-size: clamp(convertToRem(30rem), 45%, convertToRem(55rem));
+    }
+  }
+
+  .googleButton:active {
+    color: white;
+    background: $gray-peace;
+    .googleIcon {
+      opacity: 0.7;
+    }
+  }
+
+  .facebookButton {
+    color: white;
+    background: $blue-light;
+    .facebookIcon {
+      font-size: clamp(convertToRem(30rem), 45%, convertToRem(55rem));
+    }
+  }
+
+  .facebookButton:active {
+    color: $blue-light;
+    background: white;
+    .facebookIcon {
+      color: $blue-light;
+    }
+  }
+}

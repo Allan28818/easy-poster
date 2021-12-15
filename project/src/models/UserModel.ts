@@ -1,6 +1,6 @@
 export interface UserSignUp {
-  firstName: string;
-  lastName: string;
+  firstName: string | string[] | undefined;
+  lastName: string | string[] | undefined;
   email: string;
   password: string;
 }
