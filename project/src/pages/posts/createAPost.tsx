@@ -1,7 +1,8 @@
 export default function Login() {
   return (
     <>
-      <h1>Create a post</h1>
+      <input type="text" defaultValue="Type your title" />
+      <div id="post-body"></div>
     </>
   );
 }

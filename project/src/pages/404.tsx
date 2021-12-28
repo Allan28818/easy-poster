@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import styles from "../styles/404.module.scss";
 
-export default function NotFound() {
+export default function Custom404() {
   const router = useRouter();
 
   return (

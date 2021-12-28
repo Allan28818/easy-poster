@@ -14,8 +14,6 @@ import styles from "../styles/home.module.scss";
 function Home() {
   const { user } = useAuth();
 
-  console.log(user);
-
   return (
     <>
       <Head>
