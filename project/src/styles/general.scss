@@ -9,6 +9,16 @@
   outline: none;
 }
 
+.hidden {
+  position: absolute;
+  top: -100%;
+  opacity: 0;
+}
+
+button:disabled {
+  opacity: 0.7;
+}
+
 .loadingWrapper {
   display: block;
   align-items: center;
