@@ -1,5 +1,168 @@
-div {
+@import "./functions";
+@import "./variables";
+
+.header {
+  width: auto;
+  min-width: 100%;
+  height: auto;
+  min-height: convertToRem(120rem);
+  max-height: convertToRem(250rem);
+  padding: convertToRem(10rem);
+  background: $blue-merachant-marine-transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  backdrop-filter: blur(4px);
+
   .title {
-    color: blue;
+    font-size: clamp(130%, convertToRem(230rem), 190%);
+    width: auto;
+    max-width: 19%;
+    font-family: "Baloo Bhaijaan 2", sans-serif;
+    color: $blue-coastal-breeze;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    margin-top: convertToRem(15rem);
+    cursor: default;
+  }
+
+  .addPostButton {
+    width: auto;
+    min-width: convertToRem(50rem);
+    max-width: convertToRem(350rem);
+    height: auto;
+    min-height: convertToRem(30rem);
+    max-height: convertToRem(50rem);
+    padding: clamp(1%, convertToRem(0.5rem), 3%);
+    font-size: clamp(80%, convertToRem(90rem), 110%);
+    font-family: "Roboto", sans-serif;
+    font-weight: bolder;
+    border: none;
+    display: flex;
+    align-items: center;
+    margin-inline-start: auto;
+    border-radius: convertToRem(70rem);
+    position: absolute;
+    right: 1%;
+    top: 10%;
+    background: $white-anti-flash;
+    color: #1e272e;
+    transition: 0.4s;
+    cursor: pointer;
+
+    div {
+      width: auto;
+      min-width: 100%;
+      display: flex;
+      padding: convertToRem(10rem);
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .addIcon {
+      font-size: clamp(90%, convertToRem(120rem), 150%);
+      width: auto;
+      height: auto;
+    }
+
+    &:hover {
+      color: $blue-cyanite;
+      box-shadow: 0px 0px 10px 5px $black-transparent;
+    }
+  }
+}
+
+.container {
+  width: 100%;
+  height: auto;
+  margin-top: clamp(17.5%, convertToRem(40rem), 45%);
+
+  h3 {
+    display: flex;
+    align-items: center;
+    font-size: clamp(80%, convertToRem(150rem), 160%);
+    font-family: "Fira Sans", sans-serif;
+    margin-left: 23%;
+    cursor: default;
+  }
+
+  .postsWrapper {
+    width: auto;
+    min-width: convertToRem(250rem);
+    max-width: convertToRem(850rem);
+    height: auto;
+    min-height: convertToRem(300rem);
+    max-height: convertToRem(450rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    padding: convertToRem(10rem);
+    border-radius: convertToRem(20rem);
+    background: $purple-periwinkle;
+    border: 5px dashed $blue-light;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    a {
+      display: flex;
+      color: $white-anti-flash;
+      text-decoration: none;
+    }
+
+    font-size: clamp(80%, convertToRem(110rem), 120%);
+    font-family: "Fira Sans", sans-serif;
+
+    .addIcon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      margin-right: 0.5rem;
+      font-weight: bolder;
+      font-size: clamp(100%, convertToRem(150rem), 200%);
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@media (max-width: 411px) {
+  .header {
+    .title {
+      margin-top: clamp(15%, convertToRem(60rem), 35%);
+      width: 100%;
+      min-width: 100%;
+      height: auto;
+      font-size: clamp(100%, convertToRem(190rem), 200%);
+    }
+  }
+  .container {
+    width: 100%;
+    height: auto;
+    padding-top: 0.25rem;
+    margin-top: clamp(45%, convertToRem(65rem), 75%);
+  }
+}
+
+@media (max-width: 670px) {
+  .header {
+    .title {
+      margin-top: clamp(15%, convertToRem(50rem), 25%);
+      width: 100%;
+      min-width: 100%;
+      height: auto;
+      font-size: clamp(100%, convertToRem(190rem), 200%);
+    }
+  }
+  .container {
+    width: 100%;
+    height: auto;
+    margin-top: clamp(40%, convertToRem(90rem), 90%);
   }
 }
