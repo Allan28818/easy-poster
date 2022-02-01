@@ -11,6 +11,7 @@ import { FcGoogle } from "react-icons/fc";
 import { GrFacebook } from "react-icons/gr";
 
 import styles from "../../../styles/authentication/sign-up.module.scss";
+import { GetStaticProps } from "next";
 
 interface SignUpFormValues {
   email: string;
@@ -176,3 +177,9 @@ export default function SignUp2() {
     </>
   );
 }
+export const getStaticProps: GetStaticProps = (context) => {
+  return {
+    props: {},
+    revalidate: 60 * 60 * 24,
+  };
+};
