@@ -1,6 +1,7 @@
 const path = require("path");
 
 module.exports = {
+  trailingSlash: true,
   eslint: {
     ignoreDuringBuilds: true,
   },

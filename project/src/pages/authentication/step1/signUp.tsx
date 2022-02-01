@@ -1,4 +1,6 @@
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
+
+import { GetStaticProps } from "next";
 import * as yup from "yup";
 
 import { useRouter } from "next/router";
@@ -161,3 +163,10 @@ export default function SignUp() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = (context) => {
+  return {
+    props: {},
+    revalidate: 60 * 60 * 24,
+  };
+};

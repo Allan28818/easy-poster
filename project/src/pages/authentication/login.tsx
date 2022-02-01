@@ -11,6 +11,7 @@ import { FcGoogle } from "react-icons/fc";
 import { GrFacebook } from "react-icons/gr";
 
 import styles from "../../styles/authentication/login.module.scss";
+import { GetStaticProps } from "next";
 
 interface LoginFormValues {
   email: string;
@@ -164,3 +165,10 @@ export default function Login() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = (context) => {
+  return {
+    props: {},
+    revalidate: 60 * 60 * 24,
+  };
+};
