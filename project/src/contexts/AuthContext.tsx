@@ -100,6 +100,7 @@ export function AuthContextProvider({ children }: AuthContextProps) {
         });
       }
     } catch (error: any) {
+      console.log(error);
       return {
         result: null,
         message: "It wasn't possible to finish the pop-up operation",

@@ -57,6 +57,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.9.2":
+  version "7.16.7"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.16.7.tgz#03ff99f64106588c9c403c6ecb8c3bafbbdff1fa"
+  integrity sha512-9E9FJowqAsytyOY6LG+1KuueckRL+aQW+mKvXRXnuFGyRAyepJPmEo9vgMfXUA6O9u3IeEdv9MAkppFcaQwogQ==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/types@7.15.0":
   version "7.15.0"
   resolved "https://registry.npmjs.org/@babel/types/-/types-7.15.0.tgz"
@@ -451,6 +458,93 @@
   version "0.6.0"
   resolved "https://registry.npmjs.org/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.6.0.tgz"
   integrity sha512-Pz4+7HPzKvOFI1ICQ6pyUv/VgStEWq9IGiVaaV1cQLi66NIA1mD5INnY4CDNoVAxlkuZvDEUZ+cVHLQ8iwA2hQ==
+
+"@froalacharts/charts@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@froalacharts/charts/-/charts-1.0.0.tgz#d5b43ea9ee3ff6a104d9f6b0dcc0abc5af0ebf2f"
+  integrity sha512-YMbQOm2rx5h8+bLtIEMPMs4xM+QLCVxjkCL9nPakdxBlTZi2TggC+vM3UGZ6CajAX9p07MFiuKdyM/t+KjYNKw==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@froalacharts/core" "^1.0.0"
+    "@froalacharts/features" "^1.0.0"
+    "@froalacharts/utils" "^1.0.0"
+
+"@froalacharts/constructor@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@froalacharts/constructor/-/constructor-1.0.0.tgz#dd7ca09115be3d3bd914932a786546351d80af87"
+  integrity sha512-8k03GsNoCGFA9aPYukg09E+aGwJXarMe3VBA6slLRP97//UiuFJfu5WlOatzJk40LNHP8DluKIZznBg+BB/tmw==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@froalacharts/core" "^1.0.0"
+
+"@froalacharts/core@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@froalacharts/core/-/core-1.0.0.tgz#d6f854b4dce2167b460b2d2794d790122bd257d8"
+  integrity sha512-2cz9o9oxiafJtIres5rhx4GAUonWudq29wLDBPBK4JDefMy3sB5wcJJGRHvjISerTJU4hiLpi1hpAMpqy5kfQQ==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@froalacharts/utils" "^1.0.0"
+    core-js "^3.0.1"
+    ramda "^0.25.0"
+
+"@froalacharts/datatable@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@froalacharts/datatable/-/datatable-1.0.0.tgz#e0a221704c903a43588cd199ed8f8c939276328d"
+  integrity sha512-8mHbOlQ9CHoFi7n54ZPbtJ4ZBRYAGPkmV4gKDSQbkc7gtj7YU633cIkJsl/F8DgONQbLjk7c1nNF9Dln0OB20g==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@froalacharts/utils" "^1.0.0"
+
+"@froalacharts/features@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@froalacharts/features/-/features-1.0.0.tgz#5c63170e4a9e53ed5c3b59d3aa9b5ed1a835d7d8"
+  integrity sha512-8zXuDr/JljZTn8g4DlM+91CtZTNf1tcfVLV2EWgDApOIivgAa1WiYtL7SW2SeJvujQpH1FZ286GuuinNzlgchA==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@froalacharts/core" "^1.0.0"
+    "@froalacharts/utils" "^1.0.0"
+
+"@froalacharts/fusiontime@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@froalacharts/fusiontime/-/fusiontime-1.0.0.tgz#5dc7ac29382a227042a36e6084eaf0e6e8e39e58"
+  integrity sha512-RM00N1eMT+uiKZIYZvE7Dt1cQXzUATyjCyVDdCtsueyXeiEzLmGH3d8C97Uqo2gElCevr52R/LU27mYlBIKtxg==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@froalacharts/charts" "^1.0.0"
+    "@froalacharts/core" "^1.0.0"
+    "@froalacharts/datatable" "^1.0.0"
+    "@froalacharts/utils" "^1.0.0"
+    ramda "^0.25.0"
+
+"@froalacharts/powercharts@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@froalacharts/powercharts/-/powercharts-1.0.0.tgz#0c19477e6353ef00e37e8c20660e7039de4c20e7"
+  integrity sha512-0h/Qlol3tCuVm4jseNMULGQ4z/0GUL2PGSM/ZrVmMtSwM9UOm8uOfObG2MDEBvOzs9zGmBOK9hfXf8hGOxpbUg==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@froalacharts/charts" "^1.0.0"
+    "@froalacharts/core" "^1.0.0"
+    "@froalacharts/utils" "^1.0.0"
+
+"@froalacharts/utils@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@froalacharts/utils/-/utils-1.0.0.tgz#6c5c054934ed0c25e1948237368eae0b7103a93b"
+  integrity sha512-gv5pYRMIWLXPFuFkNYCIybEPMlTRTOn+p67Dn5ZFmRA8dlj0WJeljgJecfa+cuOv521AZTGpZne6yBJyYCk6sw==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    ramda "^0.25.0"
+
+"@froalacharts/widgets@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@froalacharts/widgets/-/widgets-1.0.0.tgz#3b56a5554e00038f1170465c39090a9668f5fd10"
+  integrity sha512-Dh48F89M1Yy/r82zqysQ/pEQXmvbiUtRzh+whHcYJ7pNamwEa5pjglhrYCAhORztBOOkXIrHdBzM4qVInX7+zQ==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@froalacharts/charts" "^1.0.0"
+    "@froalacharts/constructor" "^1.0.0"
+    "@froalacharts/core" "^1.0.0"
+    "@froalacharts/features" "^1.0.0"
+    "@froalacharts/utils" "^1.0.0"
 
 "@google-cloud/common@^3.7.4":
   version "3.7.4"
@@ -863,6 +957,11 @@
     "@types/mime" "^1"
     "@types/node" "*"
 
+"@types/uuid@^8.3.4":
+  version "8.3.4"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.4.tgz#bd86a43617df0594787d38b735f55c805becf1bc"
+  integrity sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==
+
 "@typescript-eslint/parser@^4.20.0":
   version "4.33.0"
   resolved "https://registry.npmjs.org/@typescript-eslint/parser/-/parser-4.33.0.tgz"
@@ -977,18 +1076,6 @@ anymatch@~3.1.1, anymatch@~3.1.2:
   dependencies:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
-
-apexcharts@^3.29.0:
-  version "3.29.0"
-  resolved "https://registry.npmjs.org/apexcharts/-/apexcharts-3.29.0.tgz"
-  integrity sha512-PhI17VayidYAbLb5/g+7WOeirgFrVopzt0qGwLq8V+cd6NXx4CeHYq3S0pDZiUGO7UFQ4YIrT8+ie9/Fnler+w==
-  dependencies:
-    svg.draggable.js "^2.2.2"
-    svg.easing.js "^2.0.0"
-    svg.filter.js "^2.0.2"
-    svg.pathmorphing.js "^0.1.3"
-    svg.resize.js "^1.4.3"
-    svg.select.js "^3.0.1"
 
 argparse@^2.0.1:
   version "2.0.1"
@@ -1445,6 +1532,11 @@ core-js@3.6.5:
   version "3.6.5"
   resolved "https://registry.npmjs.org/core-js/-/core-js-3.6.5.tgz"
   integrity sha512-vZVEEwZoIsI+vPEuoF9Iqf5H7/M3eeQqWlQnYa8FSKKePuYTf5MWnxb5SDAzCa60b3JBRS5g9b+Dq7b1y/RCrA==
+
+core-js@^3.0.1:
+  version "3.20.3"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.20.3.tgz#c710d0a676e684522f3db4ee84e5e18a9d11d69a"
+  integrity sha512-vVl8j8ph6tRS3B8qir40H7yw7voy17xL0piAjlbBUsH7WIfzoedL/ZOr1OV9FyZQLWXsayOJyV4tnRyXR85/ag==
 
 core-util-is@~1.0.0:
   version "1.0.3"
@@ -2183,6 +2275,24 @@ formik@^2.2.9:
     react-fast-compare "^2.0.1"
     tiny-warning "^1.0.2"
     tslib "^1.10.0"
+
+froalacharts@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/froalacharts/-/froalacharts-1.0.0.tgz#c18607c81089909521676b24f7cba93900b89fc0"
+  integrity sha512-vqQsmprKU5EsM8YA2a+Q0TK1XTsXu5D+cL3PsPDY3rfPd3BUT8H7nlUETwTVhoBzRUcF+8ZwHggDPosGBk9nXg==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    "@froalacharts/charts" "^1.0.0"
+    "@froalacharts/constructor" "^1.0.0"
+    "@froalacharts/core" "^1.0.0"
+    "@froalacharts/datatable" "^1.0.0"
+    "@froalacharts/features" "^1.0.0"
+    "@froalacharts/fusiontime" "^1.0.0"
+    "@froalacharts/powercharts" "^1.0.0"
+    "@froalacharts/utils" "^1.0.0"
+    "@froalacharts/widgets" "^1.0.0"
+    mutationobserver-shim "^0.3.5"
+    promise-polyfill "^8.1.3"
 
 fs.realpath@^1.0.0:
   version "1.0.0"
@@ -3149,6 +3259,11 @@ ms@^2.1.1:
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
+mutationobserver-shim@^0.3.5:
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/mutationobserver-shim/-/mutationobserver-shim-0.3.7.tgz#8bf633b0c0b0291a1107255ed32c13088a8c5bf3"
+  integrity sha512-oRIDTyZQU96nAiz2AQyngwx1e89iApl2hN5AOYwyxLUB47UYsU3Wv9lJWqH5y/QdiYkc5HQLi23ZNB3fELdHcQ==
+
 nanoclone@^0.2.1:
   version "0.2.1"
   resolved "https://registry.npmjs.org/nanoclone/-/nanoclone-0.2.1.tgz"
@@ -3576,7 +3691,12 @@ promise-polyfill@8.1.3:
   resolved "https://registry.npmjs.org/promise-polyfill/-/promise-polyfill-8.1.3.tgz"
   integrity sha512-MG5r82wBzh7pSKDRa9y+vllNHz3e3d4CNj1PQE4BQYxLme0gKYYBm9YENq+UkEikyZ0XbiGWxYlVw3Rl9O/U8g==
 
-prop-types@^15.5.7, prop-types@^15.7.2:
+promise-polyfill@^8.1.3:
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.2.1.tgz#1fa955b325bee4f6b8a4311e18148d4e5b46d254"
+  integrity sha512-3p9zj0cEHbp7NVUxEYUWjQlffXqnXaZIMPkAO7HhFh8u5636xLRDHOUo2vpWSK0T2mqm6fKLXYn1KP6PAZ2gKg==
+
+prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -3690,6 +3810,11 @@ queue@6.0.2:
   dependencies:
     inherits "~2.0.3"
 
+ramda@^0.25.0:
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
+  integrity sha512-GXpfrYVPwx3K7RQ6aYT8KPS8XViSXUVJT1ONhoKPE9VAleW42YE+U+8VEyGWt41EnEQW7gwecYJriTI0pKoecQ==
+
 randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5:
   version "2.1.0"
   resolved "https://registry.npmjs.org/randombytes/-/randombytes-2.1.0.tgz"
@@ -3715,13 +3840,6 @@ raw-body@2.4.1:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
-react-apexcharts@^1.3.9:
-  version "1.3.9"
-  resolved "https://registry.npmjs.org/react-apexcharts/-/react-apexcharts-1.3.9.tgz"
-  integrity sha512-KPonT5uQPHOHSVgTNEzpB0HhCkZtoicQYGjR9P+3DRDSgTsC+DM2vDUfo/B2Fn1m+wdgVeDXWL0VJYDc6JD/tw==
-  dependencies:
-    prop-types "^15.5.7"
-
 react-dom@17.0.2:
   version "17.0.2"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-17.0.2.tgz"
@@ -3735,6 +3853,13 @@ react-fast-compare@^2.0.1:
   version "2.0.4"
   resolved "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-2.0.4.tgz"
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
+
+react-froalacharts@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-froalacharts/-/react-froalacharts-1.0.0.tgz#11931f8c8bc9007995bbdde2706070d89e78bed8"
+  integrity sha512-skA1C8UxSkkDCKXeiXOzK75Yb9DZSFzNi7Q5Lu4BKsoGFH+OiVkEtTEHinV1o4cpo9DFEFL1+l7vzKWw/wBdpA==
+  dependencies:
+    uuid "^3.2.1"
 
 react-icons@^4.3.1:
   version "4.3.1"
@@ -4227,61 +4352,6 @@ supports-color@^8.0.0:
   dependencies:
     has-flag "^4.0.0"
 
-svg.draggable.js@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.npmjs.org/svg.draggable.js/-/svg.draggable.js-2.2.2.tgz"
-  integrity sha512-JzNHBc2fLQMzYCZ90KZHN2ohXL0BQJGQimK1kGk6AvSeibuKcIdDX9Kr0dT9+UJ5O8nYA0RB839Lhvk4CY4MZw==
-  dependencies:
-    svg.js "^2.0.1"
-
-svg.easing.js@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/svg.easing.js/-/svg.easing.js-2.0.0.tgz"
-  integrity sha1-iqmUawqOJ4V6XEChDrpAkeVpHxI=
-  dependencies:
-    svg.js ">=2.3.x"
-
-svg.filter.js@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.npmjs.org/svg.filter.js/-/svg.filter.js-2.0.2.tgz"
-  integrity sha1-kQCOFROJ3ZIwd5/L5uLJo2LRwgM=
-  dependencies:
-    svg.js "^2.2.5"
-
-svg.js@>=2.3.x, svg.js@^2.0.1, svg.js@^2.2.5, svg.js@^2.4.0, svg.js@^2.6.5:
-  version "2.7.1"
-  resolved "https://registry.npmjs.org/svg.js/-/svg.js-2.7.1.tgz"
-  integrity sha512-ycbxpizEQktk3FYvn/8BH+6/EuWXg7ZpQREJvgacqn46gIddG24tNNe4Son6omdXCnSOaApnpZw6MPCBA1dODA==
-
-svg.pathmorphing.js@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.npmjs.org/svg.pathmorphing.js/-/svg.pathmorphing.js-0.1.3.tgz"
-  integrity sha512-49HWI9X4XQR/JG1qXkSDV8xViuTLIWm/B/7YuQELV5KMOPtXjiwH4XPJvr/ghEDibmLQ9Oc22dpWpG0vUDDNww==
-  dependencies:
-    svg.js "^2.4.0"
-
-svg.resize.js@^1.4.3:
-  version "1.4.3"
-  resolved "https://registry.npmjs.org/svg.resize.js/-/svg.resize.js-1.4.3.tgz"
-  integrity sha512-9k5sXJuPKp+mVzXNvxz7U0uC9oVMQrrf7cFsETznzUDDm0x8+77dtZkWdMfRlmbkEEYvUn9btKuZ3n41oNA+uw==
-  dependencies:
-    svg.js "^2.6.5"
-    svg.select.js "^2.1.2"
-
-svg.select.js@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.npmjs.org/svg.select.js/-/svg.select.js-2.1.2.tgz"
-  integrity sha512-tH6ABEyJsAOVAhwcCjF8mw4crjXSI1aa7j2VQR8ZuJ37H2MBUbyeqYr5nEO7sSN3cy9AR9DUwNg0t/962HlDbQ==
-  dependencies:
-    svg.js "^2.2.5"
-
-svg.select.js@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/svg.select.js/-/svg.select.js-3.0.1.tgz"
-  integrity sha512-h5IS/hKkuVCbKSieR9uQCj9w+zLHoPh+ce19bBYyqF53g6mnPB8sAtIbe1s9dh2S2fCmYX2xel1Ln3PJBbK4kw==
-  dependencies:
-    svg.js "^2.6.5"
-
 teeny-request@^7.0.0:
   version "7.1.3"
   resolved "https://registry.npmjs.org/teeny-request/-/teeny-request-7.1.3.tgz"
@@ -4502,7 +4572,12 @@ util@^0.11.0:
   dependencies:
     inherits "2.0.3"
 
-uuid@^8.0.0:
+uuid@^3.2.1:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
+  integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^8.0.0, uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==

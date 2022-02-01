@@ -65,7 +65,7 @@ export default function Login() {
     const response = await signInWithGoogle();
 
     if (response.result?.user.emailVerified) {
-      history.push("/");
+      history.replace("/");
     } else {
       setFailedOperationMessage(response?.message);
     }

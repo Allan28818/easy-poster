@@ -1,6 +1,10 @@
 @import "../_functions.scss";
 @import "../variables.scss";
 
+#post-body {
+  background: red;
+}
+
 .imgPopUp,
 .graphicPopUp {
   display: flex;
@@ -53,7 +57,8 @@
       margin-bottom: 0.5rem;
     }
 
-    input {
+    input,
+    select {
       width: 100%;
       height: convertToRem(40rem);
       background: $gray-peace;
@@ -64,18 +69,21 @@
       transition: all 0.4s ease;
     }
 
-    input:focus {
+    input:focus,
+    select:focus {
       border-bottom-left-radius: 0px;
       border-bottom-right-radius: 0px;
       border-bottom: 2px solid $orange-synthetic-pumpkin;
     }
 
-    input:active {
+    input:active,
+    select:active {
       background: $white-anti-flash;
       color: $gray-peace;
     }
 
-    input:hover {
+    input:hover,
+    select:hover {
       opacity: 0.8;
     }
 
@@ -107,5 +115,46 @@
       opacity: 1;
       transition: 0.1s;
     }
+  }
+}
+
+.tagsHeader {
+  width: 100%;
+  height: auto;
+  display: flex;
+  background: $blue-cyanite;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: convertToRem(10rem);
+
+  button {
+    display: flex;
+    width: clamp(1rem, 25%, convertToRem(65rem));
+    height: convertToRem(40rem);
+    align-items: center;
+    justify-content: center;
+    background: $blue-cyanite;
+    cursor: pointer;
+    font-size: clamp(convertToRem(18rem), 45%, convertToRem(35rem));
+    color: $blue-coastal-breeze;
+    margin-left: 2%;
+    border: 2px solid transparent;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    span,
+    p {
+      background: transparent;
+    }
+  }
+
+  button:focus {
+    outline: none;
   }
 }
