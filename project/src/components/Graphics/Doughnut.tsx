@@ -1,4 +1,3 @@
-import { securityRules } from "firebase-admin";
 import React from "react";
 
 interface DoughnutProps {

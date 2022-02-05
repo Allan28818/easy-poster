@@ -1,6 +1,10 @@
 const path = require("path");
+const withPwa = require("next-pwa");
 
-module.exports = {
+module.exports = withPwa({
+  pwa: {
+    dest: "out",
+  },
   trailingSlash: true,
   eslint: {
     ignoreDuringBuilds: true,
@@ -8,4 +12,4 @@ module.exports = {
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
   },
-};
+});

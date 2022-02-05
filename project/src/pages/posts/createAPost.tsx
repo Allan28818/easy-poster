@@ -6,33 +6,26 @@ import styles from "../../styles/posts/create-a-post.module.scss";
 import HoverButton from "../../components/Buttons/HoverButton";
 import TextComponent from "../../components/TextComponents/TextComponent";
 
-import dynamic from "next/dynamic.js";
 import Doughnut from "../../components/Graphics/Doughnut";
 
-const Chart = dynamic(() => import("../../components/Graphics/Doughnut"), {
-  ssr: false,
-});
+import docElementsProp from "../../models/DocElementsProp";
 
-interface docElementsProp {
-  id: string;
-  elementName: string;
-  src?: string;
-  alt?: string;
-  textContent?: string;
-  colors?: string;
-  labels?: string[];
-  series?: string[];
-  type?: string;
-  caption?: string;
-  subCaption?: string;
-  dataPrefix?: string;
-}
+import { savePostController } from "../../controllers/savePostController";
+import { useAuth } from "../../hooks/useAuth";
+import { useRouter } from "next/router";
+import { IconContext } from "react-icons/lib";
+import BasicMessage from "../../components/Messages/BasicMessage";
+import BasicMessageProps from "../../models/components/BasicMessageProps";
+import BasicMenu from "../../components/Menu/BasicMenu";
 
 function CreateAPost() {
   const [docElements, setDocElements] = useState<docElementsProp[]>([]);
 
+  const [stepsPopUp, setStepsPopUp] = useState<boolean>(true);
+
   const [showImageModal, setShowImageModal] = useState<boolean>(false);
-  const [showGraphicModal, setShowGraphicModal] = useState<boolean>(false);
+  const [showGraphicPopUp, setShowGraphicPopUp] = useState<boolean>(false);
+  const [showMenu, setShowMenu] = useState<boolean>(true);
 
   const [srcText, setSrcText] = useState<string>("");
   const [altText, setAltText] = useState<string>("");
@@ -44,10 +37,27 @@ function CreateAPost() {
   const [graphicColors, setGraphicColors] = useState<string>(
     "#2980b9, #2ecc71, #f1c40f"
   );
+
+  const [title, setTitle] = useState<string>("Untitled");
+
   const [graphicLabels, setGraphicLabels] = useState<string>(
     "Label1, Label2, Label3"
   );
-  const [dataPrefix, setGraphicPrefix] = useState<string>("");
+  const [graphicPrefix, setGraphicPrefix] = useState<string>("");
+
+  const [basicMessageConfig, setBasicMessageConfig] =
+    useState<BasicMessageProps>({
+      showMessage: false,
+      title: "",
+      description: "",
+      type: "info",
+      onConfirm: () => {},
+    });
+
+  const { user } = useAuth();
+  const history = useRouter();
+
+  const postBody = document.querySelector("#post-body");
 
   const handleAddElement = (elementName: string) => {
     let elementToAdd = {
@@ -98,11 +108,15 @@ function CreateAPost() {
       series: graphicSeriesArray,
       caption,
       subCaption,
-      dataPrefix,
+      graphicPrefix,
     };
 
-    setDocElements((oldValues) => [...oldValues, graphicToAdd]);
+    const docElementRef = Array.from(docElements);
 
+    docElementRef.push(graphicToAdd);
+
+    setDocElements(docElementRef);
+    setStepsPopUp(true);
     setGraphicColors("");
     setGraphicLabels("");
     setGraphicPrefix("");
@@ -110,16 +124,62 @@ function CreateAPost() {
     setGraphicType("");
     setCaption("");
     setSubCaption("");
-    setShowGraphicModal(false);
+    setShowGraphicPopUp(false);
   };
+
+  async function handleSavePost() {
+    const creatorData = {
+      id: user.uid,
+      fullName: user.displayName,
+    };
+
+    const response = await savePostController({
+      elementToMap: postBody,
+      creatorData,
+      docElements,
+    });
+
+    setBasicMessageConfig({
+      title: "Your post was saved!",
+      description: response.message,
+      onConfirm: () => {
+        history.push("/");
+        setBasicMessageConfig({
+          title: "",
+          description: "",
+          onConfirm: () => {},
+          showMessage: false,
+          type: "success",
+        });
+      },
+      showMessage: true,
+      type: "success",
+    });
+  }
 
   return (
     <>
+      <BasicMessage
+        title={basicMessageConfig.title}
+        description={basicMessageConfig.description}
+        showMessage={basicMessageConfig.showMessage}
+        onConfirm={basicMessageConfig.onConfirm}
+        type={basicMessageConfig.type}
+      />
+      <BasicMenu
+        handleSavePost={handleSavePost}
+        title={title}
+        setTitle={setTitle}
+        showMenu={showMenu}
+        setShowMenu={setShowMenu}
+      />
       <div className={showImageModal ? styles.imgPopUp : "hidden"}>
-        <GrFormClose
-          className={styles.close}
-          onClick={() => setShowImageModal(false)}
-        />
+        <IconContext.Provider value={{ color: "#fff", size: "50px" }}>
+          <GrFormClose
+            className={styles.close}
+            onClick={() => setShowImageModal(false)}
+          />
+        </IconContext.Provider>
         <div className={styles.card}>
           <h1>Type your image informations</h1>
           <label htmlFor="source">Image source</label>
@@ -146,80 +206,112 @@ function CreateAPost() {
         </div>
       </div>
 
-      <div className={showGraphicModal ? styles.graphicPopUp : "hidden"}>
+      <div className={showGraphicPopUp ? styles.graphicPopUp : "hidden"}>
         <GrFormClose
           className={styles.close}
-          onClick={() => setShowGraphicModal(false)}
+          onClick={() => setShowGraphicPopUp(false)}
         />
         <div className={styles.card}>
           <h1>Type your graphic informations</h1>
-          <div className={styles.formWrapper}>
-            <label htmlFor="caption">Type your Caption</label>
-            <input
-              name="caption"
-              placeholder="This is my graphic"
-              onChange={(e: any) => setCaption(e.target.value)}
-            />
-          </div>
-          <div className={styles.formWrapper}>
-            <label htmlFor="sub-caption">
-              Type your sub caption (optional)
-            </label>
-            <input
-              name="sub-caption"
-              placeholder="And this is my description"
-              onChange={(e: any) => setSubCaption(e.target.value)}
-            />
-          </div>
-          <div className={styles.formWrapper}>
-            <label htmlFor="graphicType">Select your graphic type</label>
-            <select
-              name="graphicType"
-              onChange={(e: any) => setGraphicType(e.target.value)}
-            >
-              <option value="pie">Pie</option>
-              <option value="bar">Bar</option>
-              <option value="line">Line</option>
-            </select>
-          </div>
-          <div className={styles.formWrapper}>
-            <label htmlFor="series">Type your series</label>
-            <input
-              name="series"
-              placeholder="1, 2, 3, ..."
-              onChange={(e: any) => setGraphicSeries(e.target.value)}
-            />
-          </div>
-          <div className={styles.formWrapper}>
-            <label htmlFor="colors">Type your graphic colors</label>
-            <input
-              name="colors"
-              placeholder="#f00, #00f, #0f0..."
-              onChange={(e: any) => setGraphicColors(e.target.value)}
-            />
-          </div>
-          <div className={styles.formWrapper}>
-            <label htmlFor="labels">Type your graphic labels</label>
-            <input
-              name="labels"
-              placeholder="dogs, cats, birds..."
-              onChange={(e: any) => setGraphicLabels(e.target.value)}
-            />
-          </div>
-          <div className={styles.formWrapper}>
-            <label htmlFor="prefix">Type your data prefix</label>
-            <input
-              name="prefix"
-              placeholder="$100"
-              onChange={(e: any) => setGraphicPrefix(e.target.value)}
-            />
-          </div>
-          <button type="submit" onClick={handleAddGraphic}>
-            Create
-          </button>
+
+          {stepsPopUp ? (
+            <>
+              <div className={styles.formWrapper}>
+                <label htmlFor="caption">Type your Caption</label>
+                <input
+                  name="caption"
+                  placeholder="This is my graphic"
+                  onChange={(e: any) => setCaption(e.target.value)}
+                  value={caption}
+                />
+              </div>
+              <div className={styles.formWrapper}>
+                <label htmlFor="sub-caption">
+                  Type your sub caption (optional)
+                </label>
+                <input
+                  name="sub-caption"
+                  placeholder="And this is my description"
+                  onChange={(e: any) => setSubCaption(e.target.value)}
+                  value={subCaption}
+                />
+              </div>
+              <div className={styles.formWrapper}>
+                <label htmlFor="graphicType">Select your graphic type</label>
+                <select
+                  name="graphicType"
+                  onChange={(e: any) => setGraphicType(e.target.value)}
+                >
+                  <option value="pie">Pie</option>
+                  <option value="doughnut">Doughnut</option>
+                  <option value="bar">Bar</option>
+                  <option value="line">Line</option>
+                  <option value="heatmap">Heatmap</option>
+                  <option value="radar">Radar</option>
+                  <option value="angulargauge">Angular Gauge</option>
+                </select>
+              </div>
+              <button onClick={() => setStepsPopUp(false)}>Next</button>
+            </>
+          ) : (
+            <>
+              <div className={styles.formWrapper}>
+                <label htmlFor="series">Type your series</label>
+                <input
+                  name="series"
+                  placeholder="1, 2, 3, ..."
+                  onChange={(e: any) => setGraphicSeries(e.target.value)}
+                  value={graphicSeries}
+                />
+              </div>
+              <div className={styles.formWrapper}>
+                <label htmlFor="colors">Type your graphic colors</label>
+                <input
+                  name="colors"
+                  placeholder="#f00, #00f, #0f0..."
+                  onChange={(e: any) => setGraphicColors(e.target.value)}
+                  value={graphicColors}
+                />
+              </div>
+              <div className={styles.formWrapper}>
+                <label htmlFor="labels">Type your graphic labels</label>
+                <input
+                  name="labels"
+                  placeholder="dogs, cats, birds..."
+                  onChange={(e: any) => setGraphicLabels(e.target.value)}
+                  value={graphicLabels}
+                />
+              </div>
+              <div className={styles.formWrapper}>
+                <label htmlFor="prefix">Type your data prefix</label>
+                <input
+                  name="prefix"
+                  placeholder="$100"
+                  onChange={(e: any) => setGraphicPrefix(e.target.value)}
+                  value={graphicPrefix}
+                />
+              </div>
+              <button
+                type="submit"
+                onClick={() => {
+                  handleAddGraphic();
+                  setStepsPopUp(true);
+                  setGraphicColors("");
+                  setGraphicLabels("");
+                  setGraphicPrefix("");
+                  setGraphicSeries("");
+                  setGraphicType("");
+                  setCaption("");
+                  setSubCaption("");
+                  setShowGraphicPopUp(false);
+                }}
+              >
+                Create
+              </button>
+            </>
+          )}
         </div>
       </div>
-
       <header className={styles.tagsHeader}>
         <HoverButton onClickFunction={() => handleAddElement("h1")}>
           <h1>h1</h1>
@@ -253,9 +345,10 @@ function CreateAPost() {
         >
           img
         </HoverButton>
-        <HoverButton onClickFunction={() => setShowGraphicModal(true)}>
+        <HoverButton onClickFunction={() => setShowGraphicPopUp(true)}>
           Graphic
         </HoverButton>
+        <button onClick={() => handleSavePost()}>Salvar</button>
       </header>
 
       <div id="post-body">
@@ -272,6 +365,7 @@ function CreateAPost() {
             return (
               <TextComponent
                 key={currentElement.id}
+                id={currentElement.id}
                 elementName={currentElement.elementName}
                 textContent={currentElement.textContent}
               />
@@ -285,7 +379,7 @@ function CreateAPost() {
                 labels={currentElement.labels}
                 paletteColors={currentElement.colors}
                 series={currentElement.series}
-                numberPrefix={currentElement.dataPrefix}
+                numberPrefix={currentElement.graphicPrefix}
               />
             );
           }
