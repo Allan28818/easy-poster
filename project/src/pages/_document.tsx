@@ -8,10 +8,6 @@ export default class MyDocument extends Document {
         <Head>
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <meta
-            name="viewport"
-            content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
-          />
           <meta name="description" content="An easy way to post your ideas!" />
           <meta name="keywords" content="Easy Poster" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -33,7 +29,6 @@ export default class MyDocument extends Document {
             href="/assets/icons/icon-48x48.png"
             type="image/png"
           />
-          <link rel="manifest" href="/manifest.json" />
         </Head>
         <body>
           <Main />

@@ -123,15 +123,19 @@
   height: auto;
   display: flex;
   background: $blue-cyanite;
+  position: absolute;
   justify-content: center;
   top: 0;
   left: 0;
   margin: 0;
   padding: convertToRem(10rem);
+  flex-wrap: wrap;
 
   button {
     display: flex;
-    width: clamp(1rem, 25%, convertToRem(65rem));
+    width: auto;
+    min-width: convertToRem(70rem);
+    margin-left: 1%;
     height: convertToRem(40rem);
     align-items: center;
     justify-content: center;
@@ -139,7 +143,6 @@
     cursor: pointer;
     font-size: clamp(convertToRem(18rem), 45%, convertToRem(35rem));
     color: $blue-coastal-breeze;
-    margin-left: 2%;
     border: 2px solid transparent;
 
     h1,
