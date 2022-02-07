@@ -3,6 +3,7 @@ import docElementsProp from "../models/DocElementsProp";
 import { savePost } from "../services/posts/savePost";
 
 interface savePostControllerProps {
+  postName: string;
   elementToMap: Element | null;
   docElements: docElementsProp[];
   creatorData: {
@@ -14,7 +15,7 @@ interface savePostControllerProps {
 async function savePostController(
   props: savePostControllerProps
 ): Promise<PropsReturn> {
-  const { elementToMap, docElements, creatorData } = props;
+  const { elementToMap, docElements, creatorData, postName } = props;
 
   const childrenElements = Array.from(
     elementToMap?.children ? elementToMap.children : []
@@ -26,10 +27,9 @@ async function savePostController(
     }
   });
 
-  const response = await savePost({ creatorData, post: docElements });
+  const response = await savePost({ creatorData, post: docElements, postName });
 
   return response;
 }
 
 export { savePostController };
-

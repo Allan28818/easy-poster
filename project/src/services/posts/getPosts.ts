@@ -8,7 +8,7 @@ import {
 import { firestore } from "../config/firebase";
 
 interface getPostsProps {
-  id?: string | null;
+  id?: string | string[];
   postOwnerId?: string | null;
 }
 

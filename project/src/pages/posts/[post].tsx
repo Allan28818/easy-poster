@@ -1,7 +1,15 @@
-export default function PostDetails() {
+import React from "react";
+import docElementsProp from "../../models/DocElementsProp";
+import styles from "../../styles/posts/post-details.module.scss";
+
+export default function PostDetails(props: docElementsProp) {
+  console.log("props", props);
   return (
     <>
-      <h1>Post details</h1>
+      <header className={styles.postHeader}>
+        <h1>Post</h1>
+      </header>
+      <div className={styles.postBody}></div>
     </>
   );
 }

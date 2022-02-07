@@ -14,9 +14,11 @@ import { savePostController } from "../../controllers/savePostController";
 import { useAuth } from "../../hooks/useAuth";
 import { useRouter } from "next/router";
 import { IconContext } from "react-icons/lib";
+
 import BasicMessage from "../../components/Messages/BasicMessage";
 import BasicMessageProps from "../../models/components/BasicMessageProps";
 import BasicMenu from "../../components/Menu/BasicMenu";
+import BasicBurgerMenu from "../../components/BurgersMenu/BasicBurgerMenu";
 
 function CreateAPost() {
   const [docElements, setDocElements] = useState<docElementsProp[]>([]);
@@ -25,7 +27,7 @@ function CreateAPost() {
 
   const [showImageModal, setShowImageModal] = useState<boolean>(false);
   const [showGraphicPopUp, setShowGraphicPopUp] = useState<boolean>(false);
-  const [showMenu, setShowMenu] = useState<boolean>(true);
+  const [showMenu, setShowMenu] = useState<boolean>(false);
 
   const [srcText, setSrcText] = useState<string>("");
   const [altText, setAltText] = useState<string>("");
@@ -134,6 +136,7 @@ function CreateAPost() {
     };
 
     const response = await savePostController({
+      postName: title,
       elementToMap: postBody,
       creatorData,
       docElements,
@@ -348,7 +351,7 @@ function CreateAPost() {
         <HoverButton onClickFunction={() => setShowGraphicPopUp(true)}>
           Graphic
         </HoverButton>
-        <button onClick={() => handleSavePost()}>Salvar</button>
+        <BasicBurgerMenu onClickFunction={() => setShowMenu(true)} />
       </header>
 
       <div id="post-body">
