@@ -1,0 +1,30 @@
+@import "../_functions.scss";
+@import "../_variables.scss";
+
+.burgerWrapper {
+  width: auto;
+  height: auto;
+  margin: convertToRem(10rem);
+  cursor: pointer;
+
+  div {
+    width: convertToRem(30rem);
+    height: convertToRem(4rem);
+    background: $white-anti-flash;
+    border-radius: convertToRem(1rem);
+    margin-top: convertToRem(2rem);
+    transition: all 0.4s ease;
+  }
+
+  &:hover {
+    div:nth-child(1) {
+      width: convertToRem(25rem);
+    }
+    div:nth-child(2) {
+      width: convertToRem(17rem);
+    }
+    div:nth-child(3) {
+      width: convertToRem(31rem);
+    }
+  }
+}

@@ -2,6 +2,7 @@ import React from "react";
 
 import Link from "next/link";
 import { IoIosSave } from "react-icons/io";
+import { GrFormClose } from "react-icons/gr";
 
 import styles from "../../styles/components/basic-menu.module.scss";
 
@@ -17,6 +18,10 @@ const BasicMenu = (props: BasicMenuProps) => {
   const { title, setTitle, handleSavePost, showMenu, setShowMenu } = props;
   return (
     <div className={showMenu ? styles.menu : "hidden"}>
+      <GrFormClose
+        className={styles.closeButton}
+        onClick={() => setShowMenu(false)}
+      />
       <input
         type="text"
         value={title}

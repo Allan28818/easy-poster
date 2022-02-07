@@ -1,16 +1,19 @@
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
 import PropsReturn from "../../models/core.response";
 import savePostProps from "../../models/PostProps";
 import { firestore } from "../config/firebase";
 
 async function savePost(props: savePostProps): Promise<PropsReturn> {
-  const { creatorData, post } = props;
+  const { creatorData, post, postName } = props;
   try {
     const postId = uuid();
     await setDoc(doc(firestore, "posts", postId), {
-      ...post,
+      id: postId,
+      postName,
+      postData: { ...post },
       creatorData,
+      createdAt: serverTimestamp(),
     });
   } catch (error: any) {
     return {
