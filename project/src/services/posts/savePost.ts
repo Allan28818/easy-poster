@@ -11,9 +11,10 @@ async function savePost(props: savePostProps): Promise<PropsReturn> {
     await setDoc(doc(firestore, "posts", postId), {
       id: postId,
       postName,
-      postData: { ...post },
+      postData: [...post],
       creatorData,
       createdAt: serverTimestamp(),
+      isActive: true,
     });
   } catch (error: any) {
     return {

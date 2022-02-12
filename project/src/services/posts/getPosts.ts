@@ -2,6 +2,7 @@ import {
   collection,
   DocumentData,
   getDocs,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -15,20 +16,33 @@ interface getPostsProps {
 async function getPosts(props: getPostsProps): Promise<DocumentData[]> {
   const { id, postOwnerId } = props;
 
-  let postsRef = query(collection(firestore, "posts"));
+  let postsRef = query(
+    collection(firestore, "posts"),
+    where("isActive", "==", true),
+    orderBy("createdAt")
+  );
 
   if (!!id && !!postOwnerId) {
     postsRef = query(
       collection(firestore, "posts"),
       where("id", "==", id),
-      where("creatorData.id", "==", postOwnerId)
+      where("creatorData.id", "==", postOwnerId),
+      where("isActive", "==", true),
+      orderBy("createdAt")
     );
   } else if (!!id) {
-    postsRef = query(collection(firestore, "posts"), where("id", "==", id));
+    postsRef = query(
+      collection(firestore, "posts"),
+      where("id", "==", id),
+      where("isActive", "==", true),
+      orderBy("createdAt")
+    );
   } else if (!!postOwnerId) {
     postsRef = query(
       collection(firestore, "posts"),
-      where("creatorData.id", "==", postOwnerId)
+      where("creatorData.id", "==", postOwnerId),
+      where("isActive", "==", true),
+      orderBy("createdAt")
     );
   }
 

@@ -1,10 +1,6 @@
 @import "../_functions.scss";
 @import "../variables.scss";
 
-#post-body {
-  background: red;
-}
-
 .imgPopUp,
 .graphicPopUp {
   display: flex;
@@ -129,6 +125,7 @@
   left: 0;
   margin: 0;
   padding: convertToRem(10rem);
+  padding-right: 10%;
   flex-wrap: wrap;
 
   button {
