@@ -1,0 +1,57 @@
+@import "../_variables.scss";
+@import "../_functions.scss";
+
+.postHeader {
+  width: auto;
+  min-width: 100%;
+  height: auto;
+  min-height: convertToRem(80rem);
+  max-height: convertToRem(250rem);
+  padding: convertToRem(10rem);
+  background: $blue-merachant-marine-transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  backdrop-filter: blur(4px);
+
+  .arrowLeft {
+    width: convertToRem(35rem);
+    height: convertToRem(35rem);
+    position: fixed;
+    color: $white-anti-flash;
+    cursor: pointer;
+    transition: 0.3s ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+  .postTitle {
+    font-size: clamp(130%, convertToRem(230rem), 190%);
+    width: auto;
+    max-width: 19%;
+    font-family: "Baloo Bhaijaan 2", sans-serif;
+    color: $blue-coastal-breeze;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    margin-top: convertToRem(15rem);
+    cursor: default;
+  }
+
+  .creatorCredits {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(
+      convertToRem(15rem),
+      convertToRem(17.5rem),
+      convertToRem(22.5rem)
+    );
+    color: $white-anti-flash-transparent;
+    font-family: "Baloo Bhaijaan 2", sans-serif;
+    cursor: default;
+  }
+}

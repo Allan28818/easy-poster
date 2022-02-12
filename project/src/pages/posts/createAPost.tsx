@@ -13,7 +13,6 @@ import docElementsProp from "../../models/DocElementsProp";
 import { savePostController } from "../../controllers/savePostController";
 import { useAuth } from "../../hooks/useAuth";
 import { useRouter } from "next/router";
-import { IconContext } from "react-icons/lib";
 
 import BasicMessage from "../../components/Messages/BasicMessage";
 import BasicMessageProps from "../../models/components/BasicMessageProps";
@@ -40,7 +39,7 @@ function CreateAPost() {
     "#2980b9, #2ecc71, #f1c40f"
   );
 
-  const [title, setTitle] = useState<string>("Untitled");
+  const [title, setTitle] = useState<string>("");
 
   const [graphicLabels, setGraphicLabels] = useState<string>(
     "Label1, Label2, Label3"
@@ -130,23 +129,42 @@ function CreateAPost() {
   };
 
   async function handleSavePost() {
-    const creatorData = {
-      id: user.uid,
-      fullName: user.displayName,
-    };
+    if (title) {
+      const creatorData = {
+        id: user.uid,
+        fullName: user.displayName,
+      };
 
-    const response = await savePostController({
-      postName: title,
-      elementToMap: postBody,
-      creatorData,
-      docElements,
-    });
+      const response = await savePostController({
+        postName: title,
+        elementToMap: postBody,
+        creatorData,
+        docElements,
+      });
+
+      setBasicMessageConfig({
+        title: "Your post was saved!",
+        description: response.message,
+        onConfirm: () => {
+          history.push("/");
+          setBasicMessageConfig({
+            title: "",
+            description: "",
+            onConfirm: () => {},
+            showMessage: false,
+            type: "success",
+          });
+        },
+        showMessage: true,
+        type: "success",
+      });
+      return;
+    }
 
     setBasicMessageConfig({
-      title: "Your post was saved!",
-      description: response.message,
+      title: "Insuficient data!",
+      description: "You must give a title to your post!",
       onConfirm: () => {
-        history.push("/");
         setBasicMessageConfig({
           title: "",
           description: "",
@@ -156,8 +174,9 @@ function CreateAPost() {
         });
       },
       showMessage: true,
-      type: "success",
+      type: "error",
     });
+    return;
   }
 
   return (
@@ -177,12 +196,11 @@ function CreateAPost() {
         setShowMenu={setShowMenu}
       />
       <div className={showImageModal ? styles.imgPopUp : "hidden"}>
-        <IconContext.Provider value={{ color: "#fff", size: "50px" }}>
-          <GrFormClose
-            className={styles.close}
-            onClick={() => setShowImageModal(false)}
-          />
-        </IconContext.Provider>
+        <GrFormClose
+          className={styles.close}
+          onClick={() => setShowImageModal(false)}
+        />
+
         <div className={styles.card}>
           <h1>Type your image informations</h1>
           <label htmlFor="source">Image source</label>
@@ -351,7 +369,10 @@ function CreateAPost() {
         <HoverButton onClickFunction={() => setShowGraphicPopUp(true)}>
           Graphic
         </HoverButton>
-        <BasicBurgerMenu onClickFunction={() => setShowMenu(true)} />
+        <BasicBurgerMenu
+          position="end"
+          onClickFunction={() => setShowMenu(true)}
+        />
       </header>
 
       <div id="post-body">

@@ -28,6 +28,7 @@ const BasicMenu = (props: BasicMenuProps) => {
         onChange={(e: any) => setTitle(e.target.value)}
         spellCheck={"false"}
         autoComplete={"off"}
+        placeholder="Untitled"
       />
       <ul>
         <li>

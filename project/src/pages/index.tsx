@@ -8,7 +8,6 @@ import withAuth from "../components/withAuth";
 import { generateTimeMessage } from "../services/generateTimeMessage";
 import { AiOutlineFileAdd, AiFillPieChart } from "react-icons/ai";
 import { TiWarningOutline } from "react-icons/ti";
-import { BiLinkAlt } from "react-icons/bi";
 
 import Head from "next/head";
 
@@ -17,6 +16,8 @@ import { getPosts } from "../services/posts/getPosts";
 import { DocumentData } from "firebase/firestore";
 import docElementsProp from "../models/DocElementsProp";
 import TextComponent from "../components/TextComponents/TextComponent";
+
+import formatDate from "../services/formatDate";
 
 function Home() {
   const [postsList, setPostsList] = useState<DocumentData[]>([]);
@@ -32,14 +33,17 @@ function Home() {
   }, []);
 
   function handleCreatePreview(currentElement: docElementsProp) {
-    if (!!currentElement.textContent) {
+    if (!!currentElement.textContent && !currentElement.type) {
       return (
-        <TextComponent
-          id={currentElement.id}
-          elementName={currentElement.elementName}
-          textContent={currentElement.textContent}
-          isEditable={false}
-        />
+        <>
+          <TextComponent
+            id={currentElement.id}
+            elementName={currentElement.elementName}
+            textContent={currentElement.textContent}
+            isEditable={false}
+          />
+          <span>...</span>
+        </>
       );
     } else if (!!currentElement.src) {
       return (
@@ -51,7 +55,7 @@ function Home() {
     } else if (!!currentElement.caption) {
       return (
         <div className={styles.chartPreview}>
-          <AiFillPieChart />
+          <AiFillPieChart className={styles.icon} />
         </div>
       );
     }
@@ -63,7 +67,6 @@ function Home() {
     );
   }
 
-  console.log(postsList);
   return (
     <>
       <Head>
@@ -91,15 +94,16 @@ function Home() {
               <h1 className={styles.postTitle}>{post.postName}</h1>
               <div className={styles.postPreview}>
                 {handleCreatePreview(post.postData[0])}
-                ...
               </div>
               <span className={styles.creatorCredits}>
-                {post.creatorData.fullName}
+                &copy;{" "}
+                {`${post.creatorData.fullName} - ${formatDate(
+                  post.createdAt.toDate(),
+                  "yyyy"
+                )}`}
               </span>
 
-              <Link href={`/posts/${post.id}`} prefetch>
-                View post
-              </Link>
+              <Link href={`/posts/${post.id}`}>View post</Link>
             </div>
           ))}
         </div>
