@@ -29,6 +29,8 @@ export default class MyDocument extends Document {
             href="/assets/icons/icon-48x48.png"
             type="image/png"
           />
+
+          <link rel="manifest" href="/manifest.json" />
         </Head>
         <body>
           <Main />
