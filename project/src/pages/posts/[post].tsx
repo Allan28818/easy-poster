@@ -6,7 +6,6 @@ import docElementsProp from "../../models/DocElementsProp";
 import { getPosts } from "../../services/posts/getPosts";
 
 import TextComponent from "../../components/TextComponents/TextComponent";
-import Doughnut from "../../components/Graphics/Doughnut";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 import styles from "../../styles/posts/post-details.module.scss";
@@ -73,17 +72,17 @@ function PostDetails() {
                 />
               );
             } else if (!!currentElement.type && !!currentElement.series) {
-              return (
-                <Doughnut
-                  key={currentElement.id}
-                  caption={currentElement.caption}
-                  subCaption={currentElement.subCaption}
-                  labels={currentElement.labels}
-                  paletteColors={currentElement.colors}
-                  series={currentElement.series}
-                  numberPrefix={currentElement.graphicPrefix}
-                />
-              );
+              // return (
+              //   <Doughnut
+              //     key={currentElement.id}
+              //     caption={currentElement.caption}
+              //     subCaption={currentElement.subCaption}
+              //     labels={currentElement.labels}
+              //     paletteColors={currentElement.colors}
+              //     series={currentElement.series}
+              //     numberPrefix={currentElement.graphicPrefix}
+              //   />
+              // );
             }
           })}
       </div>

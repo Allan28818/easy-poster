@@ -53,6 +53,17 @@
       margin-bottom: 0.5rem;
     }
 
+    .colorInput {
+      width: 70%;
+      height: convertToRem(40rem);
+      border: convertToRem(5rem) solid $gray-peace;
+      border-radius: 10px;
+      color: $white-anti-flash;
+      font-size: clamp(10px, convertToRem(16rem), 23px);
+      transition: all 0.4s ease;
+      padding: 0;
+    }
+
     input,
     select {
       width: 100%;
@@ -83,6 +94,24 @@
       opacity: 0.8;
     }
 
+    .smallBtn {
+      width: 50%;
+      height: 3.5%;
+      border-radius: 2rem;
+      background: $orange-synthetic-pumpkin;
+      color: $white-anti-flash;
+      font-size: clamp(12.5px, convertToRem(20rem), 35px);
+      font-weight: bolder;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem;
+      transition: all 0.3s ease;
+      margin: auto;
+      margin-top: 1rem;
+    }
+
     button {
       width: 100%;
       height: 5%;
@@ -110,6 +139,34 @@
       color: $orange-synthetic-pumpkin;
       opacity: 1;
       transition: 0.1s;
+    }
+  }
+
+  .colorsWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    .colorCard {
+      display: flex;
+      width: convertToRem(80rem);
+      min-width: 50px;
+      height: convertToRem(25rem);
+      border-radius: convertToRem(4rem);
+      margin: convertToRem(3rem);
+      justify-content: flex-end;
+      align-items: center;
+
+      .closeColorCard {
+        width: convertToRem(20rem);
+        height: convertToRem(20rem);
+        cursor: pointer;
+        color: $white-anti-flash;
+        background: $black-transparent;
+        height: 100%;
+        width: auto;
+        border-top-right-radius: convertToRem(4rem);
+        border-bottom-right-radius: convertToRem(4rem);
+        transition: all 0.3s ease;
+      }
     }
   }
 }

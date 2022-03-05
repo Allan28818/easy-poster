@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 
 import { GrFormClose } from "react-icons/gr";
+import { AiOutlineCloseCircle } from "react-icons/ai";
+
 import styles from "../../styles/posts/create-a-post.module.scss";
 import HoverButton from "../../components/Buttons/HoverButton";
 import TextComponent from "../../components/TextComponents/TextComponent";
-
-import Doughnut from "../../components/Graphics/Doughnut";
 
 import docElementsProp from "../../models/DocElementsProp";
 
@@ -18,6 +18,8 @@ import BasicMessage from "../../components/Messages/BasicMessage";
 import BasicMessageProps from "../../models/components/BasicMessageProps";
 import BasicMenu from "../../components/Menu/BasicMenu";
 import BasicBurgerMenu from "../../components/BurgersMenu/BasicBurgerMenu";
+import convertToRGB from "../../services/convertToRGB";
+import PieChart from "../../components/Graphics/PieChart";
 
 function CreateAPost() {
   const [docElements, setDocElements] = useState<docElementsProp[]>([]);
@@ -31,20 +33,16 @@ function CreateAPost() {
   const [srcText, setSrcText] = useState<string>("");
   const [altText, setAltText] = useState<string>("");
 
-  const [caption, setCaption] = useState<string>("");
-  const [subCaption, setSubCaption] = useState<string>("");
-  const [graphicType, setGraphicType] = useState<string>("pie");
-  const [graphicSeries, setGraphicSeries] = useState<string>("30, 30, 40");
-  const [graphicColors, setGraphicColors] = useState<string>(
-    "#2980b9, #2ecc71, #f1c40f"
-  );
+  const [chartTitle, setChartTitle] = useState<string>("");
+  const [graphicType, setGraphicType] = useState<string>("");
+  const [graphicSeries, setGraphicSeries] = useState<string>("");
+  const [graphicSeriesLabels, setGraphicSeriesLabels] = useState<string>("");
+  const [colorInput, setColorInput] = useState<string>("");
+  const [graphicColors, setGraphicColors] = useState<string[]>([]);
 
   const [title, setTitle] = useState<string>("");
 
-  const [graphicLabels, setGraphicLabels] = useState<string>(
-    "Label1, Label2, Label3"
-  );
-  const [graphicPrefix, setGraphicPrefix] = useState<string>("");
+  const [graphicLabels, setGraphicLabels] = useState<string>();
 
   const [basicMessageConfig, setBasicMessageConfig] =
     useState<BasicMessageProps>({
@@ -94,11 +92,11 @@ function CreateAPost() {
 
   const handleAddGraphic = () => {
     const graphicLabelsArray = graphicLabels
-      .split(",")
+      ?.split(",")
       .map((label) => label.trim());
     const graphicSeriesArray = graphicSeries
       .split(",")
-      .map((serie) => serie.trim());
+      .map((serie) => parseInt(serie.trim()));
 
     const graphicToAdd: docElementsProp = {
       id: uuid(),
@@ -107,9 +105,7 @@ function CreateAPost() {
       colors: graphicColors,
       labels: graphicLabelsArray,
       series: graphicSeriesArray,
-      caption,
-      subCaption,
-      graphicPrefix,
+      chartTitle,
     };
 
     const docElementRef = Array.from(docElements);
@@ -118,13 +114,11 @@ function CreateAPost() {
 
     setDocElements(docElementRef);
     setStepsPopUp(true);
-    setGraphicColors("");
+    setGraphicColors([]);
     setGraphicLabels("");
-    setGraphicPrefix("");
     setGraphicSeries("");
     setGraphicType("");
-    setCaption("");
-    setSubCaption("");
+    setChartTitle("");
     setShowGraphicPopUp(false);
   };
 
@@ -238,25 +232,16 @@ function CreateAPost() {
           {stepsPopUp ? (
             <>
               <div className={styles.formWrapper}>
-                <label htmlFor="caption">Type your Caption</label>
+                <label htmlFor="title">Type your title (optional)</label>
                 <input
-                  name="caption"
+                  name="title"
                   placeholder="This is my graphic"
-                  onChange={(e: any) => setCaption(e.target.value)}
-                  value={caption}
+                  onChange={(e: any) => setChartTitle(e.target.value)}
+                  value={chartTitle}
+                  autoComplete="off"
                 />
               </div>
-              <div className={styles.formWrapper}>
-                <label htmlFor="sub-caption">
-                  Type your sub caption (optional)
-                </label>
-                <input
-                  name="sub-caption"
-                  placeholder="And this is my description"
-                  onChange={(e: any) => setSubCaption(e.target.value)}
-                  value={subCaption}
-                />
-              </div>
+
               <div className={styles.formWrapper}>
                 <label htmlFor="graphicType">Select your graphic type</label>
                 <select
@@ -267,9 +252,7 @@ function CreateAPost() {
                   <option value="doughnut">Doughnut</option>
                   <option value="bar">Bar</option>
                   <option value="line">Line</option>
-                  <option value="heatmap">Heatmap</option>
                   <option value="radar">Radar</option>
-                  <option value="angulargauge">Angular Gauge</option>
                 </select>
               </div>
               <button onClick={() => setStepsPopUp(false)}>Next</button>
@@ -283,16 +266,63 @@ function CreateAPost() {
                   placeholder="1, 2, 3, ..."
                   onChange={(e: any) => setGraphicSeries(e.target.value)}
                   value={graphicSeries}
+                  autoComplete="off"
                 />
               </div>
+              <div className={styles.formWrapper}>
+                <label htmlFor="series">Type your series labels</label>
+                <input
+                  name="series"
+                  placeholder="Type the labels in the respective order"
+                  onChange={(e: any) => setGraphicSeriesLabels(e.target.value)}
+                  value={graphicSeriesLabels}
+                  autoComplete="off"
+                />
+              </div>
+
               <div className={styles.formWrapper}>
                 <label htmlFor="colors">Type your graphic colors</label>
                 <input
                   name="colors"
-                  placeholder="#f00, #00f, #0f0..."
-                  onChange={(e: any) => setGraphicColors(e.target.value)}
-                  value={graphicColors}
+                  type={"color"}
+                  onChange={(e: any) => {
+                    const rgbaColor = convertToRGB(e.target.value);
+                    setColorInput(rgbaColor);
+                  }}
+                  className={styles.colorInput}
+                  autoComplete="off"
                 />
+                <div className={styles.colorsWrapper}>
+                  {graphicColors.map((currentColor, currentIndex) => {
+                    return (
+                      <div
+                        key={Math.floor(Math.random() * (10000 - 1)) + 1}
+                        className={styles.colorCard}
+                        style={{ backgroundColor: currentColor }}
+                      >
+                        <AiOutlineCloseCircle
+                          className={styles.closeColorCard}
+                          onClick={(e: any) => {
+                            setGraphicColors(
+                              graphicColors.filter(
+                                (_, colorIndex) => colorIndex !== currentIndex
+                              )
+                            );
+                          }}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <button
+                  className={styles.smallBtn}
+                  onClick={() =>
+                    setGraphicColors((oldValues) => [...oldValues, colorInput])
+                  }
+                >
+                  Add Color
+                </button>
               </div>
               <div className={styles.formWrapper}>
                 <label htmlFor="labels">Type your graphic labels</label>
@@ -301,29 +331,20 @@ function CreateAPost() {
                   placeholder="dogs, cats, birds..."
                   onChange={(e: any) => setGraphicLabels(e.target.value)}
                   value={graphicLabels}
+                  autoComplete="off"
                 />
               </div>
-              <div className={styles.formWrapper}>
-                <label htmlFor="prefix">Type your data prefix</label>
-                <input
-                  name="prefix"
-                  placeholder="$100"
-                  onChange={(e: any) => setGraphicPrefix(e.target.value)}
-                  value={graphicPrefix}
-                />
-              </div>
+
               <button
                 type="submit"
                 onClick={() => {
                   handleAddGraphic();
                   setStepsPopUp(true);
-                  setGraphicColors("");
+                  setGraphicColors([]);
                   setGraphicLabels("");
-                  setGraphicPrefix("");
                   setGraphicSeries("");
                   setGraphicType("");
-                  setCaption("");
-                  setSubCaption("");
+                  setChartTitle("");
                   setShowGraphicPopUp(false);
                 }}
               >
@@ -395,17 +416,17 @@ function CreateAPost() {
               />
             );
           } else if (!!currentElement.type && !!currentElement.series) {
-            return (
-              <Doughnut
-                key={currentElement.id}
-                caption={currentElement.caption}
-                subCaption={currentElement.subCaption}
-                labels={currentElement.labels}
-                paletteColors={currentElement.colors}
-                series={currentElement.series}
-                numberPrefix={currentElement.graphicPrefix}
-              />
-            );
+            // return (
+            //   <Doughnut
+            //     key={currentElement.id}
+            //     caption={currentElement.caption}
+            //     subCaption={currentElement.subCaption}
+            //     labels={currentElement.labels}
+            //     paletteColors={currentElement.colors}
+            //     series={currentElement.series}
+            //     numberPrefix={currentElement.graphicPrefix}
+            //   />
+            // );
           }
         })}
       </div>
