@@ -4,12 +4,11 @@ interface docElementsProp {
   src?: string;
   alt?: string;
   textContent?: string;
-  colors?: string;
+  colors?: string[];
   labels?: string[];
-  series?: string[];
+  series?: number[];
   type?: string;
-  caption?: string;
-  subCaption?: string;
+  chartTitle?: string;
   graphicPrefix?: string;
 }
 

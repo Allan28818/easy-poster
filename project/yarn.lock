@@ -927,13 +927,6 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.9.2":
-  version "7.16.7"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.16.7.tgz#03ff99f64106588c9c403c6ecb8c3bafbbdff1fa"
-  integrity sha512-9E9FJowqAsytyOY6LG+1KuueckRL+aQW+mKvXRXnuFGyRAyepJPmEo9vgMfXUA6O9u3IeEdv9MAkppFcaQwogQ==
-  dependencies:
-    regenerator-runtime "^0.13.4"
-
 "@babel/template@^7.16.7":
   version "7.16.7"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.16.7.tgz#8d126c8701fde4d66b264b3eba3d96f07666d155"
@@ -1361,93 +1354,6 @@
   version "0.6.0"
   resolved "https://registry.npmjs.org/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.6.0.tgz"
   integrity sha512-Pz4+7HPzKvOFI1ICQ6pyUv/VgStEWq9IGiVaaV1cQLi66NIA1mD5INnY4CDNoVAxlkuZvDEUZ+cVHLQ8iwA2hQ==
-
-"@froalacharts/charts@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@froalacharts/charts/-/charts-1.0.0.tgz#d5b43ea9ee3ff6a104d9f6b0dcc0abc5af0ebf2f"
-  integrity sha512-YMbQOm2rx5h8+bLtIEMPMs4xM+QLCVxjkCL9nPakdxBlTZi2TggC+vM3UGZ6CajAX9p07MFiuKdyM/t+KjYNKw==
-  dependencies:
-    "@babel/runtime" "^7.9.2"
-    "@froalacharts/core" "^1.0.0"
-    "@froalacharts/features" "^1.0.0"
-    "@froalacharts/utils" "^1.0.0"
-
-"@froalacharts/constructor@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@froalacharts/constructor/-/constructor-1.0.0.tgz#dd7ca09115be3d3bd914932a786546351d80af87"
-  integrity sha512-8k03GsNoCGFA9aPYukg09E+aGwJXarMe3VBA6slLRP97//UiuFJfu5WlOatzJk40LNHP8DluKIZznBg+BB/tmw==
-  dependencies:
-    "@babel/runtime" "^7.9.2"
-    "@froalacharts/core" "^1.0.0"
-
-"@froalacharts/core@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@froalacharts/core/-/core-1.0.0.tgz#d6f854b4dce2167b460b2d2794d790122bd257d8"
-  integrity sha512-2cz9o9oxiafJtIres5rhx4GAUonWudq29wLDBPBK4JDefMy3sB5wcJJGRHvjISerTJU4hiLpi1hpAMpqy5kfQQ==
-  dependencies:
-    "@babel/runtime" "^7.9.2"
-    "@froalacharts/utils" "^1.0.0"
-    core-js "^3.0.1"
-    ramda "^0.25.0"
-
-"@froalacharts/datatable@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@froalacharts/datatable/-/datatable-1.0.0.tgz#e0a221704c903a43588cd199ed8f8c939276328d"
-  integrity sha512-8mHbOlQ9CHoFi7n54ZPbtJ4ZBRYAGPkmV4gKDSQbkc7gtj7YU633cIkJsl/F8DgONQbLjk7c1nNF9Dln0OB20g==
-  dependencies:
-    "@babel/runtime" "^7.9.2"
-    "@froalacharts/utils" "^1.0.0"
-
-"@froalacharts/features@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@froalacharts/features/-/features-1.0.0.tgz#5c63170e4a9e53ed5c3b59d3aa9b5ed1a835d7d8"
-  integrity sha512-8zXuDr/JljZTn8g4DlM+91CtZTNf1tcfVLV2EWgDApOIivgAa1WiYtL7SW2SeJvujQpH1FZ286GuuinNzlgchA==
-  dependencies:
-    "@babel/runtime" "^7.9.2"
-    "@froalacharts/core" "^1.0.0"
-    "@froalacharts/utils" "^1.0.0"
-
-"@froalacharts/fusiontime@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@froalacharts/fusiontime/-/fusiontime-1.0.0.tgz#5dc7ac29382a227042a36e6084eaf0e6e8e39e58"
-  integrity sha512-RM00N1eMT+uiKZIYZvE7Dt1cQXzUATyjCyVDdCtsueyXeiEzLmGH3d8C97Uqo2gElCevr52R/LU27mYlBIKtxg==
-  dependencies:
-    "@babel/runtime" "^7.9.2"
-    "@froalacharts/charts" "^1.0.0"
-    "@froalacharts/core" "^1.0.0"
-    "@froalacharts/datatable" "^1.0.0"
-    "@froalacharts/utils" "^1.0.0"
-    ramda "^0.25.0"
-
-"@froalacharts/powercharts@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@froalacharts/powercharts/-/powercharts-1.0.0.tgz#0c19477e6353ef00e37e8c20660e7039de4c20e7"
-  integrity sha512-0h/Qlol3tCuVm4jseNMULGQ4z/0GUL2PGSM/ZrVmMtSwM9UOm8uOfObG2MDEBvOzs9zGmBOK9hfXf8hGOxpbUg==
-  dependencies:
-    "@babel/runtime" "^7.9.2"
-    "@froalacharts/charts" "^1.0.0"
-    "@froalacharts/core" "^1.0.0"
-    "@froalacharts/utils" "^1.0.0"
-
-"@froalacharts/utils@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@froalacharts/utils/-/utils-1.0.0.tgz#6c5c054934ed0c25e1948237368eae0b7103a93b"
-  integrity sha512-gv5pYRMIWLXPFuFkNYCIybEPMlTRTOn+p67Dn5ZFmRA8dlj0WJeljgJecfa+cuOv521AZTGpZne6yBJyYCk6sw==
-  dependencies:
-    "@babel/runtime" "^7.9.2"
-    ramda "^0.25.0"
-
-"@froalacharts/widgets@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@froalacharts/widgets/-/widgets-1.0.0.tgz#3b56a5554e00038f1170465c39090a9668f5fd10"
-  integrity sha512-Dh48F89M1Yy/r82zqysQ/pEQXmvbiUtRzh+whHcYJ7pNamwEa5pjglhrYCAhORztBOOkXIrHdBzM4qVInX7+zQ==
-  dependencies:
-    "@babel/runtime" "^7.9.2"
-    "@froalacharts/charts" "^1.0.0"
-    "@froalacharts/constructor" "^1.0.0"
-    "@froalacharts/core" "^1.0.0"
-    "@froalacharts/features" "^1.0.0"
-    "@froalacharts/utils" "^1.0.0"
 
 "@google-cloud/common@^3.7.4":
   version "3.7.4"
@@ -2498,6 +2404,11 @@ chalk@^4.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
+chart.js@^3.7.1:
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-3.7.1.tgz#0516f690c6a8680c6c707e31a4c1807a6f400ada"
+  integrity sha512-8knRegQLFnPQAheZV8MjxIXc5gQEfDFD897BJgv/klO/vtIyFFmgMXrNfgrXpbTr/XbTturxRgxIXx/Y+ASJBA==
+
 chokidar@3.5.1:
   version "3.5.1"
   resolved "https://registry.npmjs.org/chokidar/-/chokidar-3.5.1.tgz"
@@ -2671,11 +2582,6 @@ core-js@3.6.5:
   version "3.6.5"
   resolved "https://registry.npmjs.org/core-js/-/core-js-3.6.5.tgz"
   integrity sha512-vZVEEwZoIsI+vPEuoF9Iqf5H7/M3eeQqWlQnYa8FSKKePuYTf5MWnxb5SDAzCa60b3JBRS5g9b+Dq7b1y/RCrA==
-
-core-js@^3.0.1:
-  version "3.20.3"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.20.3.tgz#c710d0a676e684522f3db4ee84e5e18a9d11d69a"
-  integrity sha512-vVl8j8ph6tRS3B8qir40H7yw7voy17xL0piAjlbBUsH7WIfzoedL/ZOr1OV9FyZQLWXsayOJyV4tnRyXR85/ag==
 
 core-util-is@~1.0.0:
   version "1.0.3"
@@ -3488,24 +3394,6 @@ formik@^2.2.9:
     react-fast-compare "^2.0.1"
     tiny-warning "^1.0.2"
     tslib "^1.10.0"
-
-froalacharts@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/froalacharts/-/froalacharts-1.0.0.tgz#c18607c81089909521676b24f7cba93900b89fc0"
-  integrity sha512-vqQsmprKU5EsM8YA2a+Q0TK1XTsXu5D+cL3PsPDY3rfPd3BUT8H7nlUETwTVhoBzRUcF+8ZwHggDPosGBk9nXg==
-  dependencies:
-    "@babel/runtime" "^7.9.2"
-    "@froalacharts/charts" "^1.0.0"
-    "@froalacharts/constructor" "^1.0.0"
-    "@froalacharts/core" "^1.0.0"
-    "@froalacharts/datatable" "^1.0.0"
-    "@froalacharts/features" "^1.0.0"
-    "@froalacharts/fusiontime" "^1.0.0"
-    "@froalacharts/powercharts" "^1.0.0"
-    "@froalacharts/utils" "^1.0.0"
-    "@froalacharts/widgets" "^1.0.0"
-    mutationobserver-shim "^0.3.5"
-    promise-polyfill "^8.1.3"
 
 fs-extra@^9.0.1:
   version "9.1.0"
@@ -4671,11 +4559,6 @@ ms@^2.1.1:
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-mutationobserver-shim@^0.3.5:
-  version "0.3.7"
-  resolved "https://registry.yarnpkg.com/mutationobserver-shim/-/mutationobserver-shim-0.3.7.tgz#8bf633b0c0b0291a1107255ed32c13088a8c5bf3"
-  integrity sha512-oRIDTyZQU96nAiz2AQyngwx1e89iApl2hN5AOYwyxLUB47UYsU3Wv9lJWqH5y/QdiYkc5HQLi23ZNB3fELdHcQ==
-
 nanoclone@^0.2.1:
   version "0.2.1"
   resolved "https://registry.npmjs.org/nanoclone/-/nanoclone-0.2.1.tgz"
@@ -5175,11 +5058,6 @@ promise-polyfill@8.1.3:
   resolved "https://registry.npmjs.org/promise-polyfill/-/promise-polyfill-8.1.3.tgz"
   integrity sha512-MG5r82wBzh7pSKDRa9y+vllNHz3e3d4CNj1PQE4BQYxLme0gKYYBm9YENq+UkEikyZ0XbiGWxYlVw3Rl9O/U8g==
 
-promise-polyfill@^8.1.3:
-  version "8.2.1"
-  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.2.1.tgz#1fa955b325bee4f6b8a4311e18148d4e5b46d254"
-  integrity sha512-3p9zj0cEHbp7NVUxEYUWjQlffXqnXaZIMPkAO7HhFh8u5636xLRDHOUo2vpWSK0T2mqm6fKLXYn1KP6PAZ2gKg==
-
 prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz"
@@ -5294,11 +5172,6 @@ queue@6.0.2:
   dependencies:
     inherits "~2.0.3"
 
-ramda@^0.25.0:
-  version "0.25.0"
-  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
-  integrity sha512-GXpfrYVPwx3K7RQ6aYT8KPS8XViSXUVJT1ONhoKPE9VAleW42YE+U+8VEyGWt41EnEQW7gwecYJriTI0pKoecQ==
-
 randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5, randombytes@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/randombytes/-/randombytes-2.1.0.tgz"
@@ -5323,6 +5196,11 @@ raw-body@2.4.1:
     http-errors "1.7.3"
     iconv-lite "0.4.24"
     unpipe "1.0.0"
+
+react-chartjs-2@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-chartjs-2/-/react-chartjs-2-4.0.1.tgz#38ed1d5b6e2f789408450c981e9e8e1d78b2e015"
+  integrity sha512-q8bgWzKoFvBvD7YcjT/hXG8jt55TaMAuJ1dmI3tKFJ7CijUWYz4pIfOhkTI6PBTwqu/pmeWsClBRd/7HiWzN1g==
 
 react-dom@17.0.2:
   version "17.0.2"
