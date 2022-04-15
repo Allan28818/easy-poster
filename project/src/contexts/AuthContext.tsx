@@ -92,12 +92,12 @@ export function AuthContextProvider({ children }: AuthContextProps) {
           photoURL,
         });
 
-        setUser({
-          uid,
-          email,
-          photoURL,
-          displayName,
-        });
+        // setUser({
+        //   uid,
+        //   email,
+        //   photoURL,
+        //   displayName,
+        // });
       }
     } catch (error: any) {
       console.log(error);
@@ -135,12 +135,12 @@ export function AuthContextProvider({ children }: AuthContextProps) {
         photoURL,
       });
 
-      setUser({
-        uid,
-        email,
-        photoURL,
-        displayName,
-      });
+      // setUser({
+      //   uid,
+      //   email,
+      //   photoURL,
+      //   displayName,
+      // });
     } catch (error: any) {
       return {
         result: null,
@@ -171,12 +171,12 @@ export function AuthContextProvider({ children }: AuthContextProps) {
 
       updateProfile(user, { displayName: `${firstName} ${lastName}` });
 
-      await setDoc(doc(firestore, "users", user.uid), {
-        id: user.uid,
-        firstName,
-        lastName,
-        email,
-      });
+      // await setDoc(doc(firestore, "users", user.uid), {
+      //   id: user.uid,
+      //   firstName,
+      //   lastName,
+      //   email,
+      // });
     } catch (error: any) {
       return {
         message: "It wasn't possible to sign the user up!",

@@ -1,3 +1,5 @@
+import ChartDataProps from "./components/ChartDataProps";
+
 interface docElementsProp {
   id: string;
   elementName: string;
@@ -7,9 +9,10 @@ interface docElementsProp {
   colors?: string[];
   labels?: string[];
   series?: number[];
-  type?: string;
+  type: string;
   chartTitle?: string;
   graphicPrefix?: string;
+  chartData?: ChartDataProps[];
 }
 
 export default docElementsProp;
