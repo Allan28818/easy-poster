@@ -1,32 +1,53 @@
 import React from "react";
-import { Chart as ChartJs, ArcElement, Tooltip, Legend } from "chart.js";
-import { Pie } from "react-chartjs-2";
-
-ChartJs.register(ArcElement, Tooltip, Legend);
+import ReactApexChart from "react-apexcharts";
 
 interface PieChartProps {
-  labels: string[];
-  backgroundColors: string[];
-  borderColors: string[];
-  dataValues: number[];
+  series: number[] | undefined;
+  colors: string[] | undefined;
+  labels: string[] | undefined;
 }
 
-function PieChart(props: PieChartProps) {
-  const { backgroundColors, borderColors, labels, dataValues } = props;
-
-  const data = {
-    labels,
-    datasets: [
-      {
-        data: dataValues,
-        backgroundColor: backgroundColors,
-        borderColor: borderColors,
-        borderWidth: 1,
+function Piechart(props: PieChartProps) {
+  const chartData: any = {
+    series: props.series,
+    options: {
+      chart: {
+        width: 380,
+        type: "pie",
       },
-    ],
+      colors: props.colors,
+      labels: props.labels,
+
+      stroke: {
+        show: false,
+      },
+
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            legend: {
+              position: "bottom",
+            },
+          },
+        },
+      ],
+      legend: {
+        position: "bottom",
+        markers: {
+          radius: 0,
+        },
+      },
+    },
   };
 
-  return <Pie data={data} />;
+  return (
+    <ReactApexChart
+      options={chartData.options}
+      series={chartData.series}
+      type="pie"
+      height={300}
+    />
+  );
 }
-
-export default PieChart;
+export default Piechart;

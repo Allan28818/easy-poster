@@ -18,8 +18,17 @@ import BasicMessage from "../../components/Messages/BasicMessage";
 import BasicMessageProps from "../../models/components/BasicMessageProps";
 import BasicMenu from "../../components/Menu/BasicMenu";
 import BasicBurgerMenu from "../../components/BurgersMenu/BasicBurgerMenu";
-import convertToRGB from "../../services/convertToRGB";
-import PieChart from "../../components/Graphics/PieChart";
+
+import dynamic from "next/dynamic";
+import CreateChartPopUp from "../../components/PopUps/CreateChartPopUp";
+import ChartDataProps from "../../models/components/ChartDataProps";
+
+const Piechart = dynamic(() => import("../../components/Graphics/PieChart"), {
+  ssr: false,
+});
+const LineChart = dynamic(() => import("../../components/Graphics/LineChart"), {
+  ssr: false,
+});
 
 function CreateAPost() {
   const [docElements, setDocElements] = useState<docElementsProp[]>([]);
@@ -34,15 +43,19 @@ function CreateAPost() {
   const [altText, setAltText] = useState<string>("");
 
   const [chartTitle, setChartTitle] = useState<string>("");
-  const [graphicType, setGraphicType] = useState<string>("");
+  const [graphicType, setGraphicType] = useState<string>("pie");
   const [graphicSeries, setGraphicSeries] = useState<string>("");
-  const [graphicSeriesLabels, setGraphicSeriesLabels] = useState<string>("");
   const [colorInput, setColorInput] = useState<string>("");
   const [graphicColors, setGraphicColors] = useState<string[]>([]);
 
+  const [nameInput, setNameInput] = useState<string>("");
+  const [seriesInput, setSeriesInput] = useState<string>("");
+
+  const [chartData, setChartData] = useState<ChartDataProps[]>([]);
+
   const [title, setTitle] = useState<string>("");
 
-  const [graphicLabels, setGraphicLabels] = useState<string>();
+  const [graphicLabels, setGraphicLabels] = useState<string>("");
 
   const [basicMessageConfig, setBasicMessageConfig] =
     useState<BasicMessageProps>({
@@ -62,6 +75,7 @@ function CreateAPost() {
     let elementToAdd = {
       id: uuid(),
       elementName,
+      type: "text-element",
       textContent: elementName,
     };
 
@@ -74,6 +88,7 @@ function CreateAPost() {
       elementName: "img",
       src: "",
       alt: "",
+      type: "img",
     };
     if (!!srcText) {
       imageToAdd.src = srcText;
@@ -82,7 +97,6 @@ function CreateAPost() {
       }
 
       setDocElements((oldValues) => [...oldValues, imageToAdd]);
-      console.log(docElements);
     }
 
     setSrcText("");
@@ -100,12 +114,13 @@ function CreateAPost() {
 
     const graphicToAdd: docElementsProp = {
       id: uuid(),
-      elementName: `${graphicType}-chart`,
+      elementName: graphicType,
       type: graphicType,
       colors: graphicColors,
       labels: graphicLabelsArray,
       series: graphicSeriesArray,
       chartTitle,
+      chartData,
     };
 
     const docElementRef = Array.from(docElements);
@@ -221,139 +236,32 @@ function CreateAPost() {
         </div>
       </div>
 
-      <div className={showGraphicPopUp ? styles.graphicPopUp : "hidden"}>
-        <GrFormClose
-          className={styles.close}
-          onClick={() => setShowGraphicPopUp(false)}
-        />
-        <div className={styles.card}>
-          <h1>Type your graphic informations</h1>
+      <CreateChartPopUp
+        chartTitle={chartTitle}
+        setChartTitle={setChartTitle}
+        colorInput={colorInput}
+        setColorInput={setColorInput}
+        graphicColors={graphicColors}
+        setGraphicColors={setGraphicColors}
+        graphicLabels={graphicLabels}
+        setGraphicLabels={setGraphicLabels}
+        graphicSeries={graphicSeries}
+        setGraphicSeries={setGraphicSeries}
+        graphicType={graphicType}
+        setGraphicType={setGraphicType}
+        showGraphicPopUp={showGraphicPopUp}
+        setShowGraphicPopUp={setShowGraphicPopUp}
+        stepsPopUp={stepsPopUp}
+        setStepsPopUp={setStepsPopUp}
+        nameInput={nameInput}
+        setNameInput={setNameInput}
+        seriesInput={seriesInput}
+        setSeriesInput={setSeriesInput}
+        chartData={chartData}
+        setChartData={setChartData}
+        handleAddGraphic={handleAddGraphic}
+      />
 
-          {stepsPopUp ? (
-            <>
-              <div className={styles.formWrapper}>
-                <label htmlFor="title">Type your title (optional)</label>
-                <input
-                  name="title"
-                  placeholder="This is my graphic"
-                  onChange={(e: any) => setChartTitle(e.target.value)}
-                  value={chartTitle}
-                  autoComplete="off"
-                />
-              </div>
-
-              <div className={styles.formWrapper}>
-                <label htmlFor="graphicType">Select your graphic type</label>
-                <select
-                  name="graphicType"
-                  onChange={(e: any) => setGraphicType(e.target.value)}
-                >
-                  <option value="pie">Pie</option>
-                  <option value="doughnut">Doughnut</option>
-                  <option value="bar">Bar</option>
-                  <option value="line">Line</option>
-                  <option value="radar">Radar</option>
-                </select>
-              </div>
-              <button onClick={() => setStepsPopUp(false)}>Next</button>
-            </>
-          ) : (
-            <>
-              <div className={styles.formWrapper}>
-                <label htmlFor="series">Type your series</label>
-                <input
-                  name="series"
-                  placeholder="1, 2, 3, ..."
-                  onChange={(e: any) => setGraphicSeries(e.target.value)}
-                  value={graphicSeries}
-                  autoComplete="off"
-                />
-              </div>
-              <div className={styles.formWrapper}>
-                <label htmlFor="series">Type your series labels</label>
-                <input
-                  name="series"
-                  placeholder="Type the labels in the respective order"
-                  onChange={(e: any) => setGraphicSeriesLabels(e.target.value)}
-                  value={graphicSeriesLabels}
-                  autoComplete="off"
-                />
-              </div>
-
-              <div className={styles.formWrapper}>
-                <label htmlFor="colors">Type your graphic colors</label>
-                <input
-                  name="colors"
-                  type={"color"}
-                  onChange={(e: any) => {
-                    const rgbaColor = convertToRGB(e.target.value);
-                    setColorInput(rgbaColor);
-                  }}
-                  className={styles.colorInput}
-                  autoComplete="off"
-                />
-                <div className={styles.colorsWrapper}>
-                  {graphicColors.map((currentColor, currentIndex) => {
-                    return (
-                      <div
-                        key={Math.floor(Math.random() * (10000 - 1)) + 1}
-                        className={styles.colorCard}
-                        style={{ backgroundColor: currentColor }}
-                      >
-                        <AiOutlineCloseCircle
-                          className={styles.closeColorCard}
-                          onClick={(e: any) => {
-                            setGraphicColors(
-                              graphicColors.filter(
-                                (_, colorIndex) => colorIndex !== currentIndex
-                              )
-                            );
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <button
-                  className={styles.smallBtn}
-                  onClick={() =>
-                    setGraphicColors((oldValues) => [...oldValues, colorInput])
-                  }
-                >
-                  Add Color
-                </button>
-              </div>
-              <div className={styles.formWrapper}>
-                <label htmlFor="labels">Type your graphic labels</label>
-                <input
-                  name="labels"
-                  placeholder="dogs, cats, birds..."
-                  onChange={(e: any) => setGraphicLabels(e.target.value)}
-                  value={graphicLabels}
-                  autoComplete="off"
-                />
-              </div>
-
-              <button
-                type="submit"
-                onClick={() => {
-                  handleAddGraphic();
-                  setStepsPopUp(true);
-                  setGraphicColors([]);
-                  setGraphicLabels("");
-                  setGraphicSeries("");
-                  setGraphicType("");
-                  setChartTitle("");
-                  setShowGraphicPopUp(false);
-                }}
-              >
-                Create
-              </button>
-            </>
-          )}
-        </div>
-      </div>
       <header className={styles.tagsHeader}>
         <HoverButton onClickFunction={() => handleAddElement("h1")}>
           <h1>h1</h1>
@@ -415,18 +323,26 @@ function CreateAPost() {
                 textContent={currentElement.textContent}
               />
             );
-          } else if (!!currentElement.type && !!currentElement.series) {
-            // return (
-            //   <Doughnut
-            //     key={currentElement.id}
-            //     caption={currentElement.caption}
-            //     subCaption={currentElement.subCaption}
-            //     labels={currentElement.labels}
-            //     paletteColors={currentElement.colors}
-            //     series={currentElement.series}
-            //     numberPrefix={currentElement.graphicPrefix}
-            //   />
-            // );
+          } else if (!!currentElement.series) {
+            const chartOptions: any = {
+              pie: (
+                <Piechart
+                  key={currentElement.id}
+                  colors={currentElement.colors}
+                  labels={currentElement.labels}
+                  series={currentElement.series}
+                />
+              ),
+              line: (
+                <LineChart
+                  xLabels={currentElement.labels}
+                  series={currentElement.chartData}
+                  colors={currentElement.colors}
+                />
+              ),
+            };
+
+            return chartOptions[currentElement.type];
           }
         })}
       </div>

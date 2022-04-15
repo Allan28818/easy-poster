@@ -26,7 +26,10 @@ function Home() {
 
   useEffect(() => {
     const posts = async () => {
-      setPostsList(await getPosts({ postOwnerId: user.uid }));
+      console.log("user", user);
+      if (!!user.uid) {
+        setPostsList(await getPosts({ postOwnerId: user.uid }));
+      }
     };
 
     posts();
@@ -52,7 +55,7 @@ function Home() {
           alt={currentElement.alt ? currentElement.alt : ""}
         />
       );
-    } else if (!!currentElement.caption) {
+    } else if (!!currentElement.series) {
       return (
         <div className={styles.chartPreview}>
           <AiFillPieChart className={styles.icon} />
