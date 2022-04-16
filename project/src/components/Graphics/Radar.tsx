@@ -9,26 +9,15 @@ interface LineChartProps {
   colors: string[] | undefined;
 }
 
-function LineChart(props: LineChartProps) {
+function Radar(props: LineChartProps) {
   const chartData: any = {
-    series: props.series,
     options: {
       chart: {
         height: 350,
-        type: "line",
-        toolbar: false,
+        type: "radar",
       },
       colors: props.colors,
-      forecastDataPoints: {
-        count: 7,
-      },
-      stroke: {
-        width: 5,
-        curve: "smooth",
-      },
-      xaxis: {
-        categories: props.xLabels,
-      },
+      labels: props.xLabels,
       title: {
         text: props.title,
         align: "left",
@@ -37,26 +26,20 @@ function LineChart(props: LineChartProps) {
           color: "#666",
         },
       },
-      fill: {
-        opacity: 1,
-      },
-      yaxis: {
-        min: -10,
-        max: 40,
-      },
     },
+    series: props.series,
   };
 
   return (
-    <div id="chart">
+    <div>
       <ReactApexChart
         options={chartData.options}
         series={chartData.series}
-        type="line"
-        height={350}
+        type="radar"
+        height="350px"
       />
     </div>
   );
 }
 
-export default LineChart;
+export default Radar;

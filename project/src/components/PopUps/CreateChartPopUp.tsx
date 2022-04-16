@@ -3,9 +3,10 @@ import React from "react";
 import { GrFormClose } from "react-icons/gr";
 import ChartDataProps from "../../models/components/ChartDataProps";
 
-import styles from "../../styles/posts/create-a-post.module.scss";
 import BasicChartAddForm from "../Forms/BasicChartAddForm";
 import LineChartAddForm from "../Forms/LineChartAddForm";
+
+import styles from "../../styles/components/pop-up.module.scss";
 
 interface CreateChartPopUpProps {
   showGraphicPopUp: boolean;
@@ -60,6 +61,8 @@ const CreateChartPopUp = (props: CreateChartPopUpProps) => {
     handleAddGraphic,
   } = props;
 
+  const lineTemplateCharts = ["line", "bar", "radar"];
+
   return (
     <div className={showGraphicPopUp ? styles.graphicPopUp : "hidden"}>
       <GrFormClose
@@ -99,7 +102,7 @@ const CreateChartPopUp = (props: CreateChartPopUpProps) => {
           </>
         ) : (
           <>
-            {graphicType === "line" ? (
+            {lineTemplateCharts.includes(graphicType) ? (
               <LineChartAddForm
                 colorInput={colorInput}
                 setColorInput={setColorInput}

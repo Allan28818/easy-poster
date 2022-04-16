@@ -24,6 +24,17 @@
     width: 100%;
     height: auto;
   }
+
+  a {
+    color: $blue-cyanite;
+    transition: all 0.3s ease;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+      color: $blue-light;
+    }
+  }
 }
 
 .hidden {

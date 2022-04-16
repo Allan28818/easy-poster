@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 
-import { GrFormClose } from "react-icons/gr";
-import { AiOutlineCloseCircle } from "react-icons/ai";
-
 import styles from "../../styles/posts/create-a-post.module.scss";
 import HoverButton from "../../components/Buttons/HoverButton";
 import TextComponent from "../../components/TextComponents/TextComponent";
@@ -22,11 +19,26 @@ import BasicBurgerMenu from "../../components/BurgersMenu/BasicBurgerMenu";
 import dynamic from "next/dynamic";
 import CreateChartPopUp from "../../components/PopUps/CreateChartPopUp";
 import ChartDataProps from "../../models/components/ChartDataProps";
+import CreateImagePopUp from "../../components/PopUps/CreateImagePopUp";
+import CreateLinkPopUp from "../../components/PopUps/CreateLinkPopUp";
 
 const Piechart = dynamic(() => import("../../components/Graphics/PieChart"), {
   ssr: false,
 });
+
+const Donut = dynamic(() => import("../../components/Graphics/Donut"), {
+  ssr: false,
+});
+
+const BarChart = dynamic(() => import("../../components/Graphics/BarChart"), {
+  ssr: false,
+});
+
 const LineChart = dynamic(() => import("../../components/Graphics/LineChart"), {
+  ssr: false,
+});
+
+const Radar = dynamic(() => import("../../components/Graphics/Radar"), {
   ssr: false,
 });
 
@@ -37,10 +49,11 @@ function CreateAPost() {
 
   const [showImageModal, setShowImageModal] = useState<boolean>(false);
   const [showGraphicPopUp, setShowGraphicPopUp] = useState<boolean>(false);
+  const [showLinkModal, setShowLinkModal] = useState<boolean>(false);
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
-  const [srcText, setSrcText] = useState<string>("");
-  const [altText, setAltText] = useState<string>("");
+  const [srcText, setSrcText] = useState<string | string[]>("");
+  const [altText, setAltText] = useState<string | string[]>("");
 
   const [chartTitle, setChartTitle] = useState<string>("");
   const [graphicType, setGraphicType] = useState<string>("pie");
@@ -50,6 +63,9 @@ function CreateAPost() {
 
   const [nameInput, setNameInput] = useState<string>("");
   const [seriesInput, setSeriesInput] = useState<string>("");
+
+  const [linkText, setLinkText] = useState<string>("");
+  const [linkSrc, setLinkSrc] = useState<string>("");
 
   const [chartData, setChartData] = useState<ChartDataProps[]>([]);
 
@@ -82,7 +98,7 @@ function CreateAPost() {
     setDocElements((oldValues) => [...oldValues, elementToAdd]);
   };
 
-  const handleAddImage = () => {
+  const handleAddImage = async () => {
     let imageToAdd = {
       id: uuid(),
       elementName: "img",
@@ -90,13 +106,26 @@ function CreateAPost() {
       alt: "",
       type: "img",
     };
-    if (!!srcText) {
+    if (!!srcText && !Array.isArray(srcText)) {
       imageToAdd.src = srcText;
-      if (!!altText) {
+      if (!!altText && !Array.isArray(altText)) {
         imageToAdd.alt = altText;
       }
-
       setDocElements((oldValues) => [...oldValues, imageToAdd]);
+    } else if (!!srcText && Array.isArray(srcText)) {
+      let imagesToAdd: any = [];
+
+      srcText.map((image, index) => {
+        imagesToAdd.push({
+          id: uuid(),
+          elementName: "img",
+          src: image,
+          alt: altText[index],
+          type: "img",
+        });
+      });
+
+      setDocElements((oldValues) => [...oldValues, ...imagesToAdd]);
     }
 
     setSrcText("");
@@ -137,12 +166,36 @@ function CreateAPost() {
     setShowGraphicPopUp(false);
   };
 
+  const handleAddLink = () => {
+    if (linkSrc && linkText) {
+      const linkToAdd: docElementsProp = {
+        id: uuid(),
+        textContent: linkText,
+        src: linkSrc,
+        elementName: "a",
+        type: "a",
+      };
+
+      const docElementRef = Array.from(docElements);
+
+      docElementRef.push(linkToAdd);
+
+      setDocElements(docElementRef);
+    }
+
+    setLinkText("");
+    setLinkSrc("");
+    setShowLinkModal(false);
+  };
+
   async function handleSavePost() {
     if (title) {
       const creatorData = {
         id: user.uid,
         fullName: user.displayName,
       };
+
+      console.log(docElements.filter((element) => element.type === "img"));
 
       const response = await savePostController({
         postName: title,
@@ -204,37 +257,16 @@ function CreateAPost() {
         showMenu={showMenu}
         setShowMenu={setShowMenu}
       />
-      <div className={showImageModal ? styles.imgPopUp : "hidden"}>
-        <GrFormClose
-          className={styles.close}
-          onClick={() => setShowImageModal(false)}
-        />
 
-        <div className={styles.card}>
-          <h1>Type your image informations</h1>
-          <label htmlFor="source">Image source</label>
-          <input
-            type="url"
-            name="source"
-            className={styles.required}
-            placeholder="https://..."
-            required
-            value={srcText}
-            onChange={(event) => setSrcText(event.target.value)}
-          />
-          <label htmlFor="alt">Alternative text (optional)</label>
-          <input
-            type="text"
-            name="alt"
-            className={styles.optional}
-            placeholder="Texto da minha imagem"
-            onChange={(event) => setAltText(event.target.value)}
-          />
-          <button onClick={handleAddImage} disabled={!srcText ? true : false}>
-            Create
-          </button>
-        </div>
-      </div>
+      <CreateImagePopUp
+        srcText={srcText}
+        setSrcText={setSrcText}
+        altText={altText}
+        setAltText={setAltText}
+        showImageModal={showImageModal}
+        setShowImageModal={setShowImageModal}
+        handleAddImage={handleAddImage}
+      />
 
       <CreateChartPopUp
         chartTitle={chartTitle}
@@ -262,6 +294,16 @@ function CreateAPost() {
         handleAddGraphic={handleAddGraphic}
       />
 
+      <CreateLinkPopUp
+        showLinkModal={showLinkModal}
+        setShowLinkModal={setShowLinkModal}
+        linkSrc={linkSrc}
+        setLinkSrc={setLinkSrc}
+        linkText={linkText}
+        setLinkText={setLinkText}
+        handleAddLink={handleAddLink}
+      />
+
       <header className={styles.tagsHeader}>
         <HoverButton onClickFunction={() => handleAddElement("h1")}>
           <h1>h1</h1>
@@ -287,7 +329,9 @@ function CreateAPost() {
         <HoverButton onClickFunction={() => handleAddElement("span")}>
           <span>span</span>
         </HoverButton>
-        <HoverButton onClickFunction={() => {}}>link</HoverButton>
+        <HoverButton onClickFunction={() => setShowLinkModal(true)}>
+          link
+        </HoverButton>
         <HoverButton
           onClickFunction={() => {
             setShowImageModal(true);
@@ -306,13 +350,19 @@ function CreateAPost() {
 
       <div id="post-body">
         {docElements.map((currentElement) => {
-          if (!!currentElement.src) {
+          if (!!currentElement.src && currentElement.type === "img") {
             return (
               <img
                 key={currentElement.id}
                 src={currentElement.src}
                 alt={currentElement.alt}
               />
+            );
+          } else if (currentElement.textContent && currentElement.src) {
+            return (
+              <a href={currentElement.src} target="_blank">
+                {currentElement.textContent}
+              </a>
             );
           } else if (currentElement.textContent) {
             return (
@@ -321,6 +371,7 @@ function CreateAPost() {
                 id={currentElement.id}
                 elementName={currentElement.elementName}
                 textContent={currentElement.textContent}
+                isEditable={true}
               />
             );
           } else if (!!currentElement.series) {
@@ -333,8 +384,33 @@ function CreateAPost() {
                   series={currentElement.series}
                 />
               ),
+              donut: (
+                <Donut
+                  key={currentElement.id}
+                  colors={currentElement.colors}
+                  labels={currentElement.labels}
+                  series={currentElement.series}
+                />
+              ),
+              bar: (
+                <BarChart
+                  title={currentElement.chartTitle}
+                  xLabels={currentElement.labels}
+                  series={currentElement.chartData}
+                  colors={currentElement.colors}
+                />
+              ),
               line: (
                 <LineChart
+                  title={currentElement.chartTitle}
+                  xLabels={currentElement.labels}
+                  series={currentElement.chartData}
+                  colors={currentElement.colors}
+                />
+              ),
+              radar: (
+                <Radar
+                  title={currentElement.chartTitle}
                   xLabels={currentElement.labels}
                   series={currentElement.chartData}
                   colors={currentElement.colors}
