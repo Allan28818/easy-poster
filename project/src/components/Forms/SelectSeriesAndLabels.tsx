@@ -3,7 +3,7 @@ import ChartDataProps from "../../models/components/ChartDataProps";
 
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
-import styles from "../../styles/posts/create-a-post.module.scss";
+import styles from "../../styles/components/pop-up.module.scss";
 
 interface SelectSeriesAndLabelsProps {
   nameInput: string;

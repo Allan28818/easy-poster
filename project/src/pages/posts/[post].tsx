@@ -69,6 +69,7 @@ function PostDetails() {
                   id={currentElement.id}
                   elementName={currentElement.elementName}
                   textContent={currentElement.textContent}
+                  isEditable={false}
                 />
               );
             } else if (!!currentElement.type && !!currentElement.series) {
