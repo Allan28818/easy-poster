@@ -26,7 +26,6 @@ function Home() {
 
   useEffect(() => {
     const posts = async () => {
-      console.log("user", user);
       if (!!user.uid) {
         setPostsList(await getPosts({ postOwnerId: user.uid }));
       }
@@ -35,8 +34,14 @@ function Home() {
     posts();
   }, []);
 
+  console.log(postsList);
+
   function handleCreatePreview(currentElement: docElementsProp) {
-    if (!!currentElement.textContent && !currentElement.type) {
+    console.log("currentElement", currentElement);
+    if (
+      !!currentElement.textContent &&
+      currentElement.type === "text-element"
+    ) {
       return (
         <>
           <TextComponent
@@ -48,7 +53,7 @@ function Home() {
           <span>...</span>
         </>
       );
-    } else if (!!currentElement.src) {
+    } else if (!!currentElement.src && currentElement.type === "img") {
       return (
         <img
           src={currentElement.src}

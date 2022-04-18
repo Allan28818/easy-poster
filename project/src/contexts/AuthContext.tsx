@@ -50,6 +50,8 @@ interface AuthContextInt {
   logOut: () => Promise<FunctionMessage>;
   signInWithGoogle: () => Promise<popUpFunctionMessage>;
   signInWithFacebook: () => Promise<popUpFunctionMessage>;
+  loading: boolean;
+  setLoading: React.Dispatch<SetStateAction<boolean>>;
 }
 
 export const AuthContext = createContext({} as AuthContextInt);
@@ -258,6 +260,8 @@ export function AuthContextProvider({ children }: AuthContextProps) {
         logOut,
         signInWithGoogle,
         signInWithFacebook,
+        loading,
+        setLoading,
       }}
     >
       {children}

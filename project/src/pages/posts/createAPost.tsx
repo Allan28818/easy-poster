@@ -21,6 +21,7 @@ import CreateChartPopUp from "../../components/PopUps/CreateChartPopUp";
 import ChartDataProps from "../../models/components/ChartDataProps";
 import CreateImagePopUp from "../../components/PopUps/CreateImagePopUp";
 import CreateLinkPopUp from "../../components/PopUps/CreateLinkPopUp";
+import saveImage from "../../services/posts/saveImage";
 
 const Piechart = dynamic(() => import("../../components/Graphics/PieChart"), {
   ssr: false,
@@ -108,6 +109,7 @@ function CreateAPost() {
     };
     if (!!srcText && !Array.isArray(srcText)) {
       imageToAdd.src = srcText;
+
       if (!!altText && !Array.isArray(altText)) {
         imageToAdd.alt = altText;
       }
@@ -115,7 +117,10 @@ function CreateAPost() {
     } else if (!!srcText && Array.isArray(srcText)) {
       let imagesToAdd: any = [];
 
-      srcText.map((image, index) => {
+      for (const [index, image] of srcText.entries()) {
+        let imageSrc: any = image;
+        const response = saveImage(image).then((res) => (imageSrc = res.url));
+
         imagesToAdd.push({
           id: uuid(),
           elementName: "img",
@@ -123,7 +128,7 @@ function CreateAPost() {
           alt: altText[index],
           type: "img",
         });
-      });
+      }
 
       setDocElements((oldValues) => [...oldValues, ...imagesToAdd]);
     }
