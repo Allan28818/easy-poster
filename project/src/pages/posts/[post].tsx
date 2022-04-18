@@ -11,6 +11,27 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import styles from "../../styles/posts/post-details.module.scss";
 import Link from "next/link";
 import formatDate from "../../services/formatDate";
+import dynamic from "next/dynamic";
+
+const Piechart = dynamic(() => import("../../components/Graphics/PieChart"), {
+  ssr: false,
+});
+
+const Donut = dynamic(() => import("../../components/Graphics/Donut"), {
+  ssr: false,
+});
+
+const BarChart = dynamic(() => import("../../components/Graphics/BarChart"), {
+  ssr: false,
+});
+
+const LineChart = dynamic(() => import("../../components/Graphics/LineChart"), {
+  ssr: false,
+});
+
+const Radar = dynamic(() => import("../../components/Graphics/Radar"), {
+  ssr: false,
+});
 
 function PostDetails() {
   const [postInformations, setPostInformations] = useState<any>({});
@@ -54,7 +75,7 @@ function PostDetails() {
       <div id="post-body">
         {!!postInformations.postData &&
           postInformations.postData.map((currentElement: docElementsProp) => {
-            if (!!currentElement.src) {
+            if (!!currentElement.src && currentElement.type === "img") {
               return (
                 <img
                   key={currentElement.id}
@@ -62,7 +83,10 @@ function PostDetails() {
                   alt={currentElement.alt}
                 />
               );
-            } else if (currentElement.textContent && !currentElement.type) {
+            } else if (
+              currentElement.textContent &&
+              currentElement.type === "text-element"
+            ) {
               return (
                 <TextComponent
                   key={currentElement.id}
@@ -73,17 +97,50 @@ function PostDetails() {
                 />
               );
             } else if (!!currentElement.type && !!currentElement.series) {
-              // return (
-              //   <Doughnut
-              //     key={currentElement.id}
-              //     caption={currentElement.caption}
-              //     subCaption={currentElement.subCaption}
-              //     labels={currentElement.labels}
-              //     paletteColors={currentElement.colors}
-              //     series={currentElement.series}
-              //     numberPrefix={currentElement.graphicPrefix}
-              //   />
-              // );
+              const chartOptions: any = {
+                pie: (
+                  <Piechart
+                    key={currentElement.id}
+                    colors={currentElement.colors}
+                    labels={currentElement.labels}
+                    series={currentElement.series}
+                  />
+                ),
+                donut: (
+                  <Donut
+                    key={currentElement.id}
+                    colors={currentElement.colors}
+                    labels={currentElement.labels}
+                    series={currentElement.series}
+                  />
+                ),
+                bar: (
+                  <BarChart
+                    title={currentElement.chartTitle}
+                    xLabels={currentElement.labels}
+                    series={currentElement.chartData}
+                    colors={currentElement.colors}
+                  />
+                ),
+                line: (
+                  <LineChart
+                    title={currentElement.chartTitle}
+                    xLabels={currentElement.labels}
+                    series={currentElement.chartData}
+                    colors={currentElement.colors}
+                  />
+                ),
+                radar: (
+                  <Radar
+                    title={currentElement.chartTitle}
+                    xLabels={currentElement.labels}
+                    series={currentElement.chartData}
+                    colors={currentElement.colors}
+                  />
+                ),
+              };
+
+              return chartOptions[currentElement.type];
             }
           })}
       </div>
