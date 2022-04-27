@@ -1,0 +1,61 @@
+@import "../_variables.scss";
+@import "../_functions.scss";
+
+.off {
+  background: none;
+  transition: 0.4s ease;
+}
+
+.cardWrapper {
+  width: 100%;
+  height: auto;
+  border-radius: convertToRem(10rem);
+  background: $white-anti-flash-transparent;
+  transition: 0.4s ease;
+
+  .cardHeader {
+    display: flex;
+    width: 100%;
+    height: auto;
+    background: $blue-light;
+    padding: convertToRem(2.5rem);
+    border-top-right-radius: convertToRem(10rem);
+    border-top-left-radius: convertToRem(10rem);
+    cursor: grab;
+
+    .cardButtons {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+    }
+  }
+
+  .cardContent {
+    cursor: default;
+    padding: convertToRem(5rem);
+  }
+}
+
+.cardButtons {
+  button {
+    width: clamp(
+      convertToRem(50rem),
+      convertToRem(120rem),
+      convertToRem(250rem)
+    );
+    height: auto;
+    font-size: convertToRem(20rem);
+    cursor: pointer;
+    border-radius: convertToRem(30rem);
+    background: none;
+    color: $white-anti-flash;
+  }
+
+  .delete {
+    &:hover {
+      color: $orange-sunset;
+    }
+  }
+}

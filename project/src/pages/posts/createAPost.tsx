@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
 import styles from "../../styles/posts/create-a-post.module.scss";
 import HoverButton from "../../components/Buttons/HoverButton";
 import TextComponent from "../../components/TextComponents/TextComponent";
@@ -22,24 +24,34 @@ import ChartDataProps from "../../models/components/ChartDataProps";
 import CreateImagePopUp from "../../components/PopUps/CreateImagePopUp";
 import CreateLinkPopUp from "../../components/PopUps/CreateLinkPopUp";
 import saveImage from "../../services/posts/saveImage";
+import PostCard from "../../components/Cards/PostCard";
 
-const Piechart = dynamic(() => import("../../components/Graphics/PieChart"), {
+const Piechart: any = dynamic(
+  () => import("../../components/Graphics/PieChart"),
+  {
+    ssr: false,
+  }
+);
+
+const Donut: any = dynamic(() => import("../../components/Graphics/Donut"), {
   ssr: false,
 });
 
-const Donut = dynamic(() => import("../../components/Graphics/Donut"), {
-  ssr: false,
-});
+const BarChart: any = dynamic(
+  () => import("../../components/Graphics/BarChart"),
+  {
+    ssr: false,
+  }
+);
 
-const BarChart = dynamic(() => import("../../components/Graphics/BarChart"), {
-  ssr: false,
-});
+const LineChart: any = dynamic(
+  () => import("../../components/Graphics/LineChart"),
+  {
+    ssr: false,
+  }
+);
 
-const LineChart = dynamic(() => import("../../components/Graphics/LineChart"), {
-  ssr: false,
-});
-
-const Radar = dynamic(() => import("../../components/Graphics/Radar"), {
+const Radar: any = dynamic(() => import("../../components/Graphics/Radar"), {
   ssr: false,
 });
 
@@ -200,8 +212,6 @@ function CreateAPost() {
         fullName: user.displayName,
       };
 
-      console.log(docElements.filter((element) => element.type === "img"));
-
       const response = await savePostController({
         postName: title,
         elementToMap: postBody,
@@ -244,6 +254,16 @@ function CreateAPost() {
       type: "error",
     });
     return;
+  }
+
+  function onDragEnd(result: any) {
+    const items = Array.from(docElements);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    console.log("here");
+    console.log(docElements);
+    console.log("items", items);
+    setDocElements(items);
   }
 
   return (
@@ -353,80 +373,249 @@ function CreateAPost() {
         />
       </header>
 
-      <div id="post-body">
-        {docElements.map((currentElement) => {
-          if (!!currentElement.src && currentElement.type === "img") {
-            return (
-              <img
-                key={currentElement.id}
-                src={currentElement.src}
-                alt={currentElement.alt}
-              />
-            );
-          } else if (currentElement.textContent && currentElement.src) {
-            return (
-              <a href={currentElement.src} target="_blank">
-                {currentElement.textContent}
-              </a>
-            );
-          } else if (currentElement.textContent) {
-            return (
-              <TextComponent
-                key={currentElement.id}
-                id={currentElement.id}
-                elementName={currentElement.elementName}
-                textContent={currentElement.textContent}
-                isEditable={true}
-              />
-            );
-          } else if (!!currentElement.series) {
-            const chartOptions: any = {
-              pie: (
-                <Piechart
-                  key={currentElement.id}
-                  colors={currentElement.colors}
-                  labels={currentElement.labels}
-                  series={currentElement.series}
-                />
-              ),
-              donut: (
-                <Donut
-                  key={currentElement.id}
-                  colors={currentElement.colors}
-                  labels={currentElement.labels}
-                  series={currentElement.series}
-                />
-              ),
-              bar: (
-                <BarChart
-                  title={currentElement.chartTitle}
-                  xLabels={currentElement.labels}
-                  series={currentElement.chartData}
-                  colors={currentElement.colors}
-                />
-              ),
-              line: (
-                <LineChart
-                  title={currentElement.chartTitle}
-                  xLabels={currentElement.labels}
-                  series={currentElement.chartData}
-                  colors={currentElement.colors}
-                />
-              ),
-              radar: (
-                <Radar
-                  title={currentElement.chartTitle}
-                  xLabels={currentElement.labels}
-                  series={currentElement.chartData}
-                  colors={currentElement.colors}
-                />
-              ),
-            };
-
-            return chartOptions[currentElement.type];
-          }
-        })}
-      </div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="post-elements">
+          {(provided) => (
+            <div
+              id="post-body"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {docElements.map((currentElement, index) => {
+                if (!!currentElement.src && currentElement.type === "img") {
+                  return (
+                    <Draggable
+                      key={currentElement.id}
+                      draggableId={currentElement.id}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          ref={provided.innerRef}
+                        >
+                          <PostCard
+                            index={index}
+                            setDocElements={setDocElements}
+                            docElements={docElements}
+                          >
+                            <img
+                              src={currentElement.src}
+                              alt={currentElement.alt}
+                            />
+                          </PostCard>
+                        </div>
+                      )}
+                    </Draggable>
+                  );
+                } else if (currentElement.textContent && currentElement.src) {
+                  return (
+                    <Draggable
+                      key={currentElement.id}
+                      draggableId={currentElement.id}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          ref={provided.innerRef}
+                        >
+                          <PostCard
+                            index={index}
+                            setDocElements={setDocElements}
+                            docElements={docElements}
+                          >
+                            <a href={currentElement.src} target="_blank">
+                              {currentElement.textContent}
+                            </a>
+                          </PostCard>
+                        </div>
+                      )}
+                    </Draggable>
+                  );
+                } else if (currentElement.textContent) {
+                  return (
+                    <Draggable
+                      key={currentElement.id}
+                      draggableId={currentElement.id}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          ref={provided.innerRef}
+                        >
+                          <PostCard
+                            index={index}
+                            setDocElements={setDocElements}
+                            docElements={docElements}
+                          >
+                            <TextComponent
+                              key={currentElement.id}
+                              id={currentElement.id}
+                              elementName={currentElement.elementName}
+                              textContent={currentElement.textContent}
+                              isEditable={true}
+                            />
+                          </PostCard>
+                        </div>
+                      )}
+                    </Draggable>
+                  );
+                } else if (!!currentElement.series) {
+                  const chartOptions: any = {
+                    pie: (
+                      <Draggable
+                        key={currentElement.id}
+                        draggableId={currentElement.id}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <div
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                          >
+                            <PostCard
+                              index={index}
+                              setDocElements={setDocElements}
+                              docElements={docElements}
+                            >
+                              <Piechart
+                                key={currentElement.id}
+                                colors={currentElement.colors}
+                                labels={currentElement.labels}
+                                series={currentElement.series}
+                              />
+                            </PostCard>
+                          </div>
+                        )}
+                      </Draggable>
+                    ),
+                    donut: (
+                      <Draggable
+                        key={currentElement.id}
+                        draggableId={currentElement.id}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <div
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                          >
+                            <PostCard
+                              index={index}
+                              setDocElements={setDocElements}
+                              docElements={docElements}
+                            >
+                              <Donut
+                                key={currentElement.id}
+                                colors={currentElement.colors}
+                                labels={currentElement.labels}
+                                series={currentElement.series}
+                              />
+                            </PostCard>
+                          </div>
+                        )}
+                      </Draggable>
+                    ),
+                    bar: (
+                      <Draggable
+                        key={currentElement.id}
+                        draggableId={currentElement.id}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <div
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                          >
+                            <PostCard
+                              index={index}
+                              setDocElements={setDocElements}
+                              docElements={docElements}
+                            >
+                              <BarChart
+                                title={currentElement.chartTitle}
+                                xLabels={currentElement.labels}
+                                series={currentElement.chartData}
+                                colors={currentElement.colors}
+                              />
+                            </PostCard>
+                          </div>
+                        )}
+                      </Draggable>
+                    ),
+                    line: (
+                      <Draggable
+                        key={currentElement.id}
+                        draggableId={currentElement.id}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <div
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                          >
+                            <PostCard
+                              index={index}
+                              setDocElements={setDocElements}
+                              docElements={docElements}
+                            >
+                              <LineChart
+                                title={currentElement.chartTitle}
+                                xLabels={currentElement.labels}
+                                series={currentElement.chartData}
+                                colors={currentElement.colors}
+                              />
+                            </PostCard>
+                          </div>
+                        )}
+                      </Draggable>
+                    ),
+                    radar: (
+                      <Draggable
+                        key={currentElement.id}
+                        draggableId={currentElement.id}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <div
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                          >
+                            <PostCard
+                              index={index}
+                              setDocElements={setDocElements}
+                              docElements={docElements}
+                            >
+                              <Radar
+                                title={currentElement.chartTitle}
+                                xLabels={currentElement.labels}
+                                series={currentElement.chartData}
+                                colors={currentElement.colors}
+                              />
+                            </PostCard>
+                          </div>
+                        )}
+                      </Draggable>
+                    ),
+                  };
+                  return chartOptions[currentElement.type];
+                }
+              })}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </>
   );
 }

@@ -14,10 +14,12 @@ async function saveImage(imageFile: any) {
 
     const response = await uploadString(storageRef, imageFile, "data_url");
     const url = await getDownloadURL(storageRef);
+
     return {
       url,
       name: response.ref.name,
       fullPath: response.ref.fullPath,
+      storageRef,
     };
   } catch (error: any) {
     return {

@@ -34,10 +34,7 @@ function Home() {
     posts();
   }, []);
 
-  console.log(postsList);
-
   function handleCreatePreview(currentElement: docElementsProp) {
-    console.log("currentElement", currentElement);
     if (
       !!currentElement.textContent &&
       currentElement.type === "text-element"

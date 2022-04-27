@@ -4,7 +4,7 @@ import docElementsProp from "../../models/DocElementsProp";
 interface TextComponentProps {
   id: string;
   elementName: string;
-  textContent: string;
+  textContent: string | undefined;
   isEditable?: boolean;
 }
 

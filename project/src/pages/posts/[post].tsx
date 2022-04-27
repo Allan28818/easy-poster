@@ -40,8 +40,6 @@ function PostDetails() {
 
   const { post } = router.query;
 
-  console.log(postInformations.postData);
-
   useEffect(() => {
     const handleFecthPost = async () => {
       if (!!post) {

@@ -55,7 +55,6 @@ export default function Login() {
     if (!response.error && user) {
       history.push("/");
     } else {
-      console.error(response);
       setFailedOperationMessage(response?.message);
     }
 
@@ -74,7 +73,6 @@ export default function Login() {
 
   const handleSignInWithFacebook = async () => {
     const response = await signInWithFacebook();
-    console.log(response);
     if (response.result?.user.email) {
       history.push("/");
     } else {

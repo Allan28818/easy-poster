@@ -26,7 +26,6 @@ export default function RestorePassword() {
   ) => {
     const response = await resetPassword(email);
 
-    console.log("response [resetPassoword.tsx]", response);
     return actions.resetForm();
   };
 

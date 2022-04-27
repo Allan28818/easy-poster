@@ -78,7 +78,6 @@ export default function SignUp2() {
 
   const handleSignInWithFacebook = async () => {
     const response = await signInWithFacebook();
-    console.log(response);
     if (response.result?.user) {
       history.push("/");
     } else {
