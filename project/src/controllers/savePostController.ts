@@ -1,3 +1,6 @@
+//@ts-ignore
+//@ts-nocheck
+import { getDownloadURL } from "firebase/storage";
 import PropsReturn from "../models/core.response";
 import docElementsProp from "../models/DocElementsProp";
 import saveImage from "../services/posts/saveImage";
@@ -23,18 +26,21 @@ async function savePostController(
   );
 
   for (const [currentIndex, currentElement] of childrenElements.entries()) {
-    if (currentElement.textContent) {
-      docElements[currentIndex].textContent = currentElement.textContent;
-    } else if (currentElement instanceof HTMLImageElement) {
-      if (currentElement.src) {
-        const { url } = await saveImage(currentElement.src);
+    const innerElement = currentElement.firstChild?.lastChild?.firstChild;
 
+    if (currentElement.textContent && innerElement) {
+      docElements[currentIndex].textContent =
+        innerElement.textContent?.toString();
+    } else if (innerElement instanceof HTMLImageElement) {
+      if (innerElement.src) {
+        const { url, storageRef } = await saveImage(innerElement.src);
+
+        console.log("url", url);
+        console.log(await getDownloadURL(storageRef));
         docElements[currentIndex].src = url;
       }
     }
   }
-
-  console.log("docElements", docElements);
 
   const response = await savePost({ creatorData, post: docElements, postName });
 

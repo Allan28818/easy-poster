@@ -8,6 +8,7 @@ async function savePost(props: savePostProps): Promise<PropsReturn> {
   const { creatorData, post, postName } = props;
   try {
     const postId = uuid();
+    console.log("savePost", post);
     await setDoc(doc(firestore, "posts", postId), {
       id: postId,
       postName,
