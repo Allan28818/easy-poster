@@ -1,0 +1,72 @@
+@import "../_variables.scss";
+@import "../_functions.scss";
+
+.threeDots {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  color: $white-anti-flash;
+  font-size: clamp(
+    convertToRem(15rem),
+    convertToRem(20rem),
+    convertToRem(25rem)
+  );
+  .icon {
+    cursor: pointer;
+  }
+}
+
+.popUpWrapper {
+  width: clamp(
+    convertToRem(100rem),
+    convertToRem(150rem),
+    convertToRem(200rem)
+  );
+  height: auto;
+  padding: convertToRem(10rem);
+  border-radius: convertToRem(20rem);
+  background: $orange-synthetic-pumpkin;
+  box-shadow: 0px 2px 5px 2.5px $black-transparent;
+  position: absolute;
+}
+
+.optionsList {
+  display: block;
+  list-style: none;
+  padding: 0;
+
+  li {
+    display: flex;
+    margin: auto;
+    color: $white-anti-flash;
+    font-family: "Fira Sans", sans-serif;
+    font-size: clamp(
+      convertToRem(12.5rem),
+      convertToRem(15rem),
+      convertToRem(20rem)
+    );
+    margin-bottom: convertToRem(5rem);
+    cursor: pointer;
+
+    .icon {
+      margin-right: convertToRem(5rem);
+    }
+  }
+}
+
+@media (max-width: 735px) {
+  .popUpWrapper {
+    width: clamp(
+      convertToRem(100rem),
+      convertToRem(150rem),
+      convertToRem(200rem)
+    );
+    height: auto;
+    padding: convertToRem(10rem);
+    border-radius: convertToRem(20rem);
+    background: $orange-synthetic-pumpkin;
+    box-shadow: 0px 2px 5px 2.5px $black-transparent;
+    position: absolute;
+    right: 0;
+  }
+}

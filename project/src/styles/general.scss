@@ -14,7 +14,7 @@
   width: 80%;
   height: 84vh;
   margin: auto;
-  margin-top: clamp(7%, convertToRem(40rem), 30%);
+  margin-top: min(20%, convertToRem(100rem), 50%);
   box-shadow: 0px 0px 5px 0px $black-transparent;
   overflow-y: auto;
   padding: 1rem;
@@ -33,6 +33,66 @@
     &:hover {
       text-decoration: underline;
       color: $blue-light;
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  #post-body {
+    font-family: "Baloo Bhaijaan", sans-serif;
+    width: 80%;
+    height: 84vh;
+    margin: auto;
+    margin-top: max(50%, convertToRem(45rem), convertToRem(60rem));
+    box-shadow: 0px 0px 5px 0px $black-transparent;
+    overflow-y: auto;
+    padding: 1rem;
+    border-radius: convertToRem(5rem);
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    a {
+      color: $blue-cyanite;
+      transition: all 0.3s ease;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+        color: $blue-light;
+      }
+    }
+  }
+}
+
+@media (max-width: 245px) {
+  #post-body {
+    font-family: "Baloo Bhaijaan", sans-serif;
+    width: 80%;
+    height: 84vh;
+    margin: auto;
+    margin-top: max(75%, convertToRem(150rem), convertToRem(180rem));
+    box-shadow: 0px 0px 5px 0px $black-transparent;
+    overflow-y: auto;
+    padding: 1rem;
+    border-radius: convertToRem(5rem);
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    a {
+      color: $blue-cyanite;
+      transition: all 0.3s ease;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+        color: $blue-light;
+      }
     }
   }
 }

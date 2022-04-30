@@ -5,6 +5,8 @@ import {
   useEffect,
   SetStateAction,
   Dispatch,
+  Component,
+  ReactElement,
 } from "react";
 
 import {
@@ -42,8 +44,8 @@ interface AuthenticationUser {
 }
 
 interface AuthContextInt {
-  user: AuthenticationUser;
-  setUser: Dispatch<SetStateAction<AuthenticationUser>>;
+  user: AuthenticationUser | null;
+  setUser: Dispatch<SetStateAction<AuthenticationUser | null>>;
   signUpWithEmailAndPassword: (props: UserSignUp) => Promise<FunctionMessage>;
   loginWithEmailAndPassword: (props: UserLogin) => Promise<FunctionMessage>;
   resetPassword: (email: string) => Promise<FunctionMessage>;
@@ -57,18 +59,23 @@ interface AuthContextInt {
 export const AuthContext = createContext({} as AuthContextInt);
 
 export function AuthContextProvider({ children }: AuthContextProps) {
-  const [user, setUser] = useState<AuthenticationUser>(
+  const [user, setUser] = useState<AuthenticationUser | null>(
     {} as AuthenticationUser
   );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      setUser({
-        displayName: user?.displayName,
-        email: user?.email,
-        uid: user?.uid,
-      });
+    auth.onIdTokenChanged(async (authenticatedUser) => {
+      if (!authenticatedUser) {
+        setUser(null);
+      } else {
+        const token = await authenticatedUser.getIdToken();
+        setUser({
+          displayName: authenticatedUser?.displayName,
+          email: authenticatedUser?.email,
+          uid: authenticatedUser?.uid,
+        });
+      }
     });
 
     setLoading(false);
@@ -102,7 +109,6 @@ export function AuthContextProvider({ children }: AuthContextProps) {
         // });
       }
     } catch (error: any) {
-      console.log(error);
       return {
         result: null,
         message: "It wasn't possible to finish the pop-up operation",

@@ -87,8 +87,6 @@ const SelectSeriesAndLabels = (props: SelectSeriesAndLabelsProps) => {
           });
           setNameInput("");
           setSeriesInput("");
-
-          console.log("chartData", chartData);
         }}
       >
         Add Data

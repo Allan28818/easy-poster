@@ -6,7 +6,19 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 
-async function saveImage(imageFile: any) {
+interface saveImagePropsReturn {
+  url?: string;
+  name?: string;
+  fullPath?: string;
+  message: string;
+  errorCode?: number;
+  errorMessage?: string;
+}
+
+async function saveImage(imageFile: any): Promise<saveImagePropsReturn> {
+  let imageData: saveImagePropsReturn = {
+    message: "Unknown error",
+  };
   try {
     const imageName = Date.now().toString();
     const storage = getStorage();
@@ -15,11 +27,11 @@ async function saveImage(imageFile: any) {
     const response = await uploadString(storageRef, imageFile, "data_url");
     const url = await getDownloadURL(storageRef);
 
-    return {
+    imageData = {
       url,
       name: response.ref.name,
       fullPath: response.ref.fullPath,
-      storageRef,
+      message: "Your image was successfuly saved!",
     };
   } catch (error: any) {
     return {
@@ -28,6 +40,8 @@ async function saveImage(imageFile: any) {
       errorMessage: error.message,
     };
   }
+
+  return imageData;
 }
 
 export default saveImage;

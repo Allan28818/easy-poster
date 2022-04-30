@@ -22,7 +22,7 @@ function useOutsideAlerter(props: useOutsideAlerterProps) {
   const { ref, setIsActive } = props;
 
   useEffect(() => {
-    function handleClickOutside(event: any) {
+    function handleClickOutside(event: MouseEvent) {
       if (ref.current && !ref.current.contains(event.target)) {
         setIsActive(false);
       }
@@ -51,12 +51,24 @@ const PostCard = (props: PostCardProps) => {
   }
 
   function handleDuplicateElement() {
+    // debugger;
     const docElementsAvaiableArray = Array.from(docElements);
-    let currentElement = docElementsAvaiableArray[index];
+    const currentElement = docElementsAvaiableArray[index];
+    const currentElementCopy = JSON.parse(JSON.stringify(currentElement));
 
-    currentElement.id = uuid();
+    const positionToInsert = index + 1;
 
-    docElementsAvaiableArray.splice(index, 0, currentElement);
+    currentElementCopy.id = uuid();
+
+    if (currentElementCopy.textContent) {
+      const currentElementHTML = document.getElementById(currentElement.id);
+      const currentElementCopyTextContent = currentElementHTML
+        ? currentElementHTML.textContent
+        : currentElement.elementName;
+      currentElementCopy.textContent = currentElementCopyTextContent;
+    }
+
+    docElementsAvaiableArray.splice(positionToInsert, 0, currentElementCopy);
     setDocElements(docElementsAvaiableArray);
   }
 
