@@ -2,12 +2,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../config/firebase";
 
 import PropsReturn from "../../models/core.response";
-
-interface disablePostProps {
-  id: string;
-  userId: string;
-  postCreatorId: string;
-}
+import disablePostProps from "../../models/DisablePostProps";
 
 async function disablePost(props: disablePostProps): Promise<PropsReturn> {
   const { id, userId, postCreatorId } = props;
@@ -34,3 +29,5 @@ async function disablePost(props: disablePostProps): Promise<PropsReturn> {
 
   return { message: "Your post was successfuly removed!" };
 }
+
+export default disablePost;

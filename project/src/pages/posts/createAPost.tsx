@@ -208,8 +208,8 @@ function CreateAPost() {
   async function handleSavePost() {
     if (title) {
       const creatorData = {
-        id: user.uid,
-        fullName: user.displayName,
+        id: user?.uid,
+        fullName: user?.displayName,
       };
 
       const response = await savePostController({
@@ -260,9 +260,7 @@ function CreateAPost() {
     const items = Array.from(docElements);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-    console.log("here");
-    console.log(docElements);
-    console.log("items", items);
+
     setDocElements(items);
   }
 
@@ -427,7 +425,12 @@ function CreateAPost() {
                             setDocElements={setDocElements}
                             docElements={docElements}
                           >
-                            <a href={currentElement.src} target="_blank">
+                            <a
+                              id={currentElement.id}
+                              href={currentElement.src}
+                              target="_blank"
+                              contentEditable={true}
+                            >
                               {currentElement.textContent}
                             </a>
                           </PostCard>

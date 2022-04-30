@@ -1,6 +1,3 @@
-//@ts-ignore
-//@ts-nocheck
-import { getDownloadURL } from "firebase/storage";
 import PropsReturn from "../models/core.response";
 import docElementsProp from "../models/DocElementsProp";
 import saveImage from "../services/posts/saveImage";
@@ -33,10 +30,7 @@ async function savePostController(
         innerElement.textContent?.toString();
     } else if (innerElement instanceof HTMLImageElement) {
       if (innerElement.src) {
-        const { url, storageRef } = await saveImage(innerElement.src);
-
-        console.log("url", url);
-        console.log(await getDownloadURL(storageRef));
+        const { url } = await saveImage(innerElement.src);
         docElements[currentIndex].src = url;
       }
     }
