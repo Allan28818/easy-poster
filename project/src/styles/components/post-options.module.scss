@@ -1,6 +1,34 @@
 @import "../_variables.scss";
 @import "../_functions.scss";
 
+.tip {
+  width: clamp(
+    convertToRem(150rem),
+    convertToRem(250rem),
+    convertToRem(300rem)
+  );
+  min-width: convertToRem(150rem);
+  height: auto;
+  padding: convertToRem(20rem);
+  border-radius: convertToRem(20rem);
+  background: $black-transparent;
+  color: $white-anti-flash;
+  font-family: "Roboto Mono", monospace;
+  position: fixed;
+  margin: auto;
+  bottom: 5%;
+  left: 0;
+  right: 0;
+  font-size: clamp(
+    convertToRem(13rem),
+    convertToRem(15.7rem),
+    convertToRem(20rem)
+  );
+  box-shadow: 0px 1px 5px 0px $black-transparent;
+  transition: all 0.4s;
+  cursor: default;
+}
+
 .threeDots {
   display: flex;
   align-items: flex-end;

@@ -72,7 +72,7 @@ function Home() {
         </h1>
 
         <button className={styles.addPostButton}>
-          <Link href={"/posts/createAPost"} prefetch>
+          <Link href={"/posts/changes/create"} prefetch>
             <div>
               <span>New post</span>
               <MdAdd className={styles.addIcon} />
@@ -95,6 +95,7 @@ function Home() {
                     postCreatorId: post.creatorData.id,
                     userId: user?.uid,
                   }}
+                  href={window && `${window.location.href}posts/${post.id}`}
                 />
               )}
               <h1 className={styles.postTitle}>{post.postName}</h1>
@@ -120,7 +121,7 @@ function Home() {
           }`}</h3>
 
           <div className={styles.postsWrapper}>
-            <Link href={"/posts/createAPost"} prefetch>
+            <Link href={"/posts/changes/create"} prefetch>
               <a>
                 <AiOutlineFileAdd className={styles.addIcon} />
                 <h4>Add posts to your collection!</h4>

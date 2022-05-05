@@ -10,10 +10,9 @@ function HandleCreatePreview(currentElement: docElementsProp, styles: any) {
         <TextComponent
           id={currentElement.id}
           elementName={currentElement.elementName}
-          textContent={currentElement.textContent}
+          textContent={currentElement.textContent + "..."}
           isEditable={false}
         />
-        <span>...</span>
       </>
     );
   } else if (!!currentElement.src && currentElement.type === "img") {

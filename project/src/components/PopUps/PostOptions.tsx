@@ -10,6 +10,8 @@ import useOutsideAlerter from "../../services/events/useOutsideAlerter";
 import OptionProps from "../../models/components/PopUps/OptionProps";
 import disablePostProps from "../../models/DisablePostProps";
 
+import { CopyToClipboard } from "react-copy-to-clipboard";
+
 interface PostOptionsProps {
   showPopUp: ReactNode | null | any;
   setShowPopUp: React.Dispatch<
@@ -17,14 +19,17 @@ interface PostOptionsProps {
   >;
   options: OptionProps[];
   operationProps: disablePostProps;
+  href?: string;
 }
 
 const PostOptions = (props: PostOptionsProps) => {
-  const { showPopUp, setShowPopUp, options, operationProps } = props;
+  const { showPopUp, setShowPopUp, options, operationProps, href } = props;
   const ref: any = useRef(null);
   const isAbleToShow = ref.current === showPopUp && showPopUp && ref.current;
   const popUpPostion =
     window && window.scrollX + ref.current?.getBoundingClientRect()?.right;
+
+  const [showTip, setShowTip] = useState<boolean>(false);
 
   let popUpStyles = {};
 
@@ -40,49 +45,69 @@ const PostOptions = (props: PostOptionsProps) => {
 
   useOutsideAlerter({ ref, setIsActive: setShowPopUp });
 
-  return (
-    <div ref={ref}>
-      {isAbleToShow ? (
-        <div
-          className={styles.popUpWrapper}
-          style={popUpStyles}
-          data-block-click={true}
+  function handleAddClipboardFeat(option: OptionProps) {
+    if (option.icon === "link" && href) {
+      return (
+        <CopyToClipboard
+          text={href}
+          onCopy={() => {
+            setShowTip(true);
+
+            setTimeout(() => setShowTip(false), 3500);
+          }}
         >
-          <ul
-            className={styles.optionsList}
-            onClick={() => console.log("hey")}
+          <span data-block-click={true}>{option.optionText}</span>
+        </CopyToClipboard>
+      );
+    }
+
+    return option.optionText;
+  }
+
+  return (
+    <>
+      <div className={showTip ? styles.tip : "hidden"}>
+        <span>Your link was copied</span>
+      </div>
+      <div ref={ref}>
+        {isAbleToShow ? (
+          <div
+            className={styles.popUpWrapper}
+            style={popUpStyles}
             data-block-click={true}
           >
-            {options.map((option) => (
-              <li
-                key={Math.random()}
-                onClick={async () => {
-                  await option.optionCbFunction({
-                    id: operationProps.id,
-                    postCreatorId: operationProps.postCreatorId,
-                    userId: operationProps.userId,
-                  });
-                  setShowPopUp(null);
-                }}
-                data-block-click={true}
-              >
-                {option.icon && iconsList[option.icon]}
-                {option.optionText}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <div className={styles.threeDots}>
-          <BsThreeDotsVertical
-            className={styles.icon}
-            onClick={(event: any) => {
-              setShowPopUp(event.target.parentElement.parentElement);
-            }}
-          />
-        </div>
-      )}
-    </div>
+            <ul className={styles.optionsList} data-block-click={true}>
+              {options.map((option) => (
+                <li
+                  key={Math.random()}
+                  onClick={async () => {
+                    await option.optionCbFunction({
+                      id: operationProps.id,
+                      postCreatorId: operationProps.postCreatorId,
+                      userId: operationProps.userId,
+                    });
+                    setShowPopUp(null);
+                  }}
+                  data-block-click={true}
+                >
+                  {option.icon && iconsList[option.icon]}
+                  {handleAddClipboardFeat(option)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className={styles.threeDots}>
+            <BsThreeDotsVertical
+              className={styles.icon}
+              onClick={(event: any) => {
+                setShowPopUp(event.target.parentElement.parentElement);
+              }}
+            />
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

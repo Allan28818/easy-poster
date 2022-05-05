@@ -29,7 +29,7 @@ async function savePostController(
       docElements[currentIndex].textContent =
         innerElement.textContent?.toString();
     } else if (innerElement instanceof HTMLImageElement) {
-      if (innerElement.src) {
+      if (innerElement.src && !docElements[currentIndex]?.externalContent) {
         const { url } = await saveImage(innerElement.src);
         docElements[currentIndex].src = url;
       }

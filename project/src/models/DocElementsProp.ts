@@ -13,6 +13,7 @@ interface docElementsProp {
   chartTitle?: string;
   graphicPrefix?: string;
   chartData?: ChartDataProps[];
+  externalContent?: boolean;
 }
 
 export default docElementsProp;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -25,6 +25,7 @@ import CreateImagePopUp from "../../components/PopUps/CreateImagePopUp";
 import CreateLinkPopUp from "../../components/PopUps/CreateLinkPopUp";
 import saveImage from "../../services/posts/saveImage";
 import PostCard from "../../components/Cards/PostCard";
+import { getPosts } from "../../services/posts/getPosts";
 
 const Piechart: any = dynamic(
   () => import("../../components/Graphics/PieChart"),
@@ -55,7 +56,15 @@ const Radar: any = dynamic(() => import("../../components/Graphics/Radar"), {
   ssr: false,
 });
 
-function CreateAPost() {
+function CreateAndEditAPost() {
+  const router = useRouter();
+  const routeParams = router.query;
+
+  const pageOperation =
+    routeParams?.createAndEditAPost && routeParams?.createAndEditAPost[1];
+  const postId =
+    routeParams?.createAndEditAPost && routeParams?.createAndEditAPost[2];
+
   const [docElements, setDocElements] = useState<docElementsProp[]>([]);
 
   const [stepsPopUp, setStepsPopUp] = useState<boolean>(true);
@@ -118,9 +127,11 @@ function CreateAPost() {
       src: "",
       alt: "",
       type: "img",
+      externalContent: false,
     };
     if (!!srcText && !Array.isArray(srcText)) {
       imageToAdd.src = srcText;
+      imageToAdd.externalContent = true;
 
       if (!!altText && !Array.isArray(altText)) {
         imageToAdd.alt = altText;
@@ -204,6 +215,20 @@ function CreateAPost() {
     setLinkSrc("");
     setShowLinkModal(false);
   };
+
+  useEffect(() => {
+    const handleFecthPost = async () => {
+      console.log("edit");
+      if (!!postId && pageOperation === "edit") {
+        const currentPost: any = await getPosts({ id: postId });
+        setDocElements({
+          ...currentPost[0],
+        });
+      }
+    };
+
+    handleFecthPost();
+  }, []);
 
   async function handleSavePost() {
     if (title) {
@@ -623,4 +648,4 @@ function CreateAPost() {
   );
 }
 
-export default CreateAPost;
+export default CreateAndEditAPost;
