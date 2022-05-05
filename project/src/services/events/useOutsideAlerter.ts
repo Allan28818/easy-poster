@@ -10,12 +10,11 @@ function useOutsideAlerter(props: useOutsideAlerterProps) {
 
   useEffect(() => {
     function handleClickOutside(event: Event | any) {
-      const eventTargetGrandparent =
-        event.target?.parentElement?.parentElement?.parentElement;
+      const isClickBlocked = Boolean(
+        event.target.getAttribute("data-block-click")
+      );
       const mustDisable =
-        ref.current &&
-        !ref.current.contains(event.target) &&
-        !event.target.dataset.blockClick;
+        ref.current && !ref.current.contains(event.target) && !isClickBlocked;
 
       if (mustDisable) {
         setIsActive(null);
