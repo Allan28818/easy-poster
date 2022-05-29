@@ -24,7 +24,7 @@ import ChartDataProps from "../../models/components/ChartDataProps";
 import CreateImagePopUp from "../../components/PopUps/CreateImagePopUp";
 import CreateLinkPopUp from "../../components/PopUps/CreateLinkPopUp";
 import saveImage from "../../services/posts/saveImage";
-import PostCard from "../../components/Cards/PostCard";
+import PostElementCard from "../../components/Cards/PostElementCard";
 import { getPosts } from "../../services/posts/getPosts";
 
 const Piechart: any = dynamic(
@@ -418,7 +418,7 @@ function CreateAndEditAPost() {
                           {...provided.dragHandleProps}
                           ref={provided.innerRef}
                         >
-                          <PostCard
+                          <PostElementCard
                             index={index}
                             setDocElements={setDocElements}
                             docElements={docElements}
@@ -427,7 +427,7 @@ function CreateAndEditAPost() {
                               src={currentElement.src}
                               alt={currentElement.alt}
                             />
-                          </PostCard>
+                          </PostElementCard>
                         </div>
                       )}
                     </Draggable>
@@ -445,7 +445,7 @@ function CreateAndEditAPost() {
                           {...provided.dragHandleProps}
                           ref={provided.innerRef}
                         >
-                          <PostCard
+                          <PostElementCard
                             index={index}
                             setDocElements={setDocElements}
                             docElements={docElements}
@@ -458,7 +458,7 @@ function CreateAndEditAPost() {
                             >
                               {currentElement.textContent}
                             </a>
-                          </PostCard>
+                          </PostElementCard>
                         </div>
                       )}
                     </Draggable>
@@ -476,7 +476,7 @@ function CreateAndEditAPost() {
                           {...provided.dragHandleProps}
                           ref={provided.innerRef}
                         >
-                          <PostCard
+                          <PostElementCard
                             index={index}
                             setDocElements={setDocElements}
                             docElements={docElements}
@@ -488,7 +488,7 @@ function CreateAndEditAPost() {
                               textContent={currentElement.textContent}
                               isEditable={true}
                             />
-                          </PostCard>
+                          </PostElementCard>
                         </div>
                       )}
                     </Draggable>
@@ -507,7 +507,7 @@ function CreateAndEditAPost() {
                             {...provided.dragHandleProps}
                             ref={provided.innerRef}
                           >
-                            <PostCard
+                            <PostElementCard
                               index={index}
                               setDocElements={setDocElements}
                               docElements={docElements}
@@ -518,7 +518,7 @@ function CreateAndEditAPost() {
                                 labels={currentElement.labels}
                                 series={currentElement.series}
                               />
-                            </PostCard>
+                            </PostElementCard>
                           </div>
                         )}
                       </Draggable>
@@ -535,7 +535,7 @@ function CreateAndEditAPost() {
                             {...provided.dragHandleProps}
                             ref={provided.innerRef}
                           >
-                            <PostCard
+                            <PostElementCard
                               index={index}
                               setDocElements={setDocElements}
                               docElements={docElements}
@@ -546,7 +546,7 @@ function CreateAndEditAPost() {
                                 labels={currentElement.labels}
                                 series={currentElement.series}
                               />
-                            </PostCard>
+                            </PostElementCard>
                           </div>
                         )}
                       </Draggable>
@@ -563,7 +563,7 @@ function CreateAndEditAPost() {
                             {...provided.dragHandleProps}
                             ref={provided.innerRef}
                           >
-                            <PostCard
+                            <PostElementCard
                               index={index}
                               setDocElements={setDocElements}
                               docElements={docElements}
@@ -574,7 +574,7 @@ function CreateAndEditAPost() {
                                 series={currentElement.chartData}
                                 colors={currentElement.colors}
                               />
-                            </PostCard>
+                            </PostElementCard>
                           </div>
                         )}
                       </Draggable>
@@ -591,7 +591,7 @@ function CreateAndEditAPost() {
                             {...provided.dragHandleProps}
                             ref={provided.innerRef}
                           >
-                            <PostCard
+                            <PostElementCard
                               index={index}
                               setDocElements={setDocElements}
                               docElements={docElements}
@@ -602,7 +602,7 @@ function CreateAndEditAPost() {
                                 series={currentElement.chartData}
                                 colors={currentElement.colors}
                               />
-                            </PostCard>
+                            </PostElementCard>
                           </div>
                         )}
                       </Draggable>
@@ -619,7 +619,7 @@ function CreateAndEditAPost() {
                             {...provided.dragHandleProps}
                             ref={provided.innerRef}
                           >
-                            <PostCard
+                            <PostElementCard
                               index={index}
                               setDocElements={setDocElements}
                               docElements={docElements}
@@ -630,7 +630,7 @@ function CreateAndEditAPost() {
                                 series={currentElement.chartData}
                                 colors={currentElement.colors}
                               />
-                            </PostCard>
+                            </PostElementCard>
                           </div>
                         )}
                       </Draggable>
