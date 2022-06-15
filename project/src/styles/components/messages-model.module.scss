@@ -96,12 +96,32 @@
       transition: all 0.3s ease;
     }
 
+    .buttonsWrapper {
+      display: flex;
+      justify-content: space-between;
+      button {
+        width: 40%;
+      }
+    }
+
     button:hover {
       box-shadow: 0px 0px 5px 5px $black-transparent;
+    }
+
+    .deleteButton:hover {
+      background: $red-alizarin;
+      border-color: $red-alizarin;
+      color: $white-anti-flash;
     }
 
     button:active {
       opacity: 0.7;
     }
+  }
+}
+
+.buttonsWrapper {
+  button {
+    width: 10px;
   }
 }

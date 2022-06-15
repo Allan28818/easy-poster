@@ -11,23 +11,24 @@ import styles from "../styles/home.module.scss";
 import { getPosts } from "../services/posts/getPosts";
 import { DocumentData } from "firebase/firestore";
 
-import formatDate from "../services/formatDate";
-import PostOptions from "../components/PopUps/PostOptions";
 import OptionProps from "../models/components/PopUps/OptionProps";
-import HandleCreatePreview from "../components/HandleCreatePreview";
+
 import disablePost from "../services/posts/disablePost";
-import { useRouter } from "next/router";
+
 import MainHeader from "../components/Headers/MainHeader";
 import PostWrapperCard from "../components/Cards/PostWrapperCard";
+import ConfirmationPopUp from "../components/PopUps/ConfirmationPopUp";
 
 function Home() {
   const [postsList, setPostsList] = useState<DocumentData[]>([]);
   const [showPostOptions, setShowPostOptions] = useState<
     ReactNode | null | any
   >(null);
+  const [showPostDeletePopUp, setShowPostDeletePopUp] =
+    useState<boolean>(false);
+  const [postToDeleteId, setPostToDeleteId] = useState<string>();
 
   const { user } = useAuth();
-  const router = useRouter();
 
   const postOptionsArray: OptionProps[] = [
     {
@@ -42,11 +43,8 @@ function Home() {
     },
     {
       optionText: "Delete",
-      optionCbFunction: async ({ id, postCreatorId, userId }) => {
-        await disablePost({ id, postCreatorId, userId });
-        if (!!user) {
-          setPostsList(await getPosts({ postOwnerId: user.uid }));
-        }
+      optionCbFunction: async () => {
+        setShowPostDeletePopUp(true);
       },
       icon: "delete",
     },
@@ -65,6 +63,20 @@ function Home() {
   return (
     <>
       <MainHeader />
+      <ConfirmationPopUp
+        setShowMessage={setShowPostDeletePopUp}
+        showMessage={showPostDeletePopUp}
+        type="info"
+        title="Wait..."
+        description="Do you really want to delete your post?"
+        buttonsText={{ confirmation: "Delete", cancel: "Cancel" }}
+        onConfirm={async () => {
+          // await disablePost({ id, postCreatorId, userId });
+          if (!!user) {
+            setPostsList(await getPosts({ postOwnerId: user.uid }));
+          }
+        }}
+      />
 
       {!!postsList.length ? (
         <PostWrapperCard
