@@ -6,7 +6,7 @@ import { v4 as uuid } from "uuid";
 import styles from "../../styles/components/post-card.module.scss";
 import docElementsProp from "../../models/DocElementsProp";
 
-interface PostCardProps {
+interface PostElementCardProps {
   index: number;
   setDocElements: React.Dispatch<React.SetStateAction<docElementsProp[]>>;
   docElements: docElementsProp[];
@@ -35,7 +35,7 @@ function useOutsideAlerter(props: useOutsideAlerterProps) {
   }, [ref]);
 }
 
-const PostCard = (props: PostCardProps) => {
+const PostElementCard = (props: PostElementCardProps) => {
   const { children, docElements, index, setDocElements } = props;
   const [isActive, setIsActive] = useState<boolean>(false);
   const wrapperRef = useRef(null);
@@ -94,4 +94,4 @@ const PostCard = (props: PostCardProps) => {
   );
 };
 
-export default PostCard;
+export default PostElementCard;
