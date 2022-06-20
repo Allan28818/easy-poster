@@ -25,7 +25,10 @@ const ConfirmationPopUp = (props: ConfirmationPopUpProps) => {
         <h1 className={stylesOptions[type]}>{title}</h1>
         <p>{description}</p>
         <div className={styles.buttonsWrapper}>
-          <button className={styles.deleteButton} onClick={onConfirm}>
+          <button
+            className={styles.deleteButton}
+            onClick={async () => await onConfirm()}
+          >
             {buttonsText.confirmation}
           </button>
           <button onClick={() => setShowMessage(false)}>
