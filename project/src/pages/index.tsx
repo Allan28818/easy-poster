@@ -13,20 +13,19 @@ import { DocumentData } from "firebase/firestore";
 
 import OptionProps from "../models/components/PopUps/OptionProps";
 
-import disablePost from "../services/posts/disablePost";
-
 import MainHeader from "../components/Headers/MainHeader";
 import PostWrapperCard from "../components/Cards/PostWrapperCard";
-import ConfirmationPopUp from "../components/PopUps/ConfirmationPopUp";
 
 function Home() {
   const [postsList, setPostsList] = useState<DocumentData[]>([]);
+
   const [showPostOptions, setShowPostOptions] = useState<
     ReactNode | null | any
   >(null);
+
+  const [postToDelete, setPostToDelete] = useState<DocumentData>({});
   const [showPostDeletePopUp, setShowPostDeletePopUp] =
     useState<boolean>(false);
-  const [postToDeleteId, setPostToDeleteId] = useState<string>();
 
   const { user } = useAuth();
 
@@ -60,23 +59,17 @@ function Home() {
     posts();
   }, []);
 
+  async function handleGetPosts(postOwnerId?: string | null | undefined) {
+    if (postOwnerId) {
+      setPostsList(await getPosts({ postOwnerId: postOwnerId }));
+    }
+
+    return setPostsList(await getPosts({}));
+  }
+
   return (
     <>
       <MainHeader />
-      <ConfirmationPopUp
-        setShowMessage={setShowPostDeletePopUp}
-        showMessage={showPostDeletePopUp}
-        type="info"
-        title="Wait..."
-        description="Do you really want to delete your post?"
-        buttonsText={{ confirmation: "Delete", cancel: "Cancel" }}
-        onConfirm={async () => {
-          // await disablePost({ id, postCreatorId, userId });
-          if (!!user) {
-            setPostsList(await getPosts({ postOwnerId: user.uid }));
-          }
-        }}
-      />
 
       {!!postsList.length ? (
         <PostWrapperCard
@@ -84,6 +77,15 @@ function Home() {
           postOptionsArray={postOptionsArray}
           showPostOptions={showPostOptions}
           setShowPostOptions={setShowPostOptions}
+          postDeleteOptions={{
+            showPostDeletePopUp,
+            setShowPostDeletePopUp,
+            postToDelete,
+            setPostToDelete,
+          }}
+          onUpdatePosts={async () => {
+            setPostsList(await getPosts({ postOwnerId: user?.uid }));
+          }}
         />
       ) : (
         <div className={styles.container}>

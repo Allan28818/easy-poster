@@ -19,11 +19,19 @@ interface PostOptionsProps {
   >;
   options: OptionProps[];
   operationProps: disablePostProps;
+  handleDeleteClick: () => void;
   href?: string;
 }
 
 const PostOptions = (props: PostOptionsProps) => {
-  const { showPopUp, setShowPopUp, options, operationProps, href } = props;
+  const {
+    showPopUp,
+    setShowPopUp,
+    options,
+    operationProps,
+    href,
+    handleDeleteClick,
+  } = props;
   const ref: any = useRef(null);
   const isAbleToShow = ref.current === showPopUp && showPopUp && ref.current;
   const popUpPostion =
