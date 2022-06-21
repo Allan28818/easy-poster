@@ -13,54 +13,45 @@ import disablePost from "../../services/posts/disablePost";
 
 interface PostWrapperCardProps {
   postsList: DocumentData[];
-  postOptionsArray: OptionProps[];
   showPostOptions: ReactNode | null | any;
   setShowPostOptions: React.Dispatch<
     React.SetStateAction<ReactNode | null | any>
   >;
   onUpdatePosts: () => Promise<void>;
-  postDeleteOptions: {
-    showPostDeletePopUp: boolean;
-    setShowPostDeletePopUp: React.Dispatch<React.SetStateAction<boolean>>;
-    postToDelete: DocumentData;
-    setPostToDelete: React.Dispatch<React.SetStateAction<DocumentData>>;
-  };
 }
 
 const PostWrapperCard = (props: PostWrapperCardProps) => {
-  const {
-    postsList,
-    postOptionsArray,
-    showPostOptions,
-    setShowPostOptions,
-    onUpdatePosts,
-    postDeleteOptions,
-  } = props;
+  const { postsList, showPostOptions, setShowPostOptions, onUpdatePosts } =
+    props;
 
   const { user } = useAuth();
+
+  const [showPostDeletePopUp, setShowPostDeletePopUp] =
+    useState<boolean>(false);
+  const [postToDelete, setPostToDelete] = useState<DocumentData>({});
 
   return (
     <>
       <ConfirmationPopUp
-        setShowMessage={postDeleteOptions.setShowPostDeletePopUp}
-        showMessage={postDeleteOptions.showPostDeletePopUp}
+        setShowMessage={setShowPostDeletePopUp}
+        showMessage={showPostDeletePopUp}
         type="info"
         title="Wait..."
         description="Do you really want to delete your post?"
         buttonsText={{ confirmation: "Delete", cancel: "Cancel" }}
         onConfirm={async () => {
-          console.log("postToDelete", postDeleteOptions.postToDelete);
+          console.log("postToDelete", postToDelete);
 
-          if (postDeleteOptions.postToDelete) {
+          if (postToDelete) {
             await disablePost({
-              id: postDeleteOptions.postToDelete.id,
-              postCreatorId: postDeleteOptions.postToDelete.creatorData.id,
+              id: postToDelete.id,
+              postCreatorId: postToDelete.creatorData.id,
               userId: user?.uid,
             });
           }
           if (!!user) {
             await onUpdatePosts();
-            postDeleteOptions.setShowPostDeletePopUp(false);
+            setShowPostDeletePopUp(false);
           }
         }}
       />
@@ -71,14 +62,9 @@ const PostWrapperCard = (props: PostWrapperCardProps) => {
               <PostOptions
                 showPopUp={showPostOptions}
                 setShowPopUp={setShowPostOptions}
-                handleDeleteClick={() =>
-                  postDeleteOptions.setPostToDelete(post)
-                }
-                options={postOptionsArray}
-                operationProps={{
-                  id: post.id,
-                  postCreatorId: post.creatorData.id,
-                  userId: user?.uid,
+                handleDeleteClick={() => {
+                  setPostToDelete(post);
+                  setShowPostDeletePopUp(true);
                 }}
                 href={window && `${window.location.href}posts/${post.id}`}
               />
