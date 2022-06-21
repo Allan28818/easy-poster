@@ -17,21 +17,12 @@ interface PostOptionsProps {
   setShowPopUp: React.Dispatch<
     React.SetStateAction<ReactNode | HTMLElement | null>
   >;
-  options: OptionProps[];
-  operationProps: disablePostProps;
   handleDeleteClick: () => void;
   href?: string;
 }
 
 const PostOptions = (props: PostOptionsProps) => {
-  const {
-    showPopUp,
-    setShowPopUp,
-    options,
-    operationProps,
-    href,
-    handleDeleteClick,
-  } = props;
+  const { showPopUp, setShowPopUp, href, handleDeleteClick } = props;
   const ref: any = useRef(null);
   const isAbleToShow = ref.current === showPopUp && showPopUp && ref.current;
   const popUpPostion =
@@ -45,32 +36,7 @@ const PostOptions = (props: PostOptionsProps) => {
     popUpStyles = { left: popUpPostion };
   }
 
-  const iconsList: any = {
-    link: <BiCopy className={styles.icon} />,
-    delete: <AiFillDelete className={styles.icon} />,
-    edit: <MdEdit className={styles.icon} />,
-  };
-
   useOutsideAlerter({ ref, setIsActive: setShowPopUp });
-
-  function handleAddClipboardFeat(option: OptionProps) {
-    if (option.icon === "link" && href) {
-      return (
-        <CopyToClipboard
-          text={href}
-          onCopy={() => {
-            setShowTip(true);
-
-            setTimeout(() => setShowTip(false), 3500);
-          }}
-        >
-          <span data-block-click={true}>{option.optionText}</span>
-        </CopyToClipboard>
-      );
-    }
-
-    return option.optionText;
-  }
 
   return (
     <>
@@ -85,23 +51,26 @@ const PostOptions = (props: PostOptionsProps) => {
             data-block-click={true}
           >
             <ul className={styles.optionsList} data-block-click={true}>
-              {options.map((option) => (
-                <li
-                  key={Math.random()}
-                  onClick={async () => {
-                    await option.optionCbFunction({
-                      id: operationProps.id,
-                      postCreatorId: operationProps.postCreatorId,
-                      userId: operationProps.userId,
-                    });
-                    setShowPopUp(null);
+              <li onClick={() => setShowPopUp(null)}>
+                <CopyToClipboard
+                  text={href || ""}
+                  onCopy={() => {
+                    setShowTip(true);
+
+                    setTimeout(() => setShowTip(false), 3500);
                   }}
-                  data-block-click={true}
                 >
-                  {option.icon && iconsList[option.icon]}
-                  {handleAddClipboardFeat(option)}
-                </li>
-              ))}
+                  <span data-block-click={true}>
+                    <BiCopy className={styles.icon} /> Copy to Clipboard
+                  </span>
+                </CopyToClipboard>
+              </li>
+              <li>
+                <MdEdit className={styles.icon} /> Edit
+              </li>
+              <li>
+                <AiFillDelete className={styles.icon} /> Delete
+              </li>
             </ul>
           </div>
         ) : (

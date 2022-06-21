@@ -23,31 +23,7 @@ function Home() {
     ReactNode | null | any
   >(null);
 
-  const [postToDelete, setPostToDelete] = useState<DocumentData>({});
-  const [showPostDeletePopUp, setShowPostDeletePopUp] =
-    useState<boolean>(false);
-
   const { user } = useAuth();
-
-  const postOptionsArray: OptionProps[] = [
-    {
-      optionText: "Copy link",
-      optionCbFunction: async () => {},
-      icon: "link",
-    },
-    {
-      optionText: "Edit",
-      optionCbFunction: async () => {},
-      icon: "edit",
-    },
-    {
-      optionText: "Delete",
-      optionCbFunction: async () => {
-        setShowPostDeletePopUp(true);
-      },
-      icon: "delete",
-    },
-  ];
 
   useEffect(() => {
     const posts = async () => {
@@ -59,14 +35,6 @@ function Home() {
     posts();
   }, []);
 
-  async function handleGetPosts(postOwnerId?: string | null | undefined) {
-    if (postOwnerId) {
-      setPostsList(await getPosts({ postOwnerId: postOwnerId }));
-    }
-
-    return setPostsList(await getPosts({}));
-  }
-
   return (
     <>
       <MainHeader />
@@ -74,15 +42,8 @@ function Home() {
       {!!postsList.length ? (
         <PostWrapperCard
           postsList={postsList}
-          postOptionsArray={postOptionsArray}
           showPostOptions={showPostOptions}
           setShowPostOptions={setShowPostOptions}
-          postDeleteOptions={{
-            showPostDeletePopUp,
-            setShowPostDeletePopUp,
-            postToDelete,
-            setPostToDelete,
-          }}
           onUpdatePosts={async () => {
             setPostsList(await getPosts({ postOwnerId: user?.uid }));
           }}
