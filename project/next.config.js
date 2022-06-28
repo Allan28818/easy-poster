@@ -1,10 +1,10 @@
 const path = require("path");
-const withPwa = require("next-pwa");
+// const withPwa = require("next-pwa");
 
-module.exports = withPwa({
-  pwa: {
-    dest: "public",
-  },
+module.exports = {
+  // pwa: {
+  //   dest: "public",
+  // },
   resolve: {
     fallback: {
       fs: false,
@@ -25,4 +25,4 @@ module.exports = withPwa({
 
     return config;
   },
-});
+};

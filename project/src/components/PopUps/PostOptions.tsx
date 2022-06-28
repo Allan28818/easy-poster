@@ -7,10 +7,9 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 
 import styles from "../../styles/components/post-options.module.scss";
 import useOutsideAlerter from "../../services/events/useOutsideAlerter";
-import OptionProps from "../../models/components/PopUps/OptionProps";
-import disablePostProps from "../../models/DisablePostProps";
 
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import Link from "next/link";
 
 interface PostOptionsProps {
   showPopUp: ReactNode | null | any;
@@ -18,11 +17,13 @@ interface PostOptionsProps {
     React.SetStateAction<ReactNode | HTMLElement | null>
   >;
   handleDeleteClick: () => void;
-  href?: string;
+  editURL?: string;
+  sharingURL?: string;
 }
 
 const PostOptions = (props: PostOptionsProps) => {
-  const { showPopUp, setShowPopUp, href, handleDeleteClick } = props;
+  const { showPopUp, setShowPopUp, sharingURL, editURL, handleDeleteClick } =
+    props;
   const ref: any = useRef(null);
   const isAbleToShow = ref.current === showPopUp && showPopUp && ref.current;
   const popUpPostion =
@@ -53,7 +54,7 @@ const PostOptions = (props: PostOptionsProps) => {
             <ul className={styles.optionsList} data-block-click={true}>
               <li onClick={() => setShowPopUp(null)}>
                 <CopyToClipboard
-                  text={href || ""}
+                  text={sharingURL || ""}
                   onCopy={() => {
                     setShowTip(true);
 
@@ -66,10 +67,14 @@ const PostOptions = (props: PostOptionsProps) => {
                 </CopyToClipboard>
               </li>
               <li>
-                <MdEdit className={styles.icon} /> Edit
+                <Link href={editURL || ""}>
+                  <span data-block-click={true}>
+                    <MdEdit className={styles.icon} /> Edit
+                  </span>
+                </Link>
               </li>
-              <li onClick={() => console.log("hasidfhashf")}>
-                <span onClick={() => console.log("hey")}>
+              <li onClick={handleDeleteClick}>
+                <span data-block-click={true}>
                   <AiFillDelete className={styles.icon} /> Delete
                 </span>
               </li>

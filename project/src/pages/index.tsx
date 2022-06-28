@@ -1,20 +1,14 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
-import Link from "next/link";
 
 import withAuth from "../components/withAuth";
 
-import { generateTimeMessage } from "../services/generateTimeMessage";
-import { AiOutlineFileAdd } from "react-icons/ai";
-
-import styles from "../styles/home.module.scss";
 import { getPosts } from "../services/posts/getPosts";
 import { DocumentData } from "firebase/firestore";
 
-import OptionProps from "../models/components/PopUps/OptionProps";
-
 import MainHeader from "../components/Headers/MainHeader";
 import PostWrapperCard from "../components/Cards/PostWrapperCard";
+import NoPostsCard from "../components/Cards/NoPostsCard";
 
 function Home() {
   const [postsList, setPostsList] = useState<DocumentData[]>([]);
@@ -49,20 +43,7 @@ function Home() {
           }}
         />
       ) : (
-        <div className={styles.container}>
-          <h3>{`${generateTimeMessage()} ${
-            user?.displayName ? user.displayName : ""
-          }`}</h3>
-
-          <div className={styles.postsWrapper}>
-            <Link href={"/posts/changes/create"} prefetch>
-              <a>
-                <AiOutlineFileAdd className={styles.addIcon} />
-                <h4>Add posts to your collection!</h4>
-              </a>
-            </Link>
-          </div>
-        </div>
+        <NoPostsCard />
       )}
     </>
   );

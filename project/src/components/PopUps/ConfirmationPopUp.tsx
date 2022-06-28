@@ -1,6 +1,7 @@
 import React from "react";
 
 import ConfirmationPopUpProps from "../../models/components/PopUps/ConfirmationPopUpProps";
+import disablePost from "../../services/posts/disablePost";
 
 import styles from "../../styles/components/messages-model.module.scss";
 import {
@@ -19,8 +20,7 @@ const ConfirmationPopUp = (props: ConfirmationPopUpProps) => {
     buttonsText,
   } = props;
   async function handleConfirm() {
-    // await onConfirm();
-    console.log("hey there");
+    await onConfirm();
   }
 
   return (
