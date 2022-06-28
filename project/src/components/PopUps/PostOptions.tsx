@@ -68,8 +68,10 @@ const PostOptions = (props: PostOptionsProps) => {
               <li>
                 <MdEdit className={styles.icon} /> Edit
               </li>
-              <li>
-                <AiFillDelete className={styles.icon} /> Delete
+              <li onClick={() => console.log("hasidfhashf")}>
+                <span onClick={() => console.log("hey")}>
+                  <AiFillDelete className={styles.icon} /> Delete
+                </span>
               </li>
             </ul>
           </div>
