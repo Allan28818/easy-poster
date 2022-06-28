@@ -18,6 +18,11 @@ const ConfirmationPopUp = (props: ConfirmationPopUpProps) => {
     description,
     buttonsText,
   } = props;
+  async function handleConfirm() {
+    // await onConfirm();
+    console.log("hey there");
+  }
+
   return (
     <div className={showMessage ? styles.backgroundElement : "hidden"}>
       <div className={styles.card}>
@@ -25,10 +30,7 @@ const ConfirmationPopUp = (props: ConfirmationPopUpProps) => {
         <h1 className={stylesOptions[type]}>{title}</h1>
         <p>{description}</p>
         <div className={styles.buttonsWrapper}>
-          <button
-            className={styles.deleteButton}
-            onClick={async () => await onConfirm()}
-          >
+          <button className={styles.deleteButton} onClick={handleConfirm}>
             {buttonsText.confirmation}
           </button>
           <button onClick={() => setShowMessage(false)}>
