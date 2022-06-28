@@ -134,3 +134,35 @@
     }
   }
 }
+
+.container {
+  width: 100%;
+  height: auto;
+  margin-top: clamp(17.5%, convertToRem(40rem), 45%);
+
+  h3 {
+    display: flex;
+    align-items: center;
+    font-size: clamp(80%, convertToRem(150rem), 160%);
+    font-family: "Fira Sans", sans-serif;
+    margin-left: 23%;
+    cursor: default;
+  }
+}
+
+@media (max-width: 411px) {
+  .container {
+    width: 100%;
+    height: auto;
+    padding-top: 0.25rem;
+    margin-top: clamp(45%, convertToRem(65rem), 75%);
+  }
+}
+
+@media (max-width: 670px) {
+  .container {
+    width: 100%;
+    height: auto;
+    margin-top: clamp(40%, convertToRem(90rem), 90%);
+  }
+}

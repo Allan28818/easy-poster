@@ -26,6 +26,7 @@ import CreateLinkPopUp from "../../components/PopUps/CreateLinkPopUp";
 import saveImage from "../../services/posts/saveImage";
 import PostElementCard from "../../components/Cards/PostElementCard";
 import { getPosts } from "../../services/posts/getPosts";
+import { DocumentData } from "firebase/firestore";
 
 const Piechart: any = dynamic(
   () => import("../../components/Graphics/PieChart"),
@@ -60,10 +61,10 @@ function CreateAndEditAPost() {
   const router = useRouter();
   const routeParams = router.query;
 
-  const pageOperation =
-    routeParams?.createAndEditAPost && routeParams?.createAndEditAPost[1];
   const postId =
-    routeParams?.createAndEditAPost && routeParams?.createAndEditAPost[2];
+    routeParams?.createAndEditAPost && routeParams?.createAndEditAPost[1];
+
+  const [pageOperation, setPageOperation] = useState<string>("create");
 
   const [docElements, setDocElements] = useState<docElementsProp[]>([]);
 
@@ -218,17 +219,23 @@ function CreateAndEditAPost() {
 
   useEffect(() => {
     const handleFecthPost = async () => {
-      console.log("edit");
-      if (!!postId && pageOperation === "edit") {
-        const currentPost: any = await getPosts({ id: postId });
-        setDocElements({
-          ...currentPost[0],
-        });
+      if (!!postId) {
+        console.log("edit");
+        const postsList = await getPosts({ id: postId });
+        const currentPost: DocumentData = postsList[0];
+
+        setPageOperation("edit");
+        setTitle(currentPost.postName);
+        setDocElements(currentPost.postData);
       }
     };
 
     handleFecthPost();
-  }, []);
+  }, [postId]);
+
+  async function handleEditPost() {
+    console.log("hey there");
+  }
 
   async function handleSavePost() {
     if (title) {
@@ -299,7 +306,9 @@ function CreateAndEditAPost() {
         type={basicMessageConfig.type}
       />
       <BasicMenu
+        pageOperation={pageOperation}
         handleSavePost={handleSavePost}
+        handleEditPost={handleEditPost}
         title={title}
         setTitle={setTitle}
         showMenu={showMenu}

@@ -9,4 +9,13 @@ interface savePostProps {
   };
 }
 
+export interface editPostProps {
+  post: docElementsProp;
+  postName: string;
+  creatorData: {
+    id: string | null | undefined;
+    fullName: string | null | undefined;
+  };
+}
+
 export default savePostProps;

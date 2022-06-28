@@ -17,7 +17,7 @@ const MainHeader = () => {
         </h1>
 
         <button className={styles.addPostButton}>
-          <Link href={"/posts/changes/create"} prefetch>
+          <Link href={"/posts/create/default"} prefetch>
             <div>
               <span>New post</span>
               <MdAdd className={styles.addIcon} />

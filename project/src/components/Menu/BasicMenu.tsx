@@ -9,13 +9,22 @@ import styles from "../../styles/components/basic-menu.module.scss";
 interface BasicMenuProps {
   title: string;
   setTitle: React.Dispatch<string>;
+  pageOperation: string;
   handleSavePost: () => Promise<void>;
+  handleEditPost: () => Promise<void>;
   showMenu: boolean;
   setShowMenu: React.Dispatch<boolean>;
 }
 
 const BasicMenu = (props: BasicMenuProps) => {
-  const { title, setTitle, handleSavePost, showMenu, setShowMenu } = props;
+  const {
+    title,
+    setTitle,
+    handleSavePost,
+    showMenu,
+    setShowMenu,
+    pageOperation,
+  } = props;
   return (
     <div className={showMenu ? styles.menu : "hidden"}>
       <GrFormClose
@@ -36,7 +45,7 @@ const BasicMenu = (props: BasicMenuProps) => {
         </li>
       </ul>
       <button onClick={handleSavePost}>
-        Save <IoIosSave />
+        {pageOperation === "create" ? "Save" : "Edit"} <IoIosSave />
       </button>
     </div>
   );

@@ -7,7 +7,7 @@ import styles from "../../styles/components/post-wrapper-card.module.scss";
 import formatDate from "../../services/formatDate";
 import Link from "next/link";
 import HandleCreatePreview from "../HandleCreatePreview";
-import OptionProps from "../../models/components/PopUps/OptionProps";
+
 import ConfirmationPopUp from "../PopUps/ConfirmationPopUp";
 import disablePost from "../../services/posts/disablePost";
 
@@ -40,8 +40,6 @@ const PostWrapperCard = (props: PostWrapperCardProps) => {
         description="Do you really want to delete your post?"
         buttonsText={{ confirmation: "Delete", cancel: "Cancel" }}
         onConfirm={async () => {
-          console.log("postToDelete", postToDelete);
-
           if (postToDelete) {
             await disablePost({
               id: postToDelete.id,
@@ -66,7 +64,10 @@ const PostWrapperCard = (props: PostWrapperCardProps) => {
                   setPostToDelete(post);
                   setShowPostDeletePopUp(true);
                 }}
-                href={window && `${window.location.href}posts/${post.id}`}
+                editURL={
+                  window && `${window.location.href}posts/edit/${post.id}`
+                }
+                sharingURL={window && `${window.location.href}posts/${post.id}`}
               />
             )}
             <h1 className={styles.postTitle}>{post.postName}</h1>
