@@ -21,6 +21,7 @@ const BasicMenu = (props: BasicMenuProps) => {
     title,
     setTitle,
     handleSavePost,
+    handleEditPost,
     showMenu,
     setShowMenu,
     pageOperation,
@@ -44,7 +45,9 @@ const BasicMenu = (props: BasicMenuProps) => {
           <Link href="/">Home</Link>
         </li>
       </ul>
-      <button onClick={handleSavePost}>
+      <button
+        onClick={pageOperation === "create" ? handleSavePost : handleEditPost}
+      >
         {pageOperation === "create" ? "Save" : "Edit"} <IoIosSave />
       </button>
     </div>

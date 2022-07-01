@@ -1,10 +1,21 @@
 import { editPostProps } from "../../models/PostProps";
-import { updateDoc } from "firebase/firestore";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { firestore } from "../config/firebase";
 
 async function editPost(props: editPostProps) {
-  const { creatorData, post, postName } = props;
+  const { creatorData, postData, postName } = props;
+  console.log("editPost props", props);
+
   try {
+    await updateDoc(doc(firestore, "posts", postData.postId), {
+      postName,
+      postData: [...postData.post],
+      creatorData,
+      updatedAt: serverTimestamp(),
+      isActive: true,
+    });
   } catch (error: any) {
+    console.log("error", error);
     return {
       message: "It wasn't possible to edit your post! Try it later",
       errorCode: error.code,

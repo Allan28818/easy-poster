@@ -27,6 +27,8 @@ import saveImage from "../../services/posts/saveImage";
 import PostElementCard from "../../components/Cards/PostElementCard";
 import { getPosts } from "../../services/posts/getPosts";
 import { DocumentData } from "firebase/firestore";
+import { editPost } from "../../services/posts/editPost";
+import { editPostController } from "../../controllers/editPostController";
 
 const Piechart: any = dynamic(
   () => import("../../components/Graphics/PieChart"),
@@ -225,8 +227,11 @@ function CreateAndEditAPost() {
         const currentPost: DocumentData = postsList[0];
 
         setPageOperation("edit");
-        setTitle(currentPost.postName);
-        setDocElements(currentPost.postData);
+
+        if (!!currentPost) {
+          setTitle(currentPost.postName);
+          setDocElements(currentPost.postData);
+        }
       }
     };
 
@@ -234,7 +239,75 @@ function CreateAndEditAPost() {
   }, [postId]);
 
   async function handleEditPost() {
-    console.log("hey there");
+    if (title && postId) {
+      const creatorData = {
+        id: user?.uid,
+        fullName: user?.displayName,
+      };
+
+      const response = await editPostController({
+        postName: title,
+        elementToMap: postBody,
+        creatorData,
+        docElements,
+        postId,
+      });
+
+      if (response.errorCode) {
+        setBasicMessageConfig({
+          title: "Humm, we have a problem",
+          description: response.message,
+          onConfirm: () => {
+            history.push("/");
+            setBasicMessageConfig({
+              title: "",
+              description: "",
+              onConfirm: () => {},
+              showMessage: false,
+              type: "success",
+            });
+          },
+          showMessage: true,
+          type: "error",
+        });
+      } else {
+        setBasicMessageConfig({
+          title: "Your post was updated!",
+          description: response.message,
+          onConfirm: () => {
+            history.push("/");
+            setBasicMessageConfig({
+              title: "",
+              description: "",
+              onConfirm: () => {},
+              showMessage: false,
+              type: "success",
+            });
+          },
+          showMessage: true,
+          type: "success",
+        });
+      }
+
+      return;
+    }
+
+    setBasicMessageConfig({
+      title: "Insuficient data!",
+      description: "You must give a title to your post!",
+      onConfirm: () => {
+        setBasicMessageConfig({
+          title: "",
+          description: "",
+          onConfirm: () => {},
+          showMessage: false,
+          type: "success",
+        });
+      },
+      showMessage: true,
+      type: "error",
+    });
+    return;
   }
 
   async function handleSavePost() {
@@ -251,22 +324,42 @@ function CreateAndEditAPost() {
         docElements,
       });
 
-      setBasicMessageConfig({
-        title: "Your post was saved!",
-        description: response.message,
-        onConfirm: () => {
-          history.push("/");
-          setBasicMessageConfig({
-            title: "",
-            description: "",
-            onConfirm: () => {},
-            showMessage: false,
-            type: "success",
-          });
-        },
-        showMessage: true,
-        type: "success",
-      });
+      if (response.errorCode) {
+        setBasicMessageConfig({
+          title: "Humm, we had a problem!",
+          description: response.message,
+          onConfirm: () => {
+            history.push("/");
+            setBasicMessageConfig({
+              title: "",
+              description: "",
+              onConfirm: () => {},
+              showMessage: false,
+              type: "success",
+            });
+          },
+          showMessage: true,
+          type: "error",
+        });
+      } else {
+        setBasicMessageConfig({
+          title: "Your post was saved!",
+          description: response.message,
+          onConfirm: () => {
+            history.push("/");
+            setBasicMessageConfig({
+              title: "",
+              description: "",
+              onConfirm: () => {},
+              showMessage: false,
+              type: "success",
+            });
+          },
+          showMessage: true,
+          type: "success",
+        });
+      }
+
       return;
     }
 
