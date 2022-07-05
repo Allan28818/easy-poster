@@ -71,6 +71,7 @@ export function AuthContextProvider({ children }: AuthContextProps) {
       } else {
         const token = await authenticatedUser.getIdToken();
         setUser({
+          photoURL: authenticatedUser.photoURL,
           displayName: authenticatedUser?.displayName,
           email: authenticatedUser?.email,
           uid: authenticatedUser?.uid,
@@ -178,13 +179,6 @@ export function AuthContextProvider({ children }: AuthContextProps) {
       );
 
       updateProfile(user, { displayName: `${firstName} ${lastName}` });
-
-      // await setDoc(doc(firestore, "users", user.uid), {
-      //   id: user.uid,
-      //   firstName,
-      //   lastName,
-      //   email,
-      // });
     } catch (error: any) {
       return {
         message: "It wasn't possible to sign the user up!",

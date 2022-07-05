@@ -5,7 +5,14 @@ import { MdAdd } from "react-icons/md";
 
 import styles from "../../styles/components/main-header.module.scss";
 
-const MainHeader = () => {
+interface MainHeaderProps {
+  showAddPostBtn: boolean;
+  subTitle?: string;
+}
+
+const MainHeader = (props: MainHeaderProps) => {
+  const { showAddPostBtn, subTitle } = props;
+
   return (
     <>
       <Head>
@@ -16,14 +23,18 @@ const MainHeader = () => {
           Easy poster
         </h1>
 
-        <button className={styles.addPostButton}>
-          <Link href={"/posts/create/default"} prefetch>
-            <div>
-              <span>New post</span>
-              <MdAdd className={styles.addIcon} />
-            </div>
-          </Link>
-        </button>
+        {subTitle && <h3 className={styles.subTitle}>{subTitle}</h3>}
+
+        {showAddPostBtn && (
+          <button className={styles.addPostButton}>
+            <Link href={"/posts/create/default"} prefetch>
+              <div>
+                <span>New post</span>
+                <MdAdd className={styles.addIcon} />
+              </div>
+            </Link>
+          </button>
+        )}
       </nav>
     </>
   );

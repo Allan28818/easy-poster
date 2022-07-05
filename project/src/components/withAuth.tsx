@@ -5,7 +5,7 @@ import { auth } from "../services/config/firebase";
 import { useAuth } from "../hooks/useAuth";
 
 export default function withAuth(WrappedComponent: ElementType) {
-  const Wrapper = (props: unknown) => {
+  const Wrapper = (props: any) => {
     const router = useRouter();
     const { setUser } = useAuth();
     useEffect(() => {

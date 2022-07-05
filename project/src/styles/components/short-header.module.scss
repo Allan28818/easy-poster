@@ -1,0 +1,48 @@
+@import "../_functions.scss";
+@import "../_variables.scss";
+
+.shortHeader {
+  display: flex;
+  width: auto;
+  min-width: 100%;
+  height: auto;
+  min-height: convertToRem(50rem);
+  max-height: convertToRem(100rem);
+  padding: 0 5%;
+  background: $blue-merachant-marine-transparent;
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  margin: 0;
+  align-items: center;
+  justify-content: space-between;
+
+  .headerTitle a {
+    color: $blue-coastal-breeze;
+    font-family: "Baloo Bhaijaan", sans-serif;
+    font-size: clamp(50%, convertToRem(60rem), 85%);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .navigationOptions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: auto;
+    list-style: none;
+    font-size: clamp(150%, convertToRem(130rem), 170%);
+  }
+
+  .navOption {
+    margin-right: convertToRem(25rem);
+    color: $blue-coastal-breeze;
+    transition: all 0.3s;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
