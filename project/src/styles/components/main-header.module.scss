@@ -30,6 +30,20 @@
     cursor: default;
   }
 
+  .subTitle {
+    display: flex;
+    font-size: clamp(100%, convertToRem(150rem), 130%);
+    color: $blue-coastal-breeze;
+    font-family: "Roboto Mono", monospace;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin: auto;
+    margin-top: 2%;
+    opacity: 0.7;
+    cursor: default;
+  }
+
   .addPostButton {
     width: auto;
     min-width: convertToRem(50rem);
@@ -72,6 +86,30 @@
     &:hover {
       color: $blue-cyanite;
       box-shadow: 0px 0px 10px 5px $black-transparent;
+    }
+  }
+}
+
+@media (max-width: 411px) {
+  .header {
+    .title {
+      margin-top: clamp(15%, convertToRem(60rem), 35%);
+      width: 100%;
+      min-width: 100%;
+      height: auto;
+      font-size: clamp(100%, convertToRem(190rem), 200%);
+    }
+  }
+}
+
+@media (max-width: 670px) {
+  .header {
+    .title {
+      margin-top: clamp(15%, convertToRem(50rem), 25%);
+      width: 100%;
+      min-width: 100%;
+      height: auto;
+      font-size: clamp(100%, convertToRem(190rem), 200%);
     }
   }
 }

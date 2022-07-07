@@ -10,6 +10,8 @@ import MainHeader from "../components/Headers/MainHeader";
 import PostWrapperCard from "../components/Cards/PostWrapperCard";
 import NoPostsCard from "../components/Cards/NoPostsCard";
 
+import styles from "../styles/home.module.scss";
+
 function Home() {
   const [postsList, setPostsList] = useState<DocumentData[]>([]);
 
@@ -31,7 +33,7 @@ function Home() {
 
   return (
     <>
-      <MainHeader />
+      <MainHeader showAddPostBtn={true} />
 
       {!!postsList.length ? (
         <PostWrapperCard

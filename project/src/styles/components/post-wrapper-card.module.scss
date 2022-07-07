@@ -166,3 +166,17 @@
     margin-top: clamp(40%, convertToRem(90rem), 90%);
   }
 }
+
+@media (max-width: 411px) {
+  .postsList {
+    width: 100%;
+    height: auto;
+    margin-top: clamp(100%, convertToRem(100rem), 110%);
+  }
+}
+
+@media (max-width: 900px), (min-width: 500px) {
+  .postsList {
+    margin-top: convertToRem(200rem);
+  }
+}

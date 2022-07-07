@@ -1,0 +1,65 @@
+@import "../_functions.scss";
+@import "../_variables.scss";
+
+.userInfo {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 70%;
+  height: auto;
+  border: 1px solid $blue-cyanite;
+  border-radius: convertToRem(15rem);
+  margin: auto;
+  margin-top: clamp(10%, convertToRem(30rem), 40%);
+  padding: convertToRem(20rem);
+
+  .userName {
+    font-family: "Baloo Bhaijaan", sans-serif;
+    font-size: clamp(
+      convertToRem(17rem),
+      convertToRem(25rem),
+      convertToRem(35rem)
+    );
+    font-weight: 500;
+    color: $blue-deep-koamaru;
+  }
+
+  .follows {
+    display: flex;
+    justify-content: space-around;
+    font-family: "Roboto Mono", monospace;
+    color: $black-pearl;
+    font-size: clamp(65%, convertToRem(65rem), 85%);
+  }
+
+  .userEmail {
+    font-family: "Baloo Bhaijaan", sans-serif;
+    font-size: clamp(
+      convertToRem(14.5rem),
+      convertToRem(17.5rem),
+      convertToRem(25rem)
+    );
+    color: $black-transparent;
+  }
+}
+
+@media (max-width: 1000px) {
+  .userInfo {
+    margin-top: clamp(15%, convertToRem(35rem), 45%);
+  }
+}
+@media (max-width: 660px) {
+  .userInfo {
+    margin-top: clamp(20%, convertToRem(40rem), 50%);
+  }
+}
+@media (max-width: 490px) {
+  .userInfo {
+    margin-top: clamp(25%, convertToRem(45rem), 55%);
+  }
+}
+@media (max-width: 395px) {
+  .userInfo {
+    margin-top: clamp(35%, convertToRem(55rem), 65%);
+  }
+}
