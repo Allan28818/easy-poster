@@ -1,7 +1,8 @@
 import React from "react";
 
 import SelectColors from "./SelectColors";
-import styles from "../../styles/components/pop-up.module.scss";
+
+import styles from "../../styles/components/pop-ups/pop-up.module.scss";
 
 interface BasicChartAddFormProps {
   graphicSeries: string;

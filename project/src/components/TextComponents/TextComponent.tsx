@@ -1,5 +1,4 @@
 import React from "react";
-import docElementsProp from "../../models/DocElementsProp";
 
 interface TextComponentProps {
   id: string;

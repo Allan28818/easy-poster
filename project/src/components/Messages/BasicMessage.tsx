@@ -2,7 +2,8 @@ import React from "react";
 
 import BasicMessageProps from "../../models/components/BasicMessageProps";
 
-import styles from "../../styles/components/messages-model.module.scss";
+import styles from "../../styles/components/messages/messages-model.module.scss";
+
 import {
   iconsOptions,
   stylesOptions,

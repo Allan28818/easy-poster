@@ -1,6 +1,6 @@
 import { FaUser } from "react-icons/fa";
 
-import styles from "../../styles/components/profile-image.module.scss";
+import styles from "../../styles/components/images/profile-image.module.scss";
 
 interface ProfileImageProps {
   photoURL?: string | null;

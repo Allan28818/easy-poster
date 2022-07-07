@@ -1,15 +1,17 @@
 import React, { ReactNode, useRef, useState } from "react";
 
+import useOutsideAlerter from "../../services/events/useOutsideAlerter";
+
 import { BiCopy } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { MdEdit } from "react-icons/md";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
-import styles from "../../styles/components/post-options.module.scss";
-import useOutsideAlerter from "../../services/events/useOutsideAlerter";
-
 import { CopyToClipboard } from "react-copy-to-clipboard";
+
 import Link from "next/link";
+
+import styles from "../../styles/components/pop-ups/post-options.module.scss";
 
 interface PostOptionsProps {
   showPopUp: ReactNode | null | any;
