@@ -36,7 +36,7 @@ interface AuthContextProps {
   children: ReactNode;
 }
 
-interface AuthenticationUser {
+export interface AuthenticationUser {
   email: string | null | undefined;
   uid: string | null | undefined;
   photoURL?: string | null;

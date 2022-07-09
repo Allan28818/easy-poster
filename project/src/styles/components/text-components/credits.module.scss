@@ -1,0 +1,16 @@
+@import "../../_variables.scss";
+@import "../../_functions.scss";
+
+.credits {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(
+    convertToRem(12rem),
+    convertToRem(15.5rem),
+    convertToRem(17.5rem)
+  );
+  color: $white-anti-flash-transparent;
+  font-family: "Baloo Bhaijaan 2", sans-serif;
+  cursor: default;
+}

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { GrFormClose } from "react-icons/gr";
+import { handleAddImageProps } from "../../handlers/createPostHandlers/handleAddImage";
+import docElementsProp from "../../models/DocElementsProp";
 
-import styles from "../../styles/components/pop-up.module.scss";
+import styles from "../../styles/components/pop-ups/pop-up.module.scss";
 
 interface CreateImagePopUpProps {
   showImageModal: boolean;
@@ -10,7 +12,8 @@ interface CreateImagePopUpProps {
   setSrcText: React.Dispatch<React.SetStateAction<string | string[]>>;
   altText: string | string[];
   setAltText: React.Dispatch<React.SetStateAction<string | string[]>>;
-  handleAddImage: () => void;
+  setDocElements: React.Dispatch<React.SetStateAction<docElementsProp[]>>;
+  handleAddImage: (props: handleAddImageProps) => void;
 }
 
 const CreateImagePopUp = (props: CreateImagePopUpProps) => {
@@ -21,7 +24,7 @@ const CreateImagePopUp = (props: CreateImagePopUpProps) => {
     setSrcText,
     altText,
     setAltText,
-
+    setDocElements,
     handleAddImage,
   } = props;
 
@@ -126,7 +129,19 @@ const CreateImagePopUp = (props: CreateImagePopUpProps) => {
             />
           </>
         )}
-        <button onClick={handleAddImage} disabled={!srcText ? true : false}>
+        <button
+          onClick={() =>
+            handleAddImage({
+              setAltText,
+              setDocElements,
+              setShowImageModal,
+              setSrcText,
+              srcText,
+              altText,
+            })
+          }
+          disabled={!srcText ? true : false}
+        >
           Create
         </button>
       </div>

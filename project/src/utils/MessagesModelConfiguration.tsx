@@ -6,7 +6,7 @@ import {
   FcFullTrash,
 } from "react-icons/fc";
 
-import styles from "../styles/components/messages-model.module.scss";
+import styles from "../styles/components/messages/messages-model.module.scss";
 
 const iconsOptions = {
   success: <FcOk className={styles.icon} />,

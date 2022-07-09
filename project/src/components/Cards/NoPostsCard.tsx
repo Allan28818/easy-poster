@@ -1,8 +1,12 @@
 import Link from "next/link";
-import { AiOutlineFileAdd } from "react-icons/ai";
-import { useAuth } from "../../hooks/useAuth";
+
 import { generateTimeMessage } from "../../services/generateTimeMessage";
-import styles from "../../styles/components/post-wrapper-card.module.scss";
+
+import { useAuth } from "../../hooks/useAuth";
+
+import { AiOutlineFileAdd } from "react-icons/ai";
+
+import styles from "../../styles/components/cards/post-wrapper-card.module.scss";
 
 function NoPostsCard() {
   const { user } = useAuth();

@@ -7,7 +7,7 @@ import { VscNewFile } from "react-icons/vsc";
 import { RiCompassDiscoverLine } from "react-icons/ri";
 import { FiUser } from "react-icons/fi";
 
-import styles from "../../styles/components/short-header.module.scss";
+import styles from "../../styles/components/headers/short-header.module.scss";
 
 const ShortHeader = () => {
   return (

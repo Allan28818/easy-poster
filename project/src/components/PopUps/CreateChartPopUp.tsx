@@ -6,7 +6,7 @@ import ChartDataProps from "../../models/components/ChartDataProps";
 import BasicChartAddForm from "../Forms/BasicChartAddForm";
 import LineChartAddForm from "../Forms/LineChartAddForm";
 
-import styles from "../../styles/components/pop-up.module.scss";
+import styles from "../../styles/components/pop-ups/pop-up.module.scss";
 
 interface CreateChartPopUpProps {
   showGraphicPopUp: boolean;

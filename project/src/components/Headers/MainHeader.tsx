@@ -1,9 +1,11 @@
+import React from "react";
+
 import Head from "next/head";
 import Link from "next/link";
-import React from "react";
+
 import { MdAdd } from "react-icons/md";
 
-import styles from "../../styles/components/main-header.module.scss";
+import styles from "../../styles/components/headers/main-header.module.scss";
 
 interface MainHeaderProps {
   showAddPostBtn: boolean;

@@ -1,9 +1,11 @@
 import React from "react";
+
 import ChartDataProps from "../../models/components/ChartDataProps";
 
 import SelectColors from "./SelectColors";
 import SelectSeriesAndLabels from "./SelectSeriesAndLabels";
-import styles from "../../styles/components/pop-up.module.scss";
+
+import styles from "../../styles/components/pop-ups/pop-up.module.scss";
 
 interface LineChartAddFormProps {
   graphicSeries: string;

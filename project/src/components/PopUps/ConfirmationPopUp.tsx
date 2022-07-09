@@ -1,13 +1,13 @@
 import React from "react";
 
 import ConfirmationPopUpProps from "../../models/components/PopUps/ConfirmationPopUpProps";
-import disablePost from "../../services/posts/disablePost";
 
-import styles from "../../styles/components/messages-model.module.scss";
 import {
   iconsOptions,
   stylesOptions,
 } from "../../utils/MessagesModelConfiguration";
+
+import styles from "../../styles/components/messages/messages-model.module.scss";
 
 const ConfirmationPopUp = (props: ConfirmationPopUpProps) => {
   const {

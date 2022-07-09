@@ -1,7 +1,7 @@
 import React from "react";
 import { GrFormClose } from "react-icons/gr";
 
-import styles from "../../styles/components/pop-up.module.scss";
+import styles from "../../styles/components/pop-ups/pop-up.module.scss";
 
 interface CreateLinkPopUp {
   showLinkModal: boolean;

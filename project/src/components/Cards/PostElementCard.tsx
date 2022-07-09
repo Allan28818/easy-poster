@@ -1,10 +1,13 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
+
 import { IoMdTrash } from "react-icons/io";
 import { BiDuplicate } from "react-icons/bi";
+
 import { v4 as uuid } from "uuid";
 
-import styles from "../../styles/components/post-card.module.scss";
 import docElementsProp from "../../models/DocElementsProp";
+
+import styles from "../../styles/components/cards/post-card.module.scss";
 
 interface PostElementCardProps {
   index: number;

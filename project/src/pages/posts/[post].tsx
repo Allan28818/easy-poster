@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import docElementsProp from "../../models/DocElementsProp";
-
 import { getPosts } from "../../services/posts/getPosts";
+import formatDate from "../../services/formatDate";
+
+import docElementsProp from "../../models/DocElementsProp";
 
 import TextComponent from "../../components/TextComponents/TextComponent";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
-import styles from "../../styles/posts/post-details.module.scss";
 import Link from "next/link";
-import formatDate from "../../services/formatDate";
 import dynamic from "next/dynamic";
+
+import styles from "../../styles/posts/post-details.module.scss";
 
 const Piechart = dynamic(() => import("../../components/Graphics/PieChart"), {
   ssr: false,

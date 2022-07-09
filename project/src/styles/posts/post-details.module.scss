@@ -5,8 +5,7 @@
   width: auto;
   min-width: 100%;
   height: auto;
-  min-height: convertToRem(80rem);
-  max-height: convertToRem(250rem);
+  max-height: convertToRem(100rem);
   padding: convertToRem(10rem);
   background: $blue-merachant-marine-transparent;
   position: fixed;
@@ -29,7 +28,7 @@
     }
   }
   .postTitle {
-    font-size: clamp(130%, convertToRem(230rem), 190%);
+    font-size: clamp(100%, convertToRem(200rem), 150%);
     width: auto;
     max-width: 19%;
     font-family: "Baloo Bhaijaan 2", sans-serif;
@@ -47,9 +46,9 @@
     align-items: center;
     justify-content: center;
     font-size: clamp(
-      convertToRem(15rem),
-      convertToRem(17.5rem),
-      convertToRem(22.5rem)
+      convertToRem(12rem),
+      convertToRem(15.5rem),
+      convertToRem(17.5rem)
     );
     color: $white-anti-flash-transparent;
     font-family: "Baloo Bhaijaan 2", sans-serif;
