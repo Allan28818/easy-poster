@@ -55,7 +55,7 @@
   border-radius: convertToRem(20rem);
   background: $orange-synthetic-pumpkin;
   box-shadow: 0px 2px 5px 2.5px $black-transparent;
-  position: absolute;
+  position: fixed;
 }
 
 .optionsList {
@@ -94,7 +94,7 @@
     border-radius: convertToRem(20rem);
     background: $orange-synthetic-pumpkin;
     box-shadow: 0px 2px 5px 2.5px $black-transparent;
-    position: absolute;
+    position: fixed;
     right: 0;
   }
 }

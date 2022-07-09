@@ -1,3 +1,4 @@
+import { updateProfile } from "firebase/auth";
 import {
   getStorage,
   ref,
@@ -5,7 +6,9 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 
-interface saveImagePropsReturn {
+import { auth } from "../config/firebase";
+
+interface updateProfileImagePropsReturn {
   url?: string;
   name?: string;
   fullPath?: string;
@@ -14,14 +17,18 @@ interface saveImagePropsReturn {
   errorMessage?: string;
 }
 
-async function saveImage(imageFile: any): Promise<saveImagePropsReturn> {
-  let imageData: saveImagePropsReturn = {
+async function updateProfileImageService(
+  imageFile: string
+): Promise<updateProfileImagePropsReturn> {
+  const user = auth.currentUser;
+
+  let imageData: updateProfileImagePropsReturn = {
     message: "Unknown error",
   };
   try {
     const imageName = Date.now().toString();
     const storage = getStorage();
-    const storageRef = ref(storage, "posts-images/" + imageName);
+    const storageRef = ref(storage, "users-profile-images/" + imageName);
 
     const response = await uploadString(storageRef, imageFile, "data_url");
     const url = await getDownloadURL(storageRef);
@@ -32,6 +39,12 @@ async function saveImage(imageFile: any): Promise<saveImagePropsReturn> {
       fullPath: response.ref.fullPath,
       message: "Your image was successfuly saved!",
     };
+
+    if (!user) {
+      throw new Error("User doesn't exists! Try it later...");
+    }
+
+    await updateProfile(user, { photoURL: url });
   } catch (error: any) {
     return {
       message: "It wasn't possible to save your image!",
@@ -43,4 +56,4 @@ async function saveImage(imageFile: any): Promise<saveImagePropsReturn> {
   return imageData;
 }
 
-export default saveImage;
+export default updateProfileImageService;

@@ -7,8 +7,6 @@ import styles from "../../styles/user/profile-page.module.scss";
 export default function ProfilePage() {
   const { user } = useAuth();
 
-  console.log("user", user);
-
   return (
     <>
       <ShortHeader />

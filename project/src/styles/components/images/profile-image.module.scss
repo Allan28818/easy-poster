@@ -4,8 +4,9 @@
 .profileImageWrapper {
   display: flex;
   align-items: center;
-  width: auto;
-  height: auto;
+  justify-content: flex-end;
+  width: convertToRem(105rem);
+  height: convertToRem(105rem);
   background: $black-transparent;
   border: 2px solid $blue-deep-koamaru;
   border-radius: convertToRem(100rem);
@@ -13,16 +14,8 @@
   margin: 0;
 
   .image {
-    width: clamp(
-      convertToRem(70rem),
-      convertToRem(95rem),
-      convertToRem(110rem)
-    );
-    height: clamp(
-      convertToRem(70rem),
-      convertToRem(95rem),
-      convertToRem(110rem)
-    );
+    width: convertToRem(100rem);
+    height: convertToRem(100rem);
     border-radius: convertToRem(100rem);
     margin: 0;
     padding: 0;
@@ -48,5 +41,45 @@
       convertToRem(45rem),
       convertToRem(55rem)
     );
+  }
+}
+
+.uploadPictureBtn {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+  width: convertToRem(30rem);
+  height: convertToRem(30rem);
+  border-radius: convertToRem(30rem);
+  background: $blue-cyanite;
+  color: $white-anti-flash;
+  font-size: convertToRem(20rem);
+  font-weight: bold;
+  transition: all 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    background: $blue-deep-koamaru;
+    animation: rotation 0.4s;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate((360deg));
+  }
+}
+
+@media (max-width: 900px) {
+  .uploadPictureBtn:hover {
+    animation: none;
   }
 }

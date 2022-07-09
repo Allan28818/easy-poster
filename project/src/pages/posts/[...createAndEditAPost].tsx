@@ -24,8 +24,6 @@ import ChartDataProps from "../../models/components/ChartDataProps";
 
 import { getPosts } from "../../services/posts/getPosts";
 
-import { editPostController } from "../../controllers/editPostController";
-
 import CreateChartPopUp from "../../components/PopUps/CreateChartPopUp";
 import CreateImagePopUp from "../../components/PopUps/CreateImagePopUp";
 import CreateLinkPopUp from "../../components/PopUps/CreateLinkPopUp";
