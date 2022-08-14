@@ -31,12 +31,13 @@ import {
 } from "../models/FunctionMessage";
 
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import DefaultLoader from "../components/Loaders/DefaultLoader";
 
 interface AuthContextProps {
   children: ReactNode;
 }
 
-interface AuthenticationUser {
+export interface AuthenticationUser {
   email: string | null | undefined;
   uid: string | null | undefined;
   photoURL?: string | null;
@@ -240,13 +241,7 @@ export function AuthContextProvider({ children }: AuthContextProps) {
   }
 
   if (loading) {
-    return (
-      <>
-        <div className="loadingWrapper">
-          <AiOutlineLoading3Quarters className="loadingIcon" />
-        </div>
-      </>
-    );
+    return <DefaultLoader />;
   }
 
   return (

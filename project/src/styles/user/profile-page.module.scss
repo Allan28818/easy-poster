@@ -55,11 +55,33 @@
 }
 @media (max-width: 490px) {
   .userInfo {
+    display: block;
     margin-top: clamp(25%, convertToRem(45rem), 55%);
+
+    .userName {
+      font-size: convertToRem(14rem);
+    }
+
+    .follows {
+      font-size: convertToRem(12.5rem);
+    }
+
+    .userEmail {
+      font-size: convertToRem(12rem);
+    }
   }
 }
 @media (max-width: 395px) {
   .userInfo {
     margin-top: clamp(35%, convertToRem(55rem), 65%);
+    .userName {
+      font-size: convertToRem(14rem);
+    }
+    .follows {
+      font-size: convertToRem(12.5rem);
+    }
+    .userEmail {
+      font-size: convertToRem(12rem);
+    }
   }
 }

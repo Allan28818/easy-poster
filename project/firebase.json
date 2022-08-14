@@ -1,7 +1,17 @@
 {
   "hosting": {
     "public": "out",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "destination": "/posts/[post].html",
+        "regex": "^/posts/([^/]+?)(?:/)?$"
+      },
+      {
+        "destination": "/posts/[...createAndEditAPost].html",
+        "regex": "^/posts/(.+?)(?:/)?$"
+      }
+    ]
   },
   "firestore": {
     "rules": "firestore.rules",

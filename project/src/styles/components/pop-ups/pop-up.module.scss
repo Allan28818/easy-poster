@@ -1,10 +1,11 @@
-@import "../_variables.scss";
-@import "../_functions.scss";
+@import "../../_variables.scss";
+@import "../../_functions.scss";
 
 .imgPopUp,
-.graphicPopUp {
+.graphicPopUp,
+.profileImagePopUp {
   display: flex;
-  position: absolute;
+  position: fixed;
   align-items: center;
   justify-content: center;
   background: $black-transparent;
@@ -255,6 +256,66 @@
       input[type="file"] {
         display: none;
       }
+    }
+  }
+}
+
+.profileImagePopUp {
+  .description {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Baloo Bhaijaan", sans-serif;
+    font-size: clamp(
+      convertToRem(13rem),
+      convertToRem(15.5rem),
+      convertToRem(25rem)
+    );
+    color: $black-pearl;
+    cursor: default;
+  }
+
+  .clickZone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: clamp(convertToRem(180rem), convertToRem(480rem), 65%);
+    min-height: convertToRem(180rem);
+    height: auto;
+    background: $gray-peace;
+    margin: auto;
+    border-radius: convertToRem(20rem);
+    border: 2px dashed $purple-periwinkle;
+    padding: convertToRem(20rem);
+    cursor: pointer;
+
+    .instruction {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: "Robot Mono", monospace;
+      font-size: clamp(
+        convertToRem(13rem),
+        convertToRem(15.5rem),
+        convertToRem(17rem)
+      );
+      color: $blue-coastal-breeze;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .instruction:hover {
+      font-size: clamp(
+        convertToRem(14rem),
+        convertToRem(16.5rem),
+        convertToRem(18rem)
+      );
+      opacity: 0.7;
+    }
+
+    input[type="file"] {
+      display: none;
     }
   }
 }

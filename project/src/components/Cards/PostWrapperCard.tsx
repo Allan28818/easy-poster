@@ -1,15 +1,18 @@
-import { DocumentData } from "firebase/firestore";
 import React, { ReactNode, useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
-import PostOptions from "../PopUps/PostOptions";
-
-import styles from "../../styles/components/post-wrapper-card.module.scss";
-import formatDate from "../../services/formatDate";
 import Link from "next/link";
-import HandleCreatePreview from "../HandleCreatePreview";
+
+import { DocumentData } from "firebase/firestore";
+
+import { useAuth } from "../../hooks/useAuth";
+
+import formatDate from "../../services/formatDate";
+import disablePost from "../../services/posts/disablePost";
 
 import ConfirmationPopUp from "../PopUps/ConfirmationPopUp";
-import disablePost from "../../services/posts/disablePost";
+import HandleCreatePreview from "../HandleCreatePreview";
+import PostOptions from "../PopUps/PostOptions";
+
+import styles from "../../styles/components/cards/post-wrapper-card.module.scss";
 
 interface PostWrapperCardProps {
   postsList: DocumentData[];

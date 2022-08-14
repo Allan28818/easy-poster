@@ -2,7 +2,7 @@ import React from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import convertToRGB from "../../services/convertToRGB";
 
-import styles from "../../styles/components/pop-up.module.scss";
+import styles from "../../styles/components/pop-ups/pop-up.module.scss";
 
 interface SelectColorsProps {
   colorInput: string;

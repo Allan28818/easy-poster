@@ -2,7 +2,6 @@ import {
   getStorage,
   ref,
   uploadString,
-  uploadBytes,
   getDownloadURL,
 } from "firebase/storage";
 

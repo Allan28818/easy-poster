@@ -1,6 +1,6 @@
 import React from "react";
 
-import styles from "../../styles/components/basic-burger-menu.module.scss";
+import styles from "../../styles/components/burgers-menus/basic-burger-menu.module.scss";
 
 interface BasicBurgerMenuProps {
   onClickFunction: () => void;

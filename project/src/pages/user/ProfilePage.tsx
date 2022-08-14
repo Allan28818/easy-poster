@@ -1,13 +1,12 @@
 import ShortHeader from "../../components/Headers/ShortHeader";
 import ProfileImage from "../../components/Images/ProfileImage";
+import withAuth from "../../components/withAuth";
 import { useAuth } from "../../hooks/useAuth";
 
 import styles from "../../styles/user/profile-page.module.scss";
 
-export default function ProfilePage() {
+function ProfilePage() {
   const { user } = useAuth();
-
-  console.log("user", user);
 
   return (
     <>
@@ -32,3 +31,5 @@ export default function ProfilePage() {
     </>
   );
 }
+
+export default withAuth(ProfilePage);

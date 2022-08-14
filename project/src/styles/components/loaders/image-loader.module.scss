@@ -1,0 +1,51 @@
+@import "../../_functions.scss";
+@import "../../_variables.scss";
+
+.imageLoaderWrapper {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  min-height: convertToRem(200rem);
+  max-height: convertToRem(250rem);
+
+  border-radius: convertToRem(20rem);
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 80%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      $white-anti-flash,
+      transparent
+    );
+    transform: translateX(-100%);
+    animation: loading 1.5s infinite;
+  }
+
+  .loaderIcon {
+    width: clamp(
+      convertToRem(50rem),
+      convertToRem(100rem),
+      convertToRem(150rem)
+    );
+    height: clamp(
+      convertToRem(50rem),
+      convertToRem(100rem),
+      convertToRem(150rem)
+    );
+    color: $black-transparent;
+  }
+}
+
+@keyframes loading {
+  100% {
+    transform: translateX(100%);
+  }
+}

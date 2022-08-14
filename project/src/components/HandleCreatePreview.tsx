@@ -1,9 +1,16 @@
-import { AiFillPieChart } from "react-icons/ai";
-import { TiWarningOutline } from "react-icons/ti";
-import TextComponent from "./TextComponents/TextComponent";
+import Image from "next/image";
 import docElementsProp from "../models/DocElementsProp";
 
+import { AiFillPieChart } from "react-icons/ai";
+import { TiWarningOutline } from "react-icons/ti";
+
+import TextComponent from "./TextComponents/TextComponent";
+
+import { useState } from "react";
+
 function HandleCreatePreview(currentElement: docElementsProp, styles: any) {
+  const [isImageLoading, setIsImageLoading] = useState<boolean>(true);
+
   if (!!currentElement.textContent && currentElement.type === "text-element") {
     return (
       <>
@@ -17,9 +24,13 @@ function HandleCreatePreview(currentElement: docElementsProp, styles: any) {
     );
   } else if (!!currentElement.src && currentElement.type === "img") {
     return (
-      <img
+      <Image
         src={currentElement.src}
         alt={currentElement.alt ? currentElement.alt : ""}
+        width={500}
+        height={300}
+        layout={"fixed"}
+        objectFit={"cover"}
       />
     );
   } else if (!!currentElement.series) {

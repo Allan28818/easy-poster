@@ -19,16 +19,22 @@ import BasicMenu from "../../components/Menu/BasicMenu";
 import BasicBurgerMenu from "../../components/BurgersMenu/BasicBurgerMenu";
 
 import dynamic from "next/dynamic";
-import CreateChartPopUp from "../../components/PopUps/CreateChartPopUp";
+
 import ChartDataProps from "../../models/components/ChartDataProps";
+
+import { getPosts } from "../../services/posts/getPosts";
+
+import CreateChartPopUp from "../../components/PopUps/CreateChartPopUp";
 import CreateImagePopUp from "../../components/PopUps/CreateImagePopUp";
 import CreateLinkPopUp from "../../components/PopUps/CreateLinkPopUp";
-import saveImage from "../../services/posts/saveImage";
 import PostElementCard from "../../components/Cards/PostElementCard";
-import { getPosts } from "../../services/posts/getPosts";
+
 import { DocumentData } from "firebase/firestore";
-import { editPost } from "../../services/posts/editPost";
-import { editPostController } from "../../controllers/editPostController";
+import { handleAddElement } from "../../handlers/createPostHandlers/handleAddElement";
+import { handleAddImage } from "../../handlers/createPostHandlers/handleAddImage";
+import { handleAddGraphic } from "../../handlers/createPostHandlers/handleAddGraphic";
+import { handleAddLink } from "../../handlers/createPostHandlers/handleAddLink";
+import { handleEditPost } from "../../handlers/createPostHandlers/handleEditPost";
 
 const Piechart: any = dynamic(
   () => import("../../components/Graphics/PieChart"),
@@ -66,7 +72,9 @@ function CreateAndEditAPost() {
   const postId =
     routeParams?.createAndEditAPost && routeParams?.createAndEditAPost[1];
 
-  const [pageOperation, setPageOperation] = useState<string>("create");
+  const [pageOperation, setPageOperation] = useState<"create" | "edit">(
+    "create"
+  );
 
   const [docElements, setDocElements] = useState<docElementsProp[]>([]);
 
@@ -85,6 +93,7 @@ function CreateAndEditAPost() {
   const [graphicSeries, setGraphicSeries] = useState<string>("");
   const [colorInput, setColorInput] = useState<string>("");
   const [graphicColors, setGraphicColors] = useState<string[]>([]);
+  const [graphicLabels, setGraphicLabels] = useState<string>("");
 
   const [nameInput, setNameInput] = useState<string>("");
   const [seriesInput, setSeriesInput] = useState<string>("");
@@ -94,9 +103,7 @@ function CreateAndEditAPost() {
 
   const [chartData, setChartData] = useState<ChartDataProps[]>([]);
 
-  const [title, setTitle] = useState<string>("");
-
-  const [graphicLabels, setGraphicLabels] = useState<string>("");
+  const [postTitle, setPostTitle] = useState<string>("");
 
   const [basicMessageConfig, setBasicMessageConfig] =
     useState<BasicMessageProps>({
@@ -112,113 +119,6 @@ function CreateAndEditAPost() {
 
   const postBody = document.querySelector("#post-body");
 
-  const handleAddElement = (elementName: string) => {
-    let elementToAdd = {
-      id: uuid(),
-      elementName,
-      type: "text-element",
-      textContent: elementName,
-    };
-
-    setDocElements((oldValues) => [...oldValues, elementToAdd]);
-  };
-
-  const handleAddImage = async () => {
-    let imageToAdd = {
-      id: uuid(),
-      elementName: "img",
-      src: "",
-      alt: "",
-      type: "img",
-      externalContent: false,
-    };
-    if (!!srcText && !Array.isArray(srcText)) {
-      imageToAdd.src = srcText;
-      imageToAdd.externalContent = true;
-
-      if (!!altText && !Array.isArray(altText)) {
-        imageToAdd.alt = altText;
-      }
-      setDocElements((oldValues) => [...oldValues, imageToAdd]);
-    } else if (!!srcText && Array.isArray(srcText)) {
-      let imagesToAdd: any = [];
-
-      for (const [index, image] of srcText.entries()) {
-        let imageSrc: any = image;
-        const response = saveImage(image).then((res) => (imageSrc = res.url));
-
-        imagesToAdd.push({
-          id: uuid(),
-          elementName: "img",
-          src: image,
-          alt: altText[index],
-          type: "img",
-        });
-      }
-
-      setDocElements((oldValues) => [...oldValues, ...imagesToAdd]);
-    }
-
-    setSrcText("");
-    setAltText("");
-    setShowImageModal(false);
-  };
-
-  const handleAddGraphic = () => {
-    const graphicLabelsArray = graphicLabels
-      ?.split(",")
-      .map((label) => label.trim());
-    const graphicSeriesArray = graphicSeries
-      .split(",")
-      .map((serie) => parseInt(serie.trim()));
-
-    const graphicToAdd: docElementsProp = {
-      id: uuid(),
-      elementName: graphicType,
-      type: graphicType,
-      colors: graphicColors,
-      labels: graphicLabelsArray,
-      series: graphicSeriesArray,
-      chartTitle,
-      chartData,
-    };
-
-    const docElementRef = Array.from(docElements);
-
-    docElementRef.push(graphicToAdd);
-
-    setDocElements(docElementRef);
-    setStepsPopUp(true);
-    setGraphicColors([]);
-    setGraphicLabels("");
-    setGraphicSeries("");
-    setGraphicType("");
-    setChartTitle("");
-    setShowGraphicPopUp(false);
-  };
-
-  const handleAddLink = () => {
-    if (linkSrc && linkText) {
-      const linkToAdd: docElementsProp = {
-        id: uuid(),
-        textContent: linkText,
-        src: linkSrc,
-        elementName: "a",
-        type: "a",
-      };
-
-      const docElementRef = Array.from(docElements);
-
-      docElementRef.push(linkToAdd);
-
-      setDocElements(docElementRef);
-    }
-
-    setLinkText("");
-    setLinkSrc("");
-    setShowLinkModal(false);
-  };
-
   useEffect(() => {
     const handleFecthPost = async () => {
       if (!!postId) {
@@ -229,96 +129,25 @@ function CreateAndEditAPost() {
         setPageOperation("edit");
 
         if (!!currentPost) {
-          setTitle(currentPost.postName);
+          setPostTitle(currentPost.postName);
           setDocElements(currentPost.postData);
         }
       }
+      setPageOperation("create");
     };
 
     handleFecthPost();
   }, [postId]);
 
-  async function handleEditPost() {
-    if (title && postId) {
-      const creatorData = {
-        id: user?.uid,
-        fullName: user?.displayName,
-      };
-
-      const response = await editPostController({
-        postName: title,
-        elementToMap: postBody,
-        creatorData,
-        docElements,
-        postId,
-      });
-
-      if (response.errorCode) {
-        setBasicMessageConfig({
-          title: "Humm, we have a problem",
-          description: response.message,
-          onConfirm: () => {
-            history.push("/");
-            setBasicMessageConfig({
-              title: "",
-              description: "",
-              onConfirm: () => {},
-              showMessage: false,
-              type: "success",
-            });
-          },
-          showMessage: true,
-          type: "error",
-        });
-      } else {
-        setBasicMessageConfig({
-          title: "Your post was updated!",
-          description: response.message,
-          onConfirm: () => {
-            history.push("/");
-            setBasicMessageConfig({
-              title: "",
-              description: "",
-              onConfirm: () => {},
-              showMessage: false,
-              type: "success",
-            });
-          },
-          showMessage: true,
-          type: "success",
-        });
-      }
-
-      return;
-    }
-
-    setBasicMessageConfig({
-      title: "Insuficient data!",
-      description: "You must give a title to your post!",
-      onConfirm: () => {
-        setBasicMessageConfig({
-          title: "",
-          description: "",
-          onConfirm: () => {},
-          showMessage: false,
-          type: "success",
-        });
-      },
-      showMessage: true,
-      type: "error",
-    });
-    return;
-  }
-
   async function handleSavePost() {
-    if (title) {
+    if (postTitle) {
       const creatorData = {
         id: user?.uid,
         fullName: user?.displayName,
       };
 
       const response = await savePostController({
-        postName: title,
+        postName: postTitle,
         elementToMap: postBody,
         creatorData,
         docElements,
@@ -402,10 +231,13 @@ function CreateAndEditAPost() {
         pageOperation={pageOperation}
         handleSavePost={handleSavePost}
         handleEditPost={handleEditPost}
-        title={title}
-        setTitle={setTitle}
+        postTitle={postTitle}
+        setPostTitle={setPostTitle}
         showMenu={showMenu}
         setShowMenu={setShowMenu}
+        postData={{ postId, postBody }}
+        docElements={docElements}
+        setBasicMessageConfig={setBasicMessageConfig}
       />
 
       <CreateImagePopUp
@@ -415,6 +247,7 @@ function CreateAndEditAPost() {
         setAltText={setAltText}
         showImageModal={showImageModal}
         setShowImageModal={setShowImageModal}
+        setDocElements={setDocElements}
         handleAddImage={handleAddImage}
       />
 
@@ -441,7 +274,25 @@ function CreateAndEditAPost() {
         setSeriesInput={setSeriesInput}
         chartData={chartData}
         setChartData={setChartData}
-        handleAddGraphic={handleAddGraphic}
+        handleAddGraphic={() =>
+          handleAddGraphic({
+            chartData,
+            chartTitle,
+            graphicColors,
+            graphicLabels,
+            graphicSeries,
+            graphicType,
+            docElements,
+            setChartTitle,
+            setDocElements,
+            setGraphicColors,
+            setGraphicLabels,
+            setGraphicSeries,
+            setGraphicType,
+            setShowGraphicPopUp,
+            setStepsPopUp,
+          })
+        }
       />
 
       <CreateLinkPopUp
@@ -451,32 +302,74 @@ function CreateAndEditAPost() {
         setLinkSrc={setLinkSrc}
         linkText={linkText}
         setLinkText={setLinkText}
-        handleAddLink={handleAddLink}
+        handleAddLink={() =>
+          handleAddLink({
+            docElements,
+            linkSrc,
+            linkText,
+            setDocElements,
+            setLinkSrc,
+            setLinkText,
+            setShowLinkModal,
+          })
+        }
       />
 
       <header className={styles.tagsHeader}>
-        <HoverButton onClickFunction={() => handleAddElement("h1")}>
+        <HoverButton
+          onClickFunction={() =>
+            handleAddElement({ elementName: "h1", setDocElements })
+          }
+        >
           <h1>h1</h1>
         </HoverButton>
-        <HoverButton onClickFunction={() => handleAddElement("h2")}>
+        <HoverButton
+          onClickFunction={() =>
+            handleAddElement({ elementName: "h2", setDocElements })
+          }
+        >
           <h2>h2</h2>
         </HoverButton>
-        <HoverButton onClickFunction={() => handleAddElement("h3")}>
+        <HoverButton
+          onClickFunction={() =>
+            handleAddElement({ elementName: "h3", setDocElements })
+          }
+        >
           <h3>h3</h3>
         </HoverButton>
-        <HoverButton onClickFunction={() => handleAddElement("h4")}>
+        <HoverButton
+          onClickFunction={() =>
+            handleAddElement({ elementName: "h4", setDocElements })
+          }
+        >
           <h4>h4</h4>
         </HoverButton>
-        <HoverButton onClickFunction={() => handleAddElement("h5")}>
+        <HoverButton
+          onClickFunction={() =>
+            handleAddElement({ elementName: "h5", setDocElements })
+          }
+        >
           <h5>h5</h5>
         </HoverButton>
-        <HoverButton onClickFunction={() => handleAddElement("h6")}>
+        <HoverButton
+          onClickFunction={() =>
+            handleAddElement({ elementName: "h6", setDocElements })
+          }
+        >
           <h6>h6</h6>
         </HoverButton>
-        <HoverButton onClickFunction={() => handleAddElement("p")}>
+        <HoverButton
+          onClickFunction={() =>
+            handleAddElement({ elementName: "p", setDocElements })
+          }
+        >
           <p>p</p>
         </HoverButton>
-        <HoverButton onClickFunction={() => handleAddElement("span")}>
+        <HoverButton
+          onClickFunction={() =>
+            handleAddElement({ elementName: "span", setDocElements })
+          }
+        >
           <span>span</span>
         </HoverButton>
         <HoverButton onClickFunction={() => setShowLinkModal(true)}>

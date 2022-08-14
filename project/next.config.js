@@ -1,10 +1,19 @@
 const path = require("path");
-// const withPwa = require("next-pwa");
+const withPwa = require("next-pwa");
 
-module.exports = {
-  // pwa: {
-  //   dest: "public",
-  // },
+module.exports = withPwa({
+  pwa: {
+    dest: "public",
+  },
+  images: {
+    domains: [
+      "firebasestorage.googleapis.com",
+      "https://firebasestorage.googleapis.com",
+    ],
+    formats: ["image/webp"],
+    loader: "akamai",
+    path: "",
+  },
   resolve: {
     fallback: {
       fs: false,
@@ -25,4 +34,4 @@ module.exports = {
 
     return config;
   },
-};
+});
