@@ -6,14 +6,13 @@ module.exports = withPwa({
     dest: "public",
   },
   images: {
-    domains: ["firebasestorage.googleapis.com"],
-    formats: [
-      "image/avif",
-      "image/webp",
-      "image/png",
-      "image/gif",
-      "image/jpg",
+    domains: [
+      "firebasestorage.googleapis.com",
+      "https://firebasestorage.googleapis.com",
     ],
+    formats: ["image/webp"],
+    loader: "akamai",
+    path: "",
   },
   resolve: {
     fallback: {

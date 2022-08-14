@@ -72,7 +72,9 @@ function CreateAndEditAPost() {
   const postId =
     routeParams?.createAndEditAPost && routeParams?.createAndEditAPost[1];
 
-  const [pageOperation, setPageOperation] = useState<string>("create");
+  const [pageOperation, setPageOperation] = useState<"create" | "edit">(
+    "create"
+  );
 
   const [docElements, setDocElements] = useState<docElementsProp[]>([]);
 
@@ -131,6 +133,7 @@ function CreateAndEditAPost() {
           setDocElements(currentPost.postData);
         }
       }
+      setPageOperation("create");
     };
 
     handleFecthPost();

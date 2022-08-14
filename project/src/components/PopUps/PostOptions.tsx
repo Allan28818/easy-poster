@@ -6,6 +6,7 @@ import { BiCopy } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { MdEdit } from "react-icons/md";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { IoMdClose } from "react-icons/io";
 
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
@@ -54,6 +55,7 @@ const PostOptions = (props: PostOptionsProps) => {
             data-block-click={true}
           >
             <ul className={styles.optionsList} data-block-click={true}>
+              <IoMdClose className={styles.closeBtn} />
               <li onClick={() => setShowPopUp(null)}>
                 <CopyToClipboard
                   text={sharingURL || ""}
@@ -68,6 +70,7 @@ const PostOptions = (props: PostOptionsProps) => {
                   </span>
                 </CopyToClipboard>
               </li>
+
               <li>
                 <Link href={editURL || ""}>
                   <span data-block-click={true}>

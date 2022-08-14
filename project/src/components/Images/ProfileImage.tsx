@@ -7,6 +7,7 @@ import Image from "next/image";
 
 import styles from "../../styles/components/images/profile-image.module.scss";
 import UpdateProfileImagePopUp from "../PopUps/UpdateProfileImagePopUp";
+import withAuth from "../withAuth";
 
 interface ProfileImageProps {
   photoURL?: string | null;
@@ -22,6 +23,8 @@ const ProfileImage = (props: ProfileImageProps) => {
 
   const [showUpdateProfileImagePopUp, setShowUpdateProfileImagePopUp] =
     useState<boolean>(false);
+
+  console.log("newProfileImageSrc", newProfileImageSrc);
 
   return (
     <>
@@ -63,4 +66,4 @@ const ProfileImage = (props: ProfileImageProps) => {
   );
 };
 
-export default ProfileImage;
+export default withAuth(ProfileImage);

@@ -1,18 +1,18 @@
 {
   "hosting": {
     "public": "out",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "destination": "/posts/[post].html",
+        "regex": "^/posts/([^/]+?)(?:/)?$"
+      },
+      {
+        "destination": "/posts/[...createAndEditAPost].html",
+        "regex": "^/posts/(.+?)(?:/)?$"
+      }
+    ]
   },
-  "rewrites": [
-    {
-      "source": "**",
-      "destination": "/index.html"
-    },
-    {
-      "source": "**",
-      "destination": "/_error/index.html"
-    }
-  ],
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"

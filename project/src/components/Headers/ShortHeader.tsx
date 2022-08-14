@@ -34,7 +34,7 @@ const ShortHeader = () => {
             </Link>
           </li>
           <li className={styles.navOption}>
-            <Link href={"#"}>
+            <Link href={"/explore/SearchUsers"}>
               <i>
                 <RiCompassDiscoverLine />
               </i>

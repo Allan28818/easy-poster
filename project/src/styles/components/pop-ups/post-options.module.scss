@@ -15,6 +15,7 @@
   color: $white-anti-flash;
   font-family: "Roboto Mono", monospace;
   position: fixed;
+  z-index: 10;
   margin: auto;
   bottom: 5%;
   left: 0;
@@ -45,23 +46,29 @@
 }
 
 .popUpWrapper {
-  width: clamp(
-    convertToRem(100rem),
-    convertToRem(150rem),
-    convertToRem(200rem)
-  );
+  width: 100%;
   height: auto;
   padding: convertToRem(10rem);
   border-radius: convertToRem(20rem);
-  background: $orange-synthetic-pumpkin;
-  box-shadow: 0px 2px 5px 2.5px $black-transparent;
-  position: fixed;
+  border: 1.5px solid $white-anti-flash-transparent;
+  position: sticky;
+  transition: all 0.3s ease;
 }
 
 .optionsList {
   display: block;
   list-style: none;
   padding: 0;
+
+  .closeBtn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 10px;
+    color: $white-anti-flash-transparent;
+    font-size: convertToRem(25rem);
+    cursor: pointer;
+  }
 
   li {
     display: flex;
@@ -84,17 +91,22 @@
 
 @media (max-width: 735px) {
   .popUpWrapper {
-    width: clamp(
-      convertToRem(100rem),
-      convertToRem(150rem),
-      convertToRem(200rem)
-    );
+    width: 100%;
     height: auto;
     padding: convertToRem(10rem);
     border-radius: convertToRem(20rem);
-    background: $orange-synthetic-pumpkin;
-    box-shadow: 0px 2px 5px 2.5px $black-transparent;
-    position: fixed;
+    border: 1.5px solid $white-anti-flash-transparent;
+    position: sticky;
     right: 0;
+
+    .closeBtn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      margin: 10px;
+      color: $white-anti-flash-transparent;
+      font-size: convertToRem(25rem);
+      cursor: pointer;
+    }
   }
 }
