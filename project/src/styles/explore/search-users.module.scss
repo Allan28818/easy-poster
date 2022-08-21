@@ -1,2 +1,111 @@
 @import "../_functions.scss";
 @import "../_variables.scss";
+
+.searchWrapper {
+  display: block;
+  width: auto;
+  height: auto;
+  margin-top: 18vh;
+
+  .searchHeader {
+    display: block;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    padding: convertToRem(15rem);
+
+    border-bottom: 1.5px solid $gray-peace;
+
+    .searchForUser {
+      display: flex;
+      justify-content: center;
+      width: 70%;
+      height: auto;
+      margin: auto;
+      padding: convertToRem(10rem);
+      border-radius: convertToRem(20rem);
+      border: 1px solid $gray-peace;
+      background: $white-anti-flash;
+      color: $black-pearl;
+      font-family: "Roboto Mono", monospace;
+      font-size: clamp(
+        convertToRem(15rem),
+        convertToRem(18rem),
+        convertToRem(25rem)
+      );
+    }
+  }
+
+  .usersResultWrapper {
+    display: block;
+    width: 40%;
+    height: auto;
+    margin: auto;
+    margin-top: convertToRem(5rem);
+    padding: convertToRem(20rem);
+    border: 1px solid $gray-peace;
+    border-radius: convertToRem(10rem);
+  }
+}
+
+.usersList {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  list-style: none;
+  flex-wrap: wrap;
+
+  li {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: auto;
+    padding: none;
+  }
+
+  li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+}
+
+.usersList .textInfo {
+  margin-left: convertToRem(15rem);
+  .username {
+    font-size: clamp(
+      convertToRem(15rem),
+      convertToRem(17.5rem),
+      convertToRem(20rem)
+    );
+    font-family: "Roboto Mono", monospace;
+    color: $black-pearl;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 70%;
+  }
+
+  .followsMe {
+    font-family: "Fira Sans", sans-serif;
+    font-size: clamp(
+      convertToRem(12.5rem),
+      convertToRem(15rem),
+      convertToRem(17.5rem)
+    );
+    color: $green-neprhitis;
+    margin: convertToRem(2.5rem);
+  }
+
+  .basicInfo {
+    font-family: "Roboto", sans-serif;
+    font-size: clamp(
+      convertToRem(12.5rem),
+      convertToRem(15rem),
+      convertToRem(17.5rem)
+    );
+    color: $black-transparent;
+    margin: convertToRem(2.5rem);
+  }
+}

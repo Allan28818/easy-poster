@@ -24,8 +24,6 @@ const ProfileImage = (props: ProfileImageProps) => {
   const [showUpdateProfileImagePopUp, setShowUpdateProfileImagePopUp] =
     useState<boolean>(false);
 
-  console.log("newProfileImageSrc", newProfileImageSrc);
-
   return (
     <>
       <UpdateProfileImagePopUp

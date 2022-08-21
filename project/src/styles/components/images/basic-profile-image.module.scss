@@ -1,0 +1,45 @@
+@import "../../_functions.scss";
+@import "../../_variables.scss";
+
+.imageWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: convertToRem(78.75rem);
+  height: convertToRem(78.75);
+  background: $black-transparent;
+  border: 2px solid $blue-deep-koamaru;
+  border-radius: convertToRem(100rem);
+  padding: 0;
+  margin: 0;
+
+  .image {
+    width: convertToRem(75rem);
+    height: convertToRem(75rem);
+    border-radius: convertToRem(100rem);
+    margin: 0;
+    padding: 0;
+  }
+
+  .noImage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $white-anti-flash;
+    width: clamp(
+      convertToRem(52.5rem),
+      convertToRem(71.25rem),
+      convertToRem(82.5rem)
+    );
+    height: clamp(
+      convertToRem(52.5rem),
+      convertToRem(71.25rem),
+      convertToRem(82.5rem)
+    );
+    font-size: clamp(
+      convertToRem(15rem),
+      convertToRem(33.75rem),
+      convertToRem(41.25rem)
+    );
+  }
+}
