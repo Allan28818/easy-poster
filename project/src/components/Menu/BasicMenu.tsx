@@ -3,6 +3,8 @@ import React from "react";
 import Link from "next/link";
 import { IoIosSave } from "react-icons/io";
 import { GrFormClose } from "react-icons/gr";
+import { BsFillFileEarmarkLock2Fill } from "react-icons/bs";
+import { BiWorld } from "react-icons/bi";
 
 import styles from "../../styles/components/menu/basic-menu.module.scss";
 import { handleEditPostProps } from "../../handlers/createPostHandlers/handleEditPost";
@@ -11,6 +13,7 @@ import { useRouter } from "next/router";
 import docElementsProp from "../../models/DocElementsProp";
 import BasicMessageProps from "../../models/components/BasicMessageProps";
 import { useAuth } from "../../hooks/useAuth";
+import SwitchButton from "../Buttons/SwitchButton";
 
 interface BasicMenuProps {
   postTitle: string;
@@ -19,7 +22,9 @@ interface BasicMenuProps {
   handleSavePost: () => Promise<void>;
   handleEditPost: (props: handleEditPostProps) => Promise<void>;
   showMenu: boolean;
-  setShowMenu: React.Dispatch<boolean>;
+  setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
+  isAPublicPost: boolean;
+  setIsAPublicPost: React.Dispatch<React.SetStateAction<boolean>>;
   setBasicMessageConfig: React.Dispatch<
     React.SetStateAction<BasicMessageProps>
   >;
@@ -42,6 +47,8 @@ const BasicMenu = (props: BasicMenuProps) => {
     pageOperation,
     docElements,
     postData,
+    isAPublicPost,
+    setIsAPublicPost,
   } = props;
 
   const { user } = useAuth();
@@ -49,6 +56,20 @@ const BasicMenu = (props: BasicMenuProps) => {
 
   return (
     <div className={showMenu ? styles.menu : "hidden"}>
+      <div
+        className={styles.setIsPublicWrapper}
+        title={`Your post is ${isAPublicPost ? "public" : "private"}`}
+      >
+        <SwitchButton
+          isSelected={isAPublicPost}
+          setIsSelected={setIsAPublicPost}
+        />
+        {isAPublicPost ? (
+          <BiWorld className={styles.icon} />
+        ) : (
+          <BsFillFileEarmarkLock2Fill className={styles.icon} />
+        )}
+      </div>
       <GrFormClose
         className={styles.closeButton}
         onClick={() => setShowMenu(false)}

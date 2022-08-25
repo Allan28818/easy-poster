@@ -105,6 +105,8 @@ function CreateAndEditAPost() {
 
   const [postTitle, setPostTitle] = useState<string>("");
 
+  const [isAPublicPost, setIsAPublicPost] = useState<boolean>(false);
+
   const [basicMessageConfig, setBasicMessageConfig] =
     useState<BasicMessageProps>({
       showMessage: false,
@@ -238,6 +240,8 @@ function CreateAndEditAPost() {
         postData={{ postId, postBody }}
         docElements={docElements}
         setBasicMessageConfig={setBasicMessageConfig}
+        isAPublicPost={isAPublicPost}
+        setIsAPublicPost={setIsAPublicPost}
       />
 
       <CreateImagePopUp
