@@ -12,6 +12,33 @@
   box-shadow: 0px 0px 5px 5px $black-transparent;
   padding: convertToRem(30rem);
 
+  .menuPublicSwitchWrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: auto;
+
+    .public,
+    .private {
+      font-size: clamp(
+        convertToRem(15rem),
+        convertToRem(25rem),
+        convertToRem(30rem)
+      );
+      margin-left: convertToRem(10rem);
+      transition: all 0.3s;
+    }
+
+    .private {
+      color: $black-transparent;
+    }
+
+    .public {
+      color: $blue-light;
+    }
+  }
+
   .closeButton {
     display: flex;
     position: absolute;

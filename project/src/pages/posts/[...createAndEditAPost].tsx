@@ -150,6 +150,7 @@ function CreateAndEditAPost() {
 
       const response = await savePostController({
         postName: postTitle,
+        isPublic: isAPublicPost,
         elementToMap: postBody,
         creatorData,
         docElements,

@@ -2,6 +2,7 @@ import docElementsProp from "./DocElementsProp";
 
 interface savePostProps {
   post: docElementsProp[];
+  isPublic: boolean;
   postName: string;
   creatorData: {
     id: string | null | undefined;
