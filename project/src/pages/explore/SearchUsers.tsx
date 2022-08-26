@@ -31,7 +31,7 @@ function SearchUsers() {
     const handleGetAllPublicPosts = async () => {
       const queryResult = await getAllPublicPosts();
 
-      // console.log(queryResult);
+      console.log(queryResult);
     };
 
     handleGetAllPublicPosts();
