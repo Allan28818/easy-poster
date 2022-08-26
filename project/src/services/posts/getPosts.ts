@@ -3,7 +3,9 @@ import {
   DocumentData,
   getDocs,
   orderBy,
+  Query,
   query,
+  QuerySnapshot,
   where,
 } from "firebase/firestore";
 import { firestore } from "../config/firebase";
@@ -16,11 +18,9 @@ interface getPostsProps {
 async function getPosts(props: getPostsProps): Promise<DocumentData[]> {
   const { id, postOwnerId } = props;
 
-  let postsRef = query(
-    collection(firestore, "posts"),
-    where("isActive", "==", true),
-    orderBy("createdAt")
-  );
+  let postsRef: Query<DocumentData>;
+  let postsSnapshot: QuerySnapshot<DocumentData> =
+    {} as QuerySnapshot<DocumentData>;
 
   if (!!id && !!postOwnerId) {
     postsRef = query(
@@ -30,6 +30,8 @@ async function getPosts(props: getPostsProps): Promise<DocumentData[]> {
       where("isActive", "==", true),
       orderBy("createdAt")
     );
+
+    postsSnapshot = await getDocs(postsRef);
   } else if (!!id) {
     postsRef = query(
       collection(firestore, "posts"),
@@ -37,6 +39,7 @@ async function getPosts(props: getPostsProps): Promise<DocumentData[]> {
       where("isActive", "==", true),
       orderBy("createdAt")
     );
+    postsSnapshot = await getDocs(postsRef);
   } else if (!!postOwnerId) {
     postsRef = query(
       collection(firestore, "posts"),
@@ -44,11 +47,11 @@ async function getPosts(props: getPostsProps): Promise<DocumentData[]> {
       where("isActive", "==", true),
       orderBy("createdAt")
     );
+    postsSnapshot = await getDocs(postsRef);
   }
 
-  const postsSnapshot = await getDocs(postsRef);
-
-  return postsSnapshot.docs.map((post) => post.data());
+  const mappedPosts = postsSnapshot.docs?.map((post) => post.data());
+  return mappedPosts || [];
 }
 
 export { getPosts };
