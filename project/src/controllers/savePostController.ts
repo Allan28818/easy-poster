@@ -5,6 +5,7 @@ import { savePost } from "../services/posts/savePost";
 
 interface savePostControllerProps {
   postName: string;
+  isPublic: boolean;
   elementToMap: Element | HTMLImageElement | null;
   docElements: docElementsProp[];
   creatorData: {
@@ -16,7 +17,7 @@ interface savePostControllerProps {
 async function savePostController(
   props: savePostControllerProps
 ): Promise<PropsReturn> {
-  const { elementToMap, docElements, creatorData, postName } = props;
+  const { elementToMap, docElements, creatorData, postName, isPublic } = props;
 
   const childrenElements = Array.from(
     elementToMap?.children ? elementToMap.children : []
@@ -36,7 +37,12 @@ async function savePostController(
     }
   }
 
-  const response = await savePost({ creatorData, post: docElements, postName });
+  const response = await savePost({
+    creatorData,
+    post: docElements,
+    postName,
+    isPublic,
+  });
 
   return response;
 }

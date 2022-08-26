@@ -9,6 +9,7 @@ import withAuth from "../../components/withAuth";
 import { getUsers } from "../../services/users/getUsers";
 
 import styles from "../../styles/explore/search-users.module.scss";
+import { getAllPublicPosts } from "../../services/posts/getAllPublicPosts";
 
 function SearchUsers() {
   const [username, setUsername] = useState<string>("");
@@ -25,6 +26,16 @@ function SearchUsers() {
 
     handleGetUsers();
   }, [username]);
+
+  useEffect(() => {
+    const handleGetAllPublicPosts = async () => {
+      const queryResult = await getAllPublicPosts();
+
+      // console.log(queryResult);
+    };
+
+    handleGetAllPublicPosts();
+  }, []);
 
   return (
     <>

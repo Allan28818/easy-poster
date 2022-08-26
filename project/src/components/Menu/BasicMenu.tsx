@@ -57,7 +57,7 @@ const BasicMenu = (props: BasicMenuProps) => {
   return (
     <div className={showMenu ? styles.menu : "hidden"}>
       <div
-        className={styles.setIsPublicWrapper}
+        className={styles.menuPublicSwitchWrapper}
         title={`Your post is ${isAPublicPost ? "public" : "private"}`}
       >
         <SwitchButton
@@ -65,9 +65,9 @@ const BasicMenu = (props: BasicMenuProps) => {
           setIsSelected={setIsAPublicPost}
         />
         {isAPublicPost ? (
-          <BiWorld className={styles.icon} />
+          <BiWorld className={styles.public} />
         ) : (
-          <BsFillFileEarmarkLock2Fill className={styles.icon} />
+          <BsFillFileEarmarkLock2Fill className={styles.private} />
         )}
       </div>
       <GrFormClose

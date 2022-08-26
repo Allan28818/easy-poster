@@ -5,7 +5,7 @@ import savePostProps from "../../models/PostProps";
 import { firestore } from "../config/firebase";
 
 async function savePost(props: savePostProps): Promise<PropsReturn> {
-  const { creatorData, post, postName } = props;
+  const { creatorData, post, postName, isPublic } = props;
   try {
     const postId = uuid();
     await setDoc(doc(firestore, "posts", postId), {
@@ -14,6 +14,7 @@ async function savePost(props: savePostProps): Promise<PropsReturn> {
       postData: [...post],
       creatorData,
       createdAt: serverTimestamp(),
+      isPublic,
       isActive: true,
     });
   } catch (error: any) {
