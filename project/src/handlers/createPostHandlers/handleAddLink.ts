@@ -1,32 +1,30 @@
 import { v4 as uuid } from "uuid";
+import { LinkDataModel } from "../../models/components/LinkDataModel";
 import docElementsProp from "../../models/DocElementsProp";
+import { emptyLinkModel } from "../../utils/emptyModels";
 
 interface handleAddLinkProps {
-  linkSrc: string;
-  linkText: string;
+  linkDataStructure: LinkDataModel;
   docElements: docElementsProp[];
-  setLinkText: React.Dispatch<React.SetStateAction<string>>;
-  setLinkSrc: React.Dispatch<React.SetStateAction<string>>;
+  setLinkDataStructure: React.Dispatch<React.SetStateAction<LinkDataModel>>;
   setShowLinkModal: React.Dispatch<React.SetStateAction<boolean>>;
   setDocElements: React.Dispatch<React.SetStateAction<docElementsProp[]>>;
 }
 
 function handleAddLink(props: handleAddLinkProps) {
   const {
+    linkDataStructure,
     docElements,
-    linkSrc,
-    linkText,
-    setLinkSrc,
-    setLinkText,
+    setLinkDataStructure,
     setShowLinkModal,
     setDocElements,
   } = props;
 
-  if (linkSrc && linkText) {
+  if (linkDataStructure.linkSrc && linkDataStructure.linkText) {
     const linkToAdd: docElementsProp = {
       id: uuid(),
-      textContent: linkText,
-      src: linkSrc,
+      textContent: linkDataStructure.linkText,
+      src: linkDataStructure.linkSrc,
       elementName: "a",
       type: "a",
     };
@@ -38,8 +36,8 @@ function handleAddLink(props: handleAddLinkProps) {
     setDocElements(docElementRef);
   }
 
-  setLinkText("");
-  setLinkSrc("");
+  setLinkDataStructure(emptyLinkModel);
+
   setShowLinkModal(false);
 }
 

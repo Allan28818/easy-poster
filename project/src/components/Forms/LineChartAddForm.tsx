@@ -1,6 +1,8 @@
 import React from "react";
 
-import ChartDataProps from "../../models/components/ChartDataProps";
+import ChartDataProps, {
+  ChartUseStateStructure,
+} from "../../models/components/ChartDataProps";
 
 import SelectColors from "./SelectColors";
 import SelectSeriesAndLabels from "./SelectSeriesAndLabels";
@@ -8,14 +10,12 @@ import SelectSeriesAndLabels from "./SelectSeriesAndLabels";
 import styles from "../../styles/components/pop-ups/pop-up.module.scss";
 
 interface LineChartAddFormProps {
-  graphicSeries: string;
-  setGraphicSeries: React.Dispatch<React.SetStateAction<string>>;
+  chartDataStructure: ChartUseStateStructure;
+  setChartDataStructure: React.Dispatch<
+    React.SetStateAction<ChartUseStateStructure>
+  >;
   colorInput: string;
   setColorInput: React.Dispatch<React.SetStateAction<string>>;
-  graphicColors: string[];
-  setGraphicColors: React.Dispatch<React.SetStateAction<string[]>>;
-  graphicLabels: string;
-  setGraphicLabels: React.Dispatch<React.SetStateAction<string>>;
   nameInput: string;
   setNameInput: React.Dispatch<React.SetStateAction<string>>;
   seriesInput: string;
@@ -27,14 +27,10 @@ interface LineChartAddFormProps {
 
 const LineChartAddForm = (props: LineChartAddFormProps) => {
   const {
-    graphicSeries,
-    setGraphicSeries,
+    chartDataStructure,
+    setChartDataStructure,
     colorInput,
     setColorInput,
-    graphicColors,
-    setGraphicColors,
-    graphicLabels,
-    setGraphicLabels,
     handleAddGraphic,
     nameInput,
     setNameInput,
@@ -51,8 +47,12 @@ const LineChartAddForm = (props: LineChartAddFormProps) => {
         <input
           name="labels"
           placeholder="dogs, cats, birds..."
-          onChange={(e: any) => setGraphicLabels(e.target.value)}
-          value={graphicLabels}
+          onChange={(e: any) =>
+            setChartDataStructure((oldValues) => {
+              return { ...oldValues, graphicLabels: e.target.value };
+            })
+          }
+          value={chartDataStructure.graphicLabels || ""}
           autoComplete="off"
         />
       </div>
@@ -67,10 +67,10 @@ const LineChartAddForm = (props: LineChartAddFormProps) => {
       />
 
       <SelectColors
+        chartDataStructure={chartDataStructure}
+        setChartDataStructure={setChartDataStructure}
         colorInput={colorInput}
         setColorInput={setColorInput}
-        graphicColors={graphicColors}
-        setGraphicColors={setGraphicColors}
       />
 
       <button

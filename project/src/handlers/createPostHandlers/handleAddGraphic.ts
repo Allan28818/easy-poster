@@ -1,60 +1,49 @@
 import { v4 as uuid } from "uuid";
-import ChartDataProps from "../../models/components/ChartDataProps";
+import ChartDataProps, {
+  ChartUseStateStructure,
+} from "../../models/components/ChartDataProps";
 
 import docElementsProp from "../../models/DocElementsProp";
+import { emptyChartModel } from "../../utils/emptyModels";
 
 interface handleAddGraphicProps {
-  graphicLabels: string;
-  graphicSeries: string;
-  graphicType: string;
-  graphicColors: string[];
-  chartTitle: string;
+  chartDataStructure: ChartUseStateStructure;
+  setChartDataStructure: React.Dispatch<
+    React.SetStateAction<ChartUseStateStructure>
+  >;
   chartData: ChartDataProps[];
   docElements: docElementsProp[];
   setDocElements: React.Dispatch<React.SetStateAction<docElementsProp[]>>;
   setStepsPopUp: React.Dispatch<React.SetStateAction<boolean>>;
-  setGraphicColors: React.Dispatch<React.SetStateAction<string[]>>;
-  setGraphicLabels: React.Dispatch<React.SetStateAction<string>>;
-  setGraphicSeries: React.Dispatch<React.SetStateAction<string>>;
-  setGraphicType: React.Dispatch<React.SetStateAction<string>>;
-  setChartTitle: React.Dispatch<React.SetStateAction<string>>;
   setShowGraphicPopUp: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function handleAddGraphic(props: handleAddGraphicProps) {
   const {
+    chartDataStructure,
     chartData,
-    chartTitle,
     docElements,
-    graphicColors,
-    graphicLabels,
-    graphicSeries,
-    graphicType,
-    setChartTitle,
+    setChartDataStructure,
     setDocElements,
-    setGraphicLabels,
-    setGraphicSeries,
-    setGraphicColors,
-    setGraphicType,
     setShowGraphicPopUp,
     setStepsPopUp,
   } = props;
 
-  const graphicLabelsArray = graphicLabels
+  const graphicLabelsArray = chartDataStructure.graphicLabels
     ?.split(",")
     .map((label) => label.trim());
-  const graphicSeriesArray = graphicSeries
-    .split(",")
+  const graphicSeriesArray = chartDataStructure.graphicSeries
+    ?.split(",")
     .map((serie) => parseInt(serie.trim()));
 
   const graphicToAdd: docElementsProp = {
     id: uuid(),
-    elementName: graphicType,
-    type: graphicType,
-    colors: graphicColors,
+    elementName: chartDataStructure.graphicType || "",
+    type: chartDataStructure.graphicType || "",
+    colors: chartDataStructure.graphicColors || [],
     labels: graphicLabelsArray,
     series: graphicSeriesArray,
-    chartTitle,
+    chartTitle: chartDataStructure.chartTitle,
     chartData,
   };
 
@@ -62,13 +51,13 @@ function handleAddGraphic(props: handleAddGraphicProps) {
 
   docElementRef.push(graphicToAdd);
 
+  console.log("chartDataStructure", chartDataStructure);
+
   setDocElements(docElementRef);
   setStepsPopUp(true);
-  setGraphicColors([]);
-  setGraphicLabels("");
-  setGraphicSeries("");
-  setGraphicType("");
-  setChartTitle("");
+
+  setChartDataStructure(emptyChartModel);
+
   setShowGraphicPopUp(false);
 }
 

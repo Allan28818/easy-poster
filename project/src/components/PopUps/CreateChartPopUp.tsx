@@ -1,7 +1,9 @@
 import React from "react";
 
 import { GrFormClose } from "react-icons/gr";
-import ChartDataProps from "../../models/components/ChartDataProps";
+import ChartDataProps, {
+  ChartUseStateStructure,
+} from "../../models/components/ChartDataProps";
 
 import BasicChartAddForm from "../Forms/BasicChartAddForm";
 import LineChartAddForm from "../Forms/LineChartAddForm";
@@ -9,22 +11,16 @@ import LineChartAddForm from "../Forms/LineChartAddForm";
 import styles from "../../styles/components/pop-ups/pop-up.module.scss";
 
 interface CreateChartPopUpProps {
+  chartDataStructure: ChartUseStateStructure;
+  setChartDataStructure: React.Dispatch<
+    React.SetStateAction<ChartUseStateStructure>
+  >;
   showGraphicPopUp: boolean;
   setShowGraphicPopUp: React.Dispatch<React.SetStateAction<boolean>>;
   stepsPopUp: boolean;
   setStepsPopUp: React.Dispatch<React.SetStateAction<boolean>>;
-  chartTitle: string;
-  setChartTitle: React.Dispatch<React.SetStateAction<string>>;
-  graphicType: string;
-  setGraphicType: React.Dispatch<React.SetStateAction<string>>;
-  graphicSeries: string;
-  setGraphicSeries: React.Dispatch<React.SetStateAction<string>>;
-  graphicColors: string[];
-  setGraphicColors: React.Dispatch<React.SetStateAction<string[]>>;
   colorInput: string;
   setColorInput: React.Dispatch<React.SetStateAction<string>>;
-  graphicLabels: string;
-  setGraphicLabels: React.Dispatch<React.SetStateAction<string>>;
   nameInput: string;
   setNameInput: React.Dispatch<React.SetStateAction<string>>;
   seriesInput: string;
@@ -36,22 +32,14 @@ interface CreateChartPopUpProps {
 
 const CreateChartPopUp = (props: CreateChartPopUpProps) => {
   const {
+    chartDataStructure,
+    setChartDataStructure,
     showGraphicPopUp,
     setShowGraphicPopUp,
     stepsPopUp,
     setStepsPopUp,
-    chartTitle,
-    setChartTitle,
-    graphicType,
-    setGraphicType,
-    graphicSeries,
-    setGraphicSeries,
-    graphicColors,
-    setGraphicColors,
     colorInput,
     setColorInput,
-    graphicLabels,
-    setGraphicLabels,
     nameInput,
     setNameInput,
     seriesInput,
@@ -79,8 +67,12 @@ const CreateChartPopUp = (props: CreateChartPopUpProps) => {
               <input
                 name="title"
                 placeholder="This is my graphic"
-                onChange={(e: any) => setChartTitle(e.target.value)}
-                value={chartTitle}
+                onChange={(e: any) => {
+                  setChartDataStructure((oldValues) => {
+                    return { ...oldValues, chartTitle: e.target.value };
+                  });
+                }}
+                value={chartDataStructure.chartTitle || ""}
                 autoComplete="off"
               />
             </div>
@@ -89,7 +81,11 @@ const CreateChartPopUp = (props: CreateChartPopUpProps) => {
               <label htmlFor="graphicType">Select your graphic type</label>
               <select
                 name="graphicType"
-                onChange={(e: any) => setGraphicType(e.target.value)}
+                onChange={(e: any) =>
+                  setChartDataStructure((oldValues) => {
+                    return { ...oldValues, graphicType: e.target.value };
+                  })
+                }
               >
                 <option value="pie">Pie</option>
                 <option value="donut">Donut</option>
@@ -102,16 +98,12 @@ const CreateChartPopUp = (props: CreateChartPopUpProps) => {
           </>
         ) : (
           <>
-            {lineTemplateCharts.includes(graphicType) ? (
+            {lineTemplateCharts.includes(chartDataStructure.graphicType!) ? (
               <LineChartAddForm
+                chartDataStructure={chartDataStructure}
+                setChartDataStructure={setChartDataStructure}
                 colorInput={colorInput}
                 setColorInput={setColorInput}
-                graphicColors={graphicColors}
-                setGraphicColors={setGraphicColors}
-                graphicLabels={graphicLabels}
-                setGraphicLabels={setGraphicLabels}
-                graphicSeries={graphicSeries}
-                setGraphicSeries={setGraphicSeries}
                 nameInput={nameInput}
                 setNameInput={setNameInput}
                 seriesInput={seriesInput}
@@ -122,14 +114,10 @@ const CreateChartPopUp = (props: CreateChartPopUpProps) => {
               />
             ) : (
               <BasicChartAddForm
+                chartDataStructure={chartDataStructure}
+                setChartDataStructure={setChartDataStructure}
                 colorInput={colorInput}
                 setColorInput={setColorInput}
-                graphicColors={graphicColors}
-                setGraphicColors={setGraphicColors}
-                graphicLabels={graphicLabels}
-                setGraphicLabels={setGraphicLabels}
-                graphicSeries={graphicSeries}
-                setGraphicSeries={setGraphicSeries}
                 handleAddGraphic={handleAddGraphic}
               />
             )}

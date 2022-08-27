@@ -8,6 +8,7 @@ import {
   QuerySnapshot,
   where,
 } from "firebase/firestore";
+import PropsReturn from "../../models/core.response";
 import { firestore } from "../config/firebase";
 
 interface getPostsProps {
@@ -15,43 +16,55 @@ interface getPostsProps {
   postOwnerId?: string | null;
 }
 
-async function getPosts(props: getPostsProps): Promise<DocumentData[]> {
+async function getPosts(
+  props: getPostsProps
+): Promise<DocumentData[] | PropsReturn> {
   const { id, postOwnerId } = props;
 
   let postsRef: Query<DocumentData>;
   let postsSnapshot: QuerySnapshot<DocumentData> =
     {} as QuerySnapshot<DocumentData>;
 
-  if (!!id && !!postOwnerId) {
-    postsRef = query(
-      collection(firestore, "posts"),
-      where("id", "==", id),
-      where("creatorData.id", "==", postOwnerId),
-      where("isActive", "==", true),
-      orderBy("createdAt")
-    );
+  let mappedPosts: DocumentData[];
 
-    postsSnapshot = await getDocs(postsRef);
-  } else if (!!id) {
-    postsRef = query(
-      collection(firestore, "posts"),
-      where("id", "==", id),
-      where("isActive", "==", true),
-      orderBy("createdAt")
-    );
-    postsSnapshot = await getDocs(postsRef);
-  } else if (!!postOwnerId) {
-    postsRef = query(
-      collection(firestore, "posts"),
-      where("creatorData.id", "==", postOwnerId),
-      where("isActive", "==", true),
-      orderBy("createdAt")
-    );
-    postsSnapshot = await getDocs(postsRef);
+  try {
+    if (!!id && !!postOwnerId) {
+      postsRef = query(
+        collection(firestore, "posts"),
+        where("id", "==", id),
+        where("creatorData.id", "==", postOwnerId),
+        where("isActive", "==", true),
+        orderBy("createdAt")
+      );
+
+      postsSnapshot = await getDocs(postsRef);
+    } else if (!!id) {
+      postsRef = query(
+        collection(firestore, "posts"),
+        where("id", "==", id),
+        where("isActive", "==", true),
+        orderBy("createdAt")
+      );
+      postsSnapshot = await getDocs(postsRef);
+    } else if (!!postOwnerId) {
+      postsRef = query(
+        collection(firestore, "posts"),
+        where("creatorData.id", "==", postOwnerId),
+        where("isActive", "==", true),
+        orderBy("createdAt")
+      );
+      postsSnapshot = await getDocs(postsRef);
+    }
+
+    mappedPosts = postsSnapshot.docs?.map((post) => post.data());
+  } catch (error: any) {
+    return {
+      errorCode: error.code,
+      errorMessage: error.message,
+      message: "It wasn't possible to get your posts!",
+    };
   }
-
-  const mappedPosts = postsSnapshot.docs?.map((post) => post.data());
-  return mappedPosts || [];
+  return mappedPosts;
 }
 
 export { getPosts };

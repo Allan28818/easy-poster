@@ -1,18 +1,26 @@
 import React from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import convertToRGB from "../../services/convertToRGB";
+import { ChartUseStateStructure } from "../../models/components/ChartDataProps";
+import convertToRGB from "../../utils/convertToRGB";
 
 import styles from "../../styles/components/pop-ups/pop-up.module.scss";
 
 interface SelectColorsProps {
+  chartDataStructure: ChartUseStateStructure;
+  setChartDataStructure: React.Dispatch<
+    React.SetStateAction<ChartUseStateStructure>
+  >;
   colorInput: string;
   setColorInput: React.Dispatch<React.SetStateAction<string>>;
-  graphicColors: string[];
-  setGraphicColors: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const SelectColors = (props: SelectColorsProps) => {
-  const { colorInput, setColorInput, graphicColors, setGraphicColors } = props;
+  const {
+    colorInput,
+    setColorInput,
+    chartDataStructure,
+    setChartDataStructure,
+  } = props;
 
   return (
     <div className={styles.formWrapper}>
@@ -28,7 +36,7 @@ const SelectColors = (props: SelectColorsProps) => {
         autoComplete="off"
       />
       <div className={styles.colorsWrapper}>
-        {graphicColors.map((currentColor, currentIndex) => {
+        {chartDataStructure.graphicColors!.map((currentColor, currentIndex) => {
           return (
             <div
               key={Math.floor(Math.random() * (10000 - 1)) + 1}
@@ -38,11 +46,14 @@ const SelectColors = (props: SelectColorsProps) => {
               <AiOutlineCloseCircle
                 className={styles.closeColorCard}
                 onClick={(e: any) => {
-                  setGraphicColors(
-                    graphicColors.filter(
-                      (_, colorIndex) => colorIndex !== currentIndex
-                    )
-                  );
+                  setChartDataStructure((oldValues) => {
+                    const filteredColors =
+                      chartDataStructure.graphicColors!.filter(
+                        (_, colorIndex) => colorIndex !== currentIndex
+                      );
+
+                    return { ...oldValues, graphicColors: filteredColors };
+                  });
                 }}
               />
             </div>
@@ -53,7 +64,11 @@ const SelectColors = (props: SelectColorsProps) => {
       <button
         className={styles.smallBtn}
         onClick={() =>
-          setGraphicColors((oldValues) => [...oldValues, colorInput])
+          setChartDataStructure((oldValues) => {
+            const newGraphicColors = [...oldValues.graphicColors!, colorInput];
+
+            return { ...oldValues, graphicColors: newGraphicColors };
+          })
         }
       >
         Add Color

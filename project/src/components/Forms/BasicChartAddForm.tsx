@@ -3,29 +3,24 @@ import React from "react";
 import SelectColors from "./SelectColors";
 
 import styles from "../../styles/components/pop-ups/pop-up.module.scss";
+import { ChartUseStateStructure } from "../../models/components/ChartDataProps";
 
 interface BasicChartAddFormProps {
-  graphicSeries: string;
-  setGraphicSeries: React.Dispatch<React.SetStateAction<string>>;
+  chartDataStructure: ChartUseStateStructure;
+  setChartDataStructure: React.Dispatch<
+    React.SetStateAction<ChartUseStateStructure>
+  >;
   colorInput: string;
   setColorInput: React.Dispatch<React.SetStateAction<string>>;
-  graphicColors: string[];
-  setGraphicColors: React.Dispatch<React.SetStateAction<string[]>>;
-  graphicLabels: string;
-  setGraphicLabels: React.Dispatch<React.SetStateAction<string>>;
   handleAddGraphic: () => void;
 }
 
 const BasicChartAddForm = (props: BasicChartAddFormProps) => {
   const {
-    graphicSeries,
-    setGraphicSeries,
+    chartDataStructure,
+    setChartDataStructure,
     colorInput,
     setColorInput,
-    graphicColors,
-    setGraphicColors,
-    graphicLabels,
-    setGraphicLabels,
     handleAddGraphic,
   } = props;
 
@@ -36,24 +31,32 @@ const BasicChartAddForm = (props: BasicChartAddFormProps) => {
         <input
           name="series"
           placeholder="1, 2, 3, ..."
-          onChange={(e: any) => setGraphicSeries(e.target.value)}
-          value={graphicSeries}
+          onChange={(e: any) =>
+            setChartDataStructure((oldValues) => {
+              return { ...oldValues, graphicSeries: e.target.value };
+            })
+          }
+          value={chartDataStructure.graphicSeries || ""}
           autoComplete="off"
         />
       </div>
       <SelectColors
+        chartDataStructure={chartDataStructure}
+        setChartDataStructure={setChartDataStructure}
         colorInput={colorInput}
         setColorInput={setColorInput}
-        graphicColors={graphicColors}
-        setGraphicColors={setGraphicColors}
       />
       <div className={styles.formWrapper}>
         <label htmlFor="labels">Type your graphic labels</label>
         <input
           name="labels"
           placeholder="dogs, cats, birds..."
-          onChange={(e: any) => setGraphicLabels(e.target.value)}
-          value={graphicLabels}
+          onChange={(e: any) =>
+            setChartDataStructure((oldValues) => {
+              return { ...oldValues, graphicLabels: e.target.value };
+            })
+          }
+          value={chartDataStructure.graphicLabels || ""}
           autoComplete="off"
         />
       </div>

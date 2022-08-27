@@ -5,7 +5,7 @@ import { DocumentData } from "firebase/firestore";
 
 import { useAuth } from "../../hooks/useAuth";
 
-import formatDate from "../../services/formatDate";
+import formatDate from "../../utils/formatDate";
 import disablePost from "../../services/posts/disablePost";
 
 import ConfirmationPopUp from "../PopUps/ConfirmationPopUp";

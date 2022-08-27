@@ -1,29 +1,26 @@
 import React from "react";
 import { GrFormClose } from "react-icons/gr";
 import { handleAddImageProps } from "../../handlers/createPostHandlers/handleAddImage";
+import { ImageDataProps } from "../../models/components/ImageDataProps";
 import docElementsProp from "../../models/DocElementsProp";
 
 import styles from "../../styles/components/pop-ups/pop-up.module.scss";
 
 interface CreateImagePopUpProps {
+  imageDataStructure: ImageDataProps;
+  setImageDataStructure: React.Dispatch<React.SetStateAction<ImageDataProps>>;
   showImageModal: boolean;
   setShowImageModal: React.Dispatch<React.SetStateAction<boolean>>;
-  srcText: string | string[];
-  setSrcText: React.Dispatch<React.SetStateAction<string | string[]>>;
-  altText: string | string[];
-  setAltText: React.Dispatch<React.SetStateAction<string | string[]>>;
   setDocElements: React.Dispatch<React.SetStateAction<docElementsProp[]>>;
   handleAddImage: (props: handleAddImageProps) => void;
 }
 
 const CreateImagePopUp = (props: CreateImagePopUpProps) => {
   const {
+    imageDataStructure,
+    setImageDataStructure,
     showImageModal,
     setShowImageModal,
-    srcText,
-    setSrcText,
-    altText,
-    setAltText,
     setDocElements,
     handleAddImage,
   } = props;
@@ -60,8 +57,14 @@ const CreateImagePopUp = (props: CreateImagePopUpProps) => {
           const preview = reader.result;
 
           if (!!preview) {
-            setSrcText((oldValues: any) => [...oldValues, preview.toString()]);
-            setAltText((oldValues: any) => [...oldValues, name]);
+            setImageDataStructure((oldValues) => {
+              const newSrcTexts = [...oldValues.srcText!, preview.toString()];
+              return { ...oldValues, srcText: newSrcTexts };
+            });
+            setImageDataStructure((oldValues) => {
+              const newAltTexts = [...oldValues.altText!, name];
+              return { ...oldValues, altText: newAltTexts };
+            });
           }
         };
       }
@@ -99,14 +102,21 @@ const CreateImagePopUp = (props: CreateImagePopUpProps) => {
           </div>
         </div>
         <div className={styles.previewImages}>
-          {Array.isArray(srcText) &&
-            srcText.map((image: any, index) => (
+          {Array.isArray(imageDataStructure.srcText) &&
+            imageDataStructure.srcText.map((image: any, index) => (
               <div className={styles.imageContainer} key={image}>
-                <img src={image} alt={altText[index]} />
+                <img
+                  src={image}
+                  alt={
+                    imageDataStructure.altText
+                      ? imageDataStructure.altText[index]
+                      : ""
+                  }
+                />
               </div>
             ))}
         </div>
-        {!Array.isArray(srcText) && (
+        {!Array.isArray(imageDataStructure.srcText) && (
           <>
             <label htmlFor="url">Image source</label>
             <input
@@ -115,8 +125,12 @@ const CreateImagePopUp = (props: CreateImagePopUpProps) => {
               className={styles.required}
               placeholder="https://..."
               required
-              value={srcText}
-              onChange={(event) => setSrcText(event.target.value)}
+              value={imageDataStructure.srcText || ""}
+              onChange={(event) =>
+                setImageDataStructure((oldValues) => {
+                  return { ...oldValues, srcText: event.target.value };
+                })
+              }
             />
             <label htmlFor="alt">Alternative text (optional)</label>
             <input
@@ -124,23 +138,25 @@ const CreateImagePopUp = (props: CreateImagePopUpProps) => {
               name="alt"
               className={styles.optional}
               placeholder="Texto da minha imagem"
-              value={altText}
-              onChange={(event) => setAltText(event.target.value)}
+              value={imageDataStructure?.altText || ""}
+              onChange={(event) =>
+                setImageDataStructure((oldValues) => {
+                  return { ...oldValues, altText: event.target.value };
+                })
+              }
             />
           </>
         )}
         <button
           onClick={() =>
             handleAddImage({
-              setAltText,
               setDocElements,
               setShowImageModal,
-              setSrcText,
-              srcText,
-              altText,
+              setImageDataStructure,
+              imageDataStructure,
             })
           }
-          disabled={!srcText ? true : false}
+          disabled={!imageDataStructure.srcText ? true : false}
         >
           Create
         </button>
