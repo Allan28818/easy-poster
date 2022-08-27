@@ -14,28 +14,29 @@ import { getAllPublicPosts } from "../../services/posts/getAllPublicPosts";
 function SearchUsers() {
   const [username, setUsername] = useState<string>("");
   const [usersList, setUsersList] = useState<DocumentData[]>([]);
+  const [popularPostsList, setPopularPostsList] = useState<DocumentData[]>([]);
 
   useEffect(() => {
     const handleGetUsers = async () => {
       if (!!username) {
         const queryResult = await getUsers({ username });
-
-        setUsersList(queryResult);
+        if (queryResult instanceof Array) {
+          setUsersList(queryResult);
+        }
       }
     };
 
-    handleGetUsers();
-  }, [username]);
-
-  useEffect(() => {
     const handleGetAllPublicPosts = async () => {
       const queryResult = await getAllPublicPosts();
 
-      console.log(queryResult);
+      if (queryResult instanceof Array) {
+        setPopularPostsList(queryResult);
+      }
     };
 
     handleGetAllPublicPosts();
-  }, []);
+    handleGetUsers();
+  }, [username]);
 
   return (
     <>

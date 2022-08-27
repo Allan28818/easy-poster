@@ -20,7 +20,9 @@ import BasicBurgerMenu from "../../components/BurgersMenu/BasicBurgerMenu";
 
 import dynamic from "next/dynamic";
 
-import ChartDataProps from "../../models/components/ChartDataProps";
+import ChartDataProps, {
+  ChartUseStateStructure,
+} from "../../models/components/ChartDataProps";
 
 import { getPosts } from "../../services/posts/getPosts";
 
@@ -35,6 +37,10 @@ import { handleAddImage } from "../../handlers/createPostHandlers/handleAddImage
 import { handleAddGraphic } from "../../handlers/createPostHandlers/handleAddGraphic";
 import { handleAddLink } from "../../handlers/createPostHandlers/handleAddLink";
 import { handleEditPost } from "../../handlers/createPostHandlers/handleEditPost";
+import { emptyChartModel, emptyLinkModel } from "../../utils/emptyModels";
+import { ImageDataProps } from "../../models/components/ImageDataProps";
+import { emptyImageModel } from "../../utils/emptyModels";
+import { LinkDataModel } from "../../models/components/LinkDataModel";
 
 const Piechart: any = dynamic(
   () => import("../../components/Graphics/PieChart"),
@@ -85,21 +91,18 @@ function CreateAndEditAPost() {
   const [showLinkModal, setShowLinkModal] = useState<boolean>(false);
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
-  const [srcText, setSrcText] = useState<string | string[]>("");
-  const [altText, setAltText] = useState<string | string[]>("");
+  const [imageDataStructure, setImageDataStructure] =
+    useState<ImageDataProps>(emptyImageModel);
 
-  const [chartTitle, setChartTitle] = useState<string>("");
-  const [graphicType, setGraphicType] = useState<string>("pie");
-  const [graphicSeries, setGraphicSeries] = useState<string>("");
-  const [colorInput, setColorInput] = useState<string>("");
-  const [graphicColors, setGraphicColors] = useState<string[]>([]);
-  const [graphicLabels, setGraphicLabels] = useState<string>("");
+  const [chartDataStructure, setChartDataStructure] =
+    useState<ChartUseStateStructure>(emptyChartModel);
+
+  const [linkDataStructure, setLinkDataStructure] =
+    useState<LinkDataModel>(emptyLinkModel);
 
   const [nameInput, setNameInput] = useState<string>("");
+  const [colorInput, setColorInput] = useState<string>("");
   const [seriesInput, setSeriesInput] = useState<string>("");
-
-  const [linkText, setLinkText] = useState<string>("");
-  const [linkSrc, setLinkSrc] = useState<string>("");
 
   const [chartData, setChartData] = useState<ChartDataProps[]>([]);
 
@@ -124,9 +127,9 @@ function CreateAndEditAPost() {
   useEffect(() => {
     const handleFecthPost = async () => {
       if (!!postId) {
-        console.log("edit");
         const postsList = await getPosts({ id: postId });
-        const currentPost: DocumentData = postsList[0];
+        const currentPost: DocumentData =
+          postsList instanceof Array ? postsList[0] : [];
 
         setPageOperation("edit");
 
@@ -246,10 +249,8 @@ function CreateAndEditAPost() {
       />
 
       <CreateImagePopUp
-        srcText={srcText}
-        setSrcText={setSrcText}
-        altText={altText}
-        setAltText={setAltText}
+        imageDataStructure={imageDataStructure}
+        setImageDataStructure={setImageDataStructure}
         showImageModal={showImageModal}
         setShowImageModal={setShowImageModal}
         setDocElements={setDocElements}
@@ -257,18 +258,10 @@ function CreateAndEditAPost() {
       />
 
       <CreateChartPopUp
-        chartTitle={chartTitle}
-        setChartTitle={setChartTitle}
+        chartDataStructure={chartDataStructure}
+        setChartDataStructure={setChartDataStructure}
         colorInput={colorInput}
         setColorInput={setColorInput}
-        graphicColors={graphicColors}
-        setGraphicColors={setGraphicColors}
-        graphicLabels={graphicLabels}
-        setGraphicLabels={setGraphicLabels}
-        graphicSeries={graphicSeries}
-        setGraphicSeries={setGraphicSeries}
-        graphicType={graphicType}
-        setGraphicType={setGraphicType}
         showGraphicPopUp={showGraphicPopUp}
         setShowGraphicPopUp={setShowGraphicPopUp}
         stepsPopUp={stepsPopUp}
@@ -281,19 +274,11 @@ function CreateAndEditAPost() {
         setChartData={setChartData}
         handleAddGraphic={() =>
           handleAddGraphic({
+            chartDataStructure,
             chartData,
-            chartTitle,
-            graphicColors,
-            graphicLabels,
-            graphicSeries,
-            graphicType,
             docElements,
-            setChartTitle,
+            setChartDataStructure,
             setDocElements,
-            setGraphicColors,
-            setGraphicLabels,
-            setGraphicSeries,
-            setGraphicType,
             setShowGraphicPopUp,
             setStepsPopUp,
           })
@@ -301,20 +286,16 @@ function CreateAndEditAPost() {
       />
 
       <CreateLinkPopUp
+        linkDataStructure={linkDataStructure}
+        setLinkDataStructure={setLinkDataStructure}
         showLinkModal={showLinkModal}
         setShowLinkModal={setShowLinkModal}
-        linkSrc={linkSrc}
-        setLinkSrc={setLinkSrc}
-        linkText={linkText}
-        setLinkText={setLinkText}
         handleAddLink={() =>
           handleAddLink({
+            linkDataStructure,
             docElements,
-            linkSrc,
-            linkText,
+            setLinkDataStructure,
             setDocElements,
-            setLinkSrc,
-            setLinkText,
             setShowLinkModal,
           })
         }

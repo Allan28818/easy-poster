@@ -3,7 +3,7 @@
 
 // const privateKeyPath = path.join(
 //   __dirname,
-//   "easy-poster-d747a-firebase-adminsdk-1bi5r-0fac03203b.json/"
+//   "<firebase_admin_file>"
 // );
 // const credential = firebaseAdmin.credential.cert(privateKeyPath);
 

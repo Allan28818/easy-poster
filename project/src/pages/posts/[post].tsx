@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { getPosts } from "../../services/posts/getPosts";
-import formatDate from "../../services/formatDate";
+import formatDate from "../../utils/formatDate";
 
 import docElementsProp from "../../models/DocElementsProp";
 

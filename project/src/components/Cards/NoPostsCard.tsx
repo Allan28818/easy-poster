@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { generateTimeMessage } from "../../services/generateTimeMessage";
+import { generateTimeMessage } from "../../utils/generateTimeMessage";
 
 import { useAuth } from "../../hooks/useAuth";
 

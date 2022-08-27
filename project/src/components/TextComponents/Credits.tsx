@@ -1,6 +1,6 @@
 import { DocumentData } from "firebase/firestore";
 import React from "react";
-import formatDate from "../../services/formatDate";
+import formatDate from "../../utils/formatDate";
 
 interface CreditsProps {
   creatorName: string;

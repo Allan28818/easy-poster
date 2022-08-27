@@ -10,15 +10,15 @@ import PropsReturn from "../../models/core.response";
 import { firestore } from "../config/firebase";
 
 async function getAllPublicPosts(): Promise<DocumentData[] | PropsReturn> {
-  const postsQuery = query(
-    collection(firestore, "posts"),
-    where("isActive", "==", true),
-    where("isPublic", "==", true),
-    orderBy("createdAt")
-  );
   let posts: DocumentData[];
 
   try {
+    const postsQuery = query(
+      collection(firestore, "posts"),
+      where("isActive", "==", true),
+      where("isPublic", "==", true),
+      orderBy("createdAt")
+    );
     const postsSnapshot = await getDocs(postsQuery);
     posts = postsSnapshot.docs.map((post) => post.data());
   } catch (error: any) {

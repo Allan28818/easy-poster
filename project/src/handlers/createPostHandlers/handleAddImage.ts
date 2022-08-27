@@ -1,13 +1,13 @@
 import { v4 as uuid } from "uuid";
+import { ImageDataProps } from "../../models/components/ImageDataProps";
 import docElementsProp from "../../models/DocElementsProp";
 import saveImage from "../../services/posts/saveImage";
+import { emptyImageModel } from "../../utils/emptyModels";
 
 export interface handleAddImageProps {
-  srcText: string | string[];
-  altText?: string | string[];
+  imageDataStructure: ImageDataProps;
   setDocElements: React.Dispatch<React.SetStateAction<docElementsProp[]>>;
-  setSrcText: React.Dispatch<React.SetStateAction<string | string[]>>;
-  setAltText: React.Dispatch<React.SetStateAction<string | string[]>>;
+  setImageDataStructure: React.Dispatch<React.SetStateAction<ImageDataProps>>;
   setShowImageModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -34,22 +34,34 @@ interface imageComponentProps {
 
 async function handleAddImage(props: handleAddImageProps) {
   const {
-    srcText,
-    altText,
+    imageDataStructure,
     setDocElements,
-    setSrcText,
-    setAltText,
+    setImageDataStructure,
     setShowImageModal,
   } = props;
 
-  if (!!srcText && !Array.isArray(srcText)) {
-    addASingleImage({ srcText, altText, setDocElements });
-  } else if (!!srcText && Array.isArray(srcText)) {
-    addAnImageSet({ srcText, altText, setDocElements });
+  if (
+    !!imageDataStructure.srcText &&
+    !Array.isArray(imageDataStructure.srcText)
+  ) {
+    addASingleImage({
+      srcText: imageDataStructure.srcText,
+      altText: imageDataStructure.altText,
+      setDocElements,
+    });
+  } else if (
+    !!imageDataStructure.srcText &&
+    Array.isArray(imageDataStructure.srcText)
+  ) {
+    addAnImageSet({
+      srcText: imageDataStructure.srcText,
+      altText: imageDataStructure.altText,
+      setDocElements,
+    });
   }
 
-  setSrcText("");
-  setAltText("");
+  setImageDataStructure(emptyImageModel);
+
   setShowImageModal(false);
 }
 

@@ -10,8 +10,6 @@ import MainHeader from "../components/Headers/MainHeader";
 import PostWrapperCard from "../components/Cards/PostWrapperCard";
 import NoPostsCard from "../components/Cards/NoPostsCard";
 
-import styles from "../styles/home.module.scss";
-
 function Home() {
   const [postsList, setPostsList] = useState<DocumentData[]>([]);
 
@@ -24,12 +22,13 @@ function Home() {
   useEffect(() => {
     const posts = async () => {
       if (!!user) {
-        setPostsList(await getPosts({ postOwnerId: user.uid }));
+        const returnedPosts = await getPosts({ postOwnerId: user?.uid });
+        setPostsList(returnedPosts instanceof Array ? returnedPosts : []);
       }
     };
 
     posts();
-  }, []);
+  }, [user]);
 
   return (
     <>
@@ -41,7 +40,8 @@ function Home() {
           showPostOptions={showPostOptions}
           setShowPostOptions={setShowPostOptions}
           onUpdatePosts={async () => {
-            setPostsList(await getPosts({ postOwnerId: user?.uid }));
+            const returnedPosts = await getPosts({ postOwnerId: user?.uid });
+            setPostsList(returnedPosts instanceof Array ? returnedPosts : []);
           }}
         />
       ) : (

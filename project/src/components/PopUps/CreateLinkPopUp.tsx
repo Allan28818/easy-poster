@@ -1,26 +1,23 @@
 import React from "react";
 import { GrFormClose } from "react-icons/gr";
+import { LinkDataModel } from "../../models/components/LinkDataModel";
 
 import styles from "../../styles/components/pop-ups/pop-up.module.scss";
 
 interface CreateLinkPopUp {
+  linkDataStructure: LinkDataModel;
+  setLinkDataStructure: React.Dispatch<React.SetStateAction<LinkDataModel>>;
   showLinkModal: boolean;
   setShowLinkModal: React.Dispatch<React.SetStateAction<boolean>>;
-  linkText: string;
-  setLinkText: React.Dispatch<React.SetStateAction<string>>;
-  linkSrc: string;
-  setLinkSrc: React.Dispatch<React.SetStateAction<string>>;
   handleAddLink: () => void;
 }
 
 const CreateLinkPopUp = (props: CreateLinkPopUp) => {
   const {
+    linkDataStructure,
+    setLinkDataStructure,
     showLinkModal,
     setShowLinkModal,
-    linkText,
-    setLinkText,
-    linkSrc,
-    setLinkSrc,
     handleAddLink,
   } = props;
 
@@ -40,8 +37,12 @@ const CreateLinkPopUp = (props: CreateLinkPopUp) => {
           className={styles.required}
           placeholder="Link text"
           required
-          value={linkText}
-          onChange={(event) => setLinkText(event.target.value)}
+          value={linkDataStructure?.linkText || ""}
+          onChange={(event) =>
+            setLinkDataStructure((oldValues) => {
+              return { ...oldValues, linkText: event.target.value };
+            })
+          }
         />
         <label htmlFor="link-url">Type here your URL</label>
         <input
@@ -49,8 +50,12 @@ const CreateLinkPopUp = (props: CreateLinkPopUp) => {
           name="link-url"
           className={styles.optional}
           placeholder="https://..."
-          value={linkSrc}
-          onChange={(event) => setLinkSrc(event.target.value)}
+          value={linkDataStructure?.linkSrc || ""}
+          onChange={(event) =>
+            setLinkDataStructure((oldValues) => {
+              return { ...oldValues, linkSrc: event.target.value };
+            })
+          }
         />
         <button onClick={handleAddLink}>Create</button>
       </div>

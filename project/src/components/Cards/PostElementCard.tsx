@@ -54,7 +54,6 @@ const PostElementCard = (props: PostElementCardProps) => {
   }
 
   function handleDuplicateElement() {
-    // debugger;
     const docElementsAvaiableArray = Array.from(docElements);
     const currentElement = docElementsAvaiableArray[index];
     const currentElementCopy = JSON.parse(JSON.stringify(currentElement));
