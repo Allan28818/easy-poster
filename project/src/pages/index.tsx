@@ -9,6 +9,7 @@ import { DocumentData } from "firebase/firestore";
 import MainHeader from "../components/Headers/MainHeader";
 import PostWrapperCard from "../components/Cards/PostWrapperCard";
 import NoPostsCard from "../components/Cards/NoPostsCard";
+import ShortHeader from "../components/Headers/ShortHeader";
 
 function Home() {
   const [postsList, setPostsList] = useState<DocumentData[]>([]);
@@ -32,7 +33,7 @@ function Home() {
 
   return (
     <>
-      <MainHeader showAddPostBtn={true} />
+      <ShortHeader />
 
       {!!postsList.length ? (
         <PostWrapperCard

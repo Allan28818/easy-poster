@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { DocumentData } from "firebase/firestore";
 
 import ShortHeader from "../../components/Headers/ShortHeader";
+import PostWrapperCard from "../../components/Cards/PostWrapperCard";
 import { BasicProfileImage } from "../../components/Images/BasicProfileImage";
 
 import withAuth from "../../components/withAuth";
@@ -10,6 +11,7 @@ import { getUsers } from "../../services/users/getUsers";
 
 import styles from "../../styles/explore/search-users.module.scss";
 import { getAllPublicPosts } from "../../services/posts/getAllPublicPosts";
+import SimplifiedPostWrapperCard from "../../components/Cards/SimplifiedPostWrapperCard";
 
 function SearchUsers() {
   const [username, setUsername] = useState<string>("");
@@ -31,6 +33,7 @@ function SearchUsers() {
 
       if (queryResult instanceof Array) {
         setPopularPostsList(queryResult);
+        console.log(queryResult);
       }
     };
 
@@ -81,7 +84,7 @@ function SearchUsers() {
         )}
       </section>
       <section className={styles.famousPosts}>
-        {/* List of famous posts */}
+        <SimplifiedPostWrapperCard postsList={popularPostsList} />
       </section>
     </>
   );

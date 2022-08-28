@@ -8,8 +8,11 @@ import { RiCompassDiscoverLine } from "react-icons/ri";
 import { FiUser } from "react-icons/fi";
 
 import styles from "../../styles/components/headers/short-header.module.scss";
+import { useAuth } from "../../hooks/useAuth";
 
 const ShortHeader = () => {
+  const { user } = useAuth();
+
   return (
     <>
       <header className={styles.shortHeader}>
@@ -41,7 +44,7 @@ const ShortHeader = () => {
             </Link>
           </li>
           <li className={styles.navOption} data-tester="no">
-            <Link href={"/user/ProfilePage"}>
+            <Link href={`/user/${user?.email}`}>
               <i>
                 <FiUser />
               </i>

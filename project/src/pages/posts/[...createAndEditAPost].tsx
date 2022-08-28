@@ -149,6 +149,7 @@ function CreateAndEditAPost() {
       const creatorData = {
         id: user?.uid,
         fullName: user?.displayName,
+        email: user?.email,
       };
 
       const response = await savePostController({

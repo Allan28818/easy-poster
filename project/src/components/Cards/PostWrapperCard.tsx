@@ -50,16 +50,17 @@ const PostWrapperCard = (props: PostWrapperCardProps) => {
               userId: user?.uid,
             });
           }
-          if (!!user) {
+          if (!!user && onUpdatePosts) {
             await onUpdatePosts();
             setShowPostDeletePopUp(false);
           }
         }}
       />
+
       <div className={styles.postsList}>
         {postsList.map((post) => (
           <div key={post.createdAt} className={styles.postWrapper}>
-            {user?.uid === post.creatorData.id && (
+            {user?.uid === post.creatorData.id && setShowPostOptions && (
               <PostOptions
                 showPopUp={showPostOptions}
                 setShowPopUp={setShowPostOptions}

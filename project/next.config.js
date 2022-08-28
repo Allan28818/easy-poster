@@ -9,6 +9,7 @@ module.exports = withPwa({
     domains: [
       "firebasestorage.googleapis.com",
       "https://firebasestorage.googleapis.com",
+      "https://lh3.googleusercontent.com",
     ],
     formats: ["image/webp"],
     loader: "akamai",

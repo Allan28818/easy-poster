@@ -7,6 +7,7 @@ interface savePostProps {
   creatorData: {
     id: string | null | undefined;
     fullName: string | null | undefined;
+    email: string | null | undefined;
   };
 }
 
