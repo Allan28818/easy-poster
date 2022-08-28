@@ -109,3 +109,12 @@
     margin: convertToRem(2.5rem);
   }
 }
+
+.famousPosts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: convertToRem(10rem);
+  width: 100%;
+  height: 100%;
+}

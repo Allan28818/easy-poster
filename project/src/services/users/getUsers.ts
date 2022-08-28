@@ -29,7 +29,7 @@ async function getUsers(
         usernameMiddleLenght
       );
       const usernameEndindCharacters = username.slice(-usernameMiddleLenght);
-      console.log("there's an username");
+
       usersRef = query(
         collection(firestore, "users"),
         where("email", ">=", usernameStartingCharacters),

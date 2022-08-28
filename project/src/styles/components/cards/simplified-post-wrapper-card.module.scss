@@ -1,0 +1,69 @@
+@import "../../_functions.scss";
+@import "../../_variables.scss";
+
+.postWrapperCard {
+  width: auto;
+  height: auto;
+  min-width: convertToRem(200rem);
+  max-width: convertToRem(700rem);
+  padding: convertToRem(25rem);
+  background: $white-anti-flash;
+  border: 1px solid $gray-peace;
+  border-radius: convertToRem(20rem);
+  margin: auto;
+
+  header {
+    width: 100%;
+    padding: convertToRem(2.5rem);
+    margin-bottom: convertToRem(1.5rem);
+
+    .username a {
+      font-size: clamp(
+        convertToRem(12.5rem),
+        convertToRem(15rem),
+        convertToRem(17.5rem)
+      );
+      font-family: "Robot Mono", monospace;
+      color: $black-transparent;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .username a:hover {
+      text-decoration: underline;
+      color: $blue-deep-koamaru;
+    }
+
+    hr {
+      background: $gray-peace;
+      height: 1px;
+      width: 100%;
+    }
+
+    .postName {
+      font-size: clamp(
+        convertToRem(15rem),
+        convertToRem(17.5rem),
+        convertToRem(20rem)
+      );
+      font-family: "Baloo Bhaijaan", sans-serif;
+      font-weight: bold;
+      color: $black-pearl;
+    }
+  }
+
+  .postPreview {
+    border-radius: convertToRem(10rem);
+    width: auto;
+    min-width: convertToRem(175rem);
+    max-width: convertToRem(600rem);
+    height: auto;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: convertToRem(5rem);
+    }
+  }
+}
