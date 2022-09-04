@@ -44,10 +44,10 @@
 }
 
 .postsList {
-  margin-top: clamp(13%, convertToRem(25rem), 30%);
-
   .postWrapper {
-    width: convertToRem(500rem);
+    width: auto;
+    min-width: convertToRem(250rem);
+    max-width: convertToRem(650rem);
     height: auto;
     background: $orange-synthetic-pumpkin;
     margin: auto;
@@ -132,51 +132,5 @@
     a:hover {
       opacity: 0.7;
     }
-  }
-}
-
-.container {
-  width: 100%;
-  height: auto;
-  margin-top: clamp(17.5%, convertToRem(40rem), 45%);
-
-  h3 {
-    display: flex;
-    align-items: center;
-    font-size: clamp(80%, convertToRem(150rem), 160%);
-    font-family: "Fira Sans", sans-serif;
-    margin-left: 23%;
-    cursor: default;
-  }
-}
-
-@media (max-width: 411px) {
-  .container {
-    width: 100%;
-    height: auto;
-    padding-top: 0.25rem;
-    margin-top: clamp(45%, convertToRem(65rem), 75%);
-  }
-}
-
-@media (max-width: 670px) {
-  .container {
-    width: 100%;
-    height: auto;
-    margin-top: clamp(40%, convertToRem(90rem), 90%);
-  }
-}
-
-@media (max-width: 411px) {
-  .postsList {
-    width: 100%;
-    height: auto;
-    margin-top: clamp(100%, convertToRem(100rem), 110%);
-  }
-}
-
-@media (max-width: 900px), (min-width: 500px) {
-  .postsList {
-    margin-top: convertToRem(200rem);
   }
 }

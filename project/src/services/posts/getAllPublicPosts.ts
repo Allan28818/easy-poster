@@ -9,7 +9,7 @@ import {
 import PropsReturn from "../../models/core.response";
 import { firestore } from "../config/firebase";
 
-async function getAllPublicPosts(): Promise<DocumentData[] | PropsReturn> {
+async function getAllPublicPosts(): Promise<PropsReturn> {
   let posts: DocumentData[];
 
   try {
@@ -29,7 +29,10 @@ async function getAllPublicPosts(): Promise<DocumentData[] | PropsReturn> {
     };
   }
 
-  return posts;
+  return {
+    message: "All the public posts were successfully requested!",
+    data: posts,
+  };
 }
 
 export { getAllPublicPosts };

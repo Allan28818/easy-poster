@@ -5,7 +5,7 @@
   width: auto;
   height: auto;
   min-width: convertToRem(200rem);
-  max-width: convertToRem(700rem);
+  max-width: convertToRem(800rem);
   padding: convertToRem(25rem);
   background: $white-anti-flash;
   border: 1px solid $gray-peace;
@@ -13,26 +13,13 @@
   margin: auto;
 
   header {
+    display: block;
     width: 100%;
     padding: convertToRem(2.5rem);
     margin-bottom: convertToRem(1.5rem);
-
-    .username a {
-      font-size: clamp(
-        convertToRem(12.5rem),
-        convertToRem(15rem),
-        convertToRem(17.5rem)
-      );
-      font-family: "Robot Mono", monospace;
-      color: $black-transparent;
-      text-decoration: none;
-      transition: all 0.3s;
-    }
-
-    .username a:hover {
-      text-decoration: underline;
-      color: $blue-deep-koamaru;
-    }
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 
     hr {
       background: $gray-peace;
@@ -52,6 +39,35 @@
     }
   }
 
+  .profileInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .avatar {
+      margin-right: convertToRem(5rem);
+      border-radius: convertToRem(50rem);
+    }
+
+    .username a {
+      text-overflow: ellipsis;
+
+      font-size: clamp(
+        convertToRem(12.5rem),
+        convertToRem(15rem),
+        convertToRem(17.5rem)
+      );
+      font-family: "Robot Mono", monospace;
+      color: $black-transparent;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .username a:hover {
+      text-decoration: underline;
+      color: $blue-deep-koamaru;
+    }
+  }
+
   .postPreview {
     border-radius: convertToRem(10rem);
     width: auto;
@@ -59,6 +75,13 @@
     max-width: convertToRem(600rem);
     height: auto;
     cursor: pointer;
+    font-family: "Roboto Mono", monospace;
+    color: $blue-deep-koamaru;
+    border: 1px solid $black-transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $gray-peace;
 
     img {
       width: 100%;

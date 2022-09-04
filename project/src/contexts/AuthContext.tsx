@@ -24,7 +24,7 @@ import {
 import { doc, setDoc } from "firebase/firestore";
 
 import { auth, firestore } from "../services/config/firebase";
-import { UserLogin, UserSignUp } from "../models/UserModel";
+import { UserLogin, UserSignUp } from "../models/userTypes/UserModel";
 import {
   FunctionMessage,
   popUpFunctionMessage,

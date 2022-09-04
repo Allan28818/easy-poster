@@ -16,7 +16,7 @@ interface getUserByFieldProps {
 
 async function getUserByField(
   props: getUserByFieldProps
-): Promise<DocumentData | PropsReturn> {
+): Promise<PropsReturn> {
   const { fieldToGet, fieldValue } = props;
 
   let userToReturn: DocumentData;
@@ -44,7 +44,7 @@ async function getUserByField(
     };
   }
 
-  return userToReturn;
+  return { message: "User successfully found", data: userToReturn };
 }
 
 export { getUserByField };

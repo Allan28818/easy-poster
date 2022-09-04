@@ -4,20 +4,11 @@ import {
   uploadString,
   getDownloadURL,
 } from "firebase/storage";
+import PropsReturn from "../../models/core.response";
+import { UserProfileProps } from "../../models/userTypes/UserProfileProps";
 
-interface saveImagePropsReturn {
-  url?: string;
-  name?: string;
-  fullPath?: string;
-  message: string;
-  errorCode?: number;
-  errorMessage?: string;
-}
-
-async function saveImage(imageFile: any): Promise<saveImagePropsReturn> {
-  let imageData: saveImagePropsReturn = {
-    message: "Unknown error",
-  };
+async function saveImage(imageFile: any): Promise<PropsReturn> {
+  let imageData: UserProfileProps = {};
   try {
     const imageName = Date.now().toString();
     const storage = getStorage();
@@ -30,7 +21,6 @@ async function saveImage(imageFile: any): Promise<saveImagePropsReturn> {
       url,
       name: response.ref.name,
       fullPath: response.ref.fullPath,
-      message: "Your image was successfuly saved!",
     };
   } catch (error: any) {
     return {
@@ -40,7 +30,7 @@ async function saveImage(imageFile: any): Promise<saveImagePropsReturn> {
     };
   }
 
-  return imageData;
+  return { message: "Your image was successfuly saved!", data: imageData };
 }
 
 export default saveImage;

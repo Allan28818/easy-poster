@@ -16,9 +16,7 @@ interface getPostsProps {
   postOwnerId?: string | null;
 }
 
-async function getPosts(
-  props: getPostsProps
-): Promise<DocumentData[] | PropsReturn> {
+async function getPosts(props: getPostsProps): Promise<PropsReturn> {
   const { id, postOwnerId } = props;
 
   let postsRef: Query<DocumentData>;
@@ -64,7 +62,10 @@ async function getPosts(
       message: "It wasn't possible to get your posts!",
     };
   }
-  return mappedPosts;
+  return {
+    message: "All the posts were successfully requested!",
+    data: mappedPosts,
+  };
 }
 
 export { getPosts };

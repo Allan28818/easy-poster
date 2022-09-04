@@ -12,6 +12,7 @@ interface savePostControllerProps {
     id: string | null | undefined;
     fullName: string | null | undefined;
     email: string | null | undefined;
+    photoURL: string | null | undefined;
   };
 }
 

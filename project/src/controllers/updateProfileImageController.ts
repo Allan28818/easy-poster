@@ -7,7 +7,7 @@ async function updateProfileImageController(
 
   const response = await updateProfileImageService(stringfiedSrc);
 
-  return response.message;
+  return response?.data.message;
 }
 
 export { updateProfileImageController };

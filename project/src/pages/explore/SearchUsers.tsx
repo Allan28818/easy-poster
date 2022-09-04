@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { DocumentData } from "firebase/firestore";
 
 import ShortHeader from "../../components/Headers/ShortHeader";
-import PostWrapperCard from "../../components/Cards/PostWrapperCard";
 import { BasicProfileImage } from "../../components/Images/BasicProfileImage";
 
 import withAuth from "../../components/withAuth";
@@ -12,6 +11,7 @@ import { getUsers } from "../../services/users/getUsers";
 import styles from "../../styles/explore/search-users.module.scss";
 import { getAllPublicPosts } from "../../services/posts/getAllPublicPosts";
 import SimplifiedPostWrapperCard from "../../components/Cards/SimplifiedPostWrapperCard";
+import NoPostsMessage from "../../components/Messages/NoPostsMessage";
 
 function SearchUsers() {
   const [username, setUsername] = useState<string>("");
@@ -22,8 +22,8 @@ function SearchUsers() {
     const handleGetUsers = async () => {
       if (!!username) {
         const queryResult = await getUsers({ username });
-        if (queryResult instanceof Array) {
-          setUsersList(queryResult);
+        if (queryResult.data instanceof Array) {
+          setUsersList(queryResult.data);
         }
       }
     };
@@ -31,8 +31,8 @@ function SearchUsers() {
     const handleGetAllPublicPosts = async () => {
       const queryResult = await getAllPublicPosts();
 
-      if (queryResult instanceof Array) {
-        setPopularPostsList(queryResult);
+      if (queryResult.data instanceof Array) {
+        setPopularPostsList(queryResult.data);
         console.log(queryResult);
       }
     };
@@ -62,7 +62,7 @@ function SearchUsers() {
             <ul className={styles.usersList}>
               {usersList.map((currentUser) => (
                 <li>
-                  <Link href={"#"}>
+                  <Link href={`/user/${currentUser.email}`}>
                     <a>
                       <BasicProfileImage
                         username={"static"}
@@ -84,7 +84,16 @@ function SearchUsers() {
         )}
       </section>
       <section className={styles.famousPosts}>
-        <SimplifiedPostWrapperCard postsList={popularPostsList} />
+        {popularPostsList.length ? (
+          <SimplifiedPostWrapperCard postsList={popularPostsList} />
+        ) : (
+          <NoPostsMessage
+            messageTitle="No posts!"
+            messageDescription="There's no public posts in the application... be the first and publish one!"
+            redirectionURL="/posts/create/default/"
+            emojieTitle="Add new post"
+          />
+        )}
       </section>
     </>
   );

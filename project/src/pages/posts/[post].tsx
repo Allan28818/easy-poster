@@ -13,6 +13,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 
 import styles from "../../styles/posts/post-details.module.scss";
+import PropsReturn from "../../models/core.response";
 
 const Piechart = dynamic(() => import("../../components/Graphics/PieChart"), {
   ssr: false,
@@ -44,10 +45,13 @@ function PostDetails() {
   useEffect(() => {
     const handleFecthPost = async () => {
       if (!!post) {
-        const currentPost: any = await getPosts({ id: post });
-        setPostInformations({
-          ...currentPost[0],
-        });
+        const currentPost: PropsReturn = await getPosts({ id: post });
+
+        if (currentPost.data) {
+          setPostInformations({
+            ...currentPost.data[0],
+          });
+        }
       }
     };
 

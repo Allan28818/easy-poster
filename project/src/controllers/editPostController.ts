@@ -1,7 +1,6 @@
 import PropsReturn from "../models/core.response";
 import docElementsProp from "../models/DocElementsProp";
 import { editPost } from "../services/posts/editPost";
-import saveImage from "../services/posts/saveImage";
 
 interface editPostController {
   postName: string;
