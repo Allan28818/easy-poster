@@ -26,7 +26,7 @@ function ProfilePage() {
           fieldValue: username,
         });
 
-        setPageOwner(getUserByFieldResponse);
+        setPageOwner(getUserByFieldResponse.data);
       }
     };
 

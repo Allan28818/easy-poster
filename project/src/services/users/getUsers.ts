@@ -13,9 +13,7 @@ interface getUsersProps {
   username: string;
 }
 
-async function getUsers(
-  props: getUsersProps
-): Promise<DocumentData[] | PropsReturn> {
+async function getUsers(props: getUsersProps): Promise<PropsReturn> {
   const { username } = props;
   let mappedUsers: DocumentData[];
 
@@ -48,7 +46,7 @@ async function getUsers(
     };
   }
 
-  return mappedUsers;
+  return { message: "Your users were successfully gotten", data: mappedUsers };
 }
 
 export { getUsers };

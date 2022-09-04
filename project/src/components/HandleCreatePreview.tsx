@@ -6,11 +6,7 @@ import { TiWarningOutline } from "react-icons/ti";
 
 import TextComponent from "./TextComponents/TextComponent";
 
-import { useState } from "react";
-
 function HandleCreatePreview(currentElement: docElementsProp, styles: any) {
-  const [isImageLoading, setIsImageLoading] = useState<boolean>(true);
-
   if (!!currentElement.textContent && currentElement.type === "text-element") {
     return (
       <>

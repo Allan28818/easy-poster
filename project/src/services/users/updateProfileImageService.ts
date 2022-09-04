@@ -5,26 +5,17 @@ import {
   uploadString,
   getDownloadURL,
 } from "firebase/storage";
+import PropsReturn from "../../models/core.response";
+import { UserProfileProps } from "../../models/userTypes/UserProfileProps";
 
 import { auth } from "../config/firebase";
 
-interface updateProfileImagePropsReturn {
-  url?: string;
-  name?: string;
-  fullPath?: string;
-  message: string;
-  errorCode?: number;
-  errorMessage?: string;
-}
-
 async function updateProfileImageService(
   imageFile: string
-): Promise<updateProfileImagePropsReturn> {
+): Promise<PropsReturn> {
   const user = auth.currentUser;
 
-  let imageData: updateProfileImagePropsReturn = {
-    message: "Unknown error",
-  };
+  let imageData: UserProfileProps = {};
   try {
     const imageName = Date.now().toString();
     const storage = getStorage();
@@ -37,7 +28,6 @@ async function updateProfileImageService(
       url,
       name: response.ref.name,
       fullPath: response.ref.fullPath,
-      message: "Your image was successfuly saved!",
     };
 
     if (!user) {
@@ -53,7 +43,7 @@ async function updateProfileImageService(
     };
   }
 
-  return imageData;
+  return { message: "Your profile image was updated", data: imageData };
 }
 
 export default updateProfileImageService;

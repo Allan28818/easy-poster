@@ -1,0 +1,75 @@
+@import "../../_variables.scss";
+@import "../../_functions.scss";
+
+.messageWrapper {
+  display: block;
+  margin: auto;
+  padding: convertToRem(20rem);
+
+  .messageTitle {
+    font-size: clamp(
+      convertToRem(20rem),
+      convertToRem(27.5rem),
+      convertToRem(30rem)
+    );
+    font-family: "Baloo Bhaijaan", sans-serif;
+    color: $blue-deep-koamaru;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .iconWrapper {
+    display: block;
+    width: auto;
+    min-width: convertToRem(30rem);
+    max-width: convertToRem(40rem);
+    margin: auto;
+    color: $gray-peace;
+    transition: all 0.3s ease;
+    .icon {
+      font-size: clamp(
+        convertToRem(40rem),
+        convertToRem(45rem),
+        convertToRem(50rem)
+      );
+      cursor: pointer;
+    }
+
+    &:hover {
+      color: $blue-cyanite;
+      animation: opacityAnimation 0.4s ease-in;
+    }
+  }
+
+  .messageDescription {
+    font-size: clamp(
+      convertToRem(15rem),
+      convertToRem(17.5rem),
+      convertToRem(20rem)
+    );
+    font-family: "Roboto", sans-serif;
+    color: $black-pearl;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: convertToRem(15rem);
+    margin-top: convertToRem(30rem);
+  }
+}
+
+@keyframes opacityAnimation {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+    color: $blue-cyanite;
+  }
+
+  100% {
+    opacity: 1;
+    color: $blue-cyanite;
+  }
+}

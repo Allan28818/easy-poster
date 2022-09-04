@@ -129,7 +129,7 @@ function CreateAndEditAPost() {
       if (!!postId) {
         const postsList = await getPosts({ id: postId });
         const currentPost: DocumentData =
-          postsList instanceof Array ? postsList[0] : [];
+          postsList.data instanceof Array ? postsList.data[0] : [];
 
         setPageOperation("edit");
 
@@ -150,6 +150,7 @@ function CreateAndEditAPost() {
         id: user?.uid,
         fullName: user?.displayName,
         email: user?.email,
+        photoURL: user?.photoURL,
       };
 
       const response = await savePostController({

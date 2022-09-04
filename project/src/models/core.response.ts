@@ -1,5 +1,6 @@
 interface PropsReturn {
   message: string;
+  data?: any | any[];
   errorMessage?: string;
   errorCode?: string;
 }

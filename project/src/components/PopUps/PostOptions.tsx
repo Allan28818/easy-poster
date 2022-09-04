@@ -1,6 +1,6 @@
 import React, { ReactNode, useRef, useState } from "react";
 
-import useOutsideAlerter from "../../services/events/useOutsideAlerter";
+import useOutsideAlerter from "../ClickLayers/useOutsideAlerter";
 
 import { BiCopy } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
