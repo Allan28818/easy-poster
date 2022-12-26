@@ -1,4 +1,4 @@
-import admin from "firebase-admin";
+import { firestore } from "firebase-admin";
 import { PropsReturn } from "../models/core.response";
 
 interface onFollowUserModuleFunctionProps {
@@ -22,7 +22,7 @@ const onFollowUserModuleFunction = async (
     const newFollowerFollowingAccounts =
       newFollowerData.data()?.following || [];
 
-    const updatedAt = admin.firestore.FieldValue.serverTimestamp();
+    const updatedAt = firestore.FieldValue.serverTimestamp();
 
     userFollowedFollowers.push(newFollowerId);
     newFollowerFollowingAccounts.push(userFollowedId);
