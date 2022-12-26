@@ -5,8 +5,6 @@ import {
   useEffect,
   SetStateAction,
   Dispatch,
-  Component,
-  ReactElement,
 } from "react";
 
 import {
@@ -30,7 +28,6 @@ import {
   popUpFunctionMessage,
 } from "../models/FunctionMessage";
 
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import DefaultLoader from "../components/Loaders/DefaultLoader";
 
 interface AuthContextProps {
@@ -101,6 +98,8 @@ export function AuthContextProvider({ children }: AuthContextProps) {
           displayName,
           email,
           photoURL,
+          followers: [],
+          following: [],
         });
 
         // setUser({
@@ -143,6 +142,8 @@ export function AuthContextProvider({ children }: AuthContextProps) {
         displayName,
         email,
         photoURL,
+        followers: [],
+        following: [],
       });
 
       // setUser({

@@ -20,6 +20,6 @@
   "exclude": ["target", "dist", "node_modules", "__tests__"],
   "typeRoots": ["./typings", "./@types", "./node_modules/@types"],
   "types": ["node", "webpack", "react", "react-dom", "reactstrap"],
-  "include": ["src", "**/*.ts"],
+  "include": ["next-env.d.ts", "src", "**/*.ts"],
   "compileOnSave": true
 }

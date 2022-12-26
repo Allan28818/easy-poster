@@ -33,8 +33,8 @@ async function savePostController(
         innerElement.textContent?.toString();
     } else if (innerElement instanceof HTMLImageElement) {
       if (innerElement.src && !docElements[currentIndex]?.externalContent) {
-        const { url } = await saveImage(innerElement.src);
-        docElements[currentIndex].src = url;
+        const { data } = await saveImage(innerElement.src);
+        docElements[currentIndex].src = data.url;
       }
     }
   }
