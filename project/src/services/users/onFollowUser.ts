@@ -36,6 +36,14 @@ async function onFollowUser(props: onFollowUserProps): Promise<PropsReturn> {
       user.data()
     );
 
+    const aleradyFollowing = userFollowedData[0].followers.some(
+      (followerId: string) => followerId === newFollowerId
+    );
+
+    if (aleradyFollowing) {
+      return { message: "User already following!" };
+    }
+
     const userFollowedFollowers = userFollowedData[0]?.followers || [];
     const newFollowerFollowingAccounts = newFollowerData[0]?.following || [];
 

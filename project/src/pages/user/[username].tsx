@@ -9,6 +9,7 @@ import withAuth from "../../components/withAuth";
 import { useAuth } from "../../hooks/useAuth";
 import { getUserByField } from "../../services/users/getUserByField";
 import { onFollowUser } from "../../services/users/onFollowUser";
+import { onUnfollowUser } from "../../services/users/onUnfollowUser";
 
 import styles from "../../styles/user/profile-page.module.scss";
 
@@ -59,10 +60,25 @@ function ProfilePage() {
         <div>
           {!isCurrentUserPageOwner && (
             <FollowUserButton
-              onClick={async () => {
+              following={
+                pageOwner &&
+                pageOwner.followers.some(
+                  (followerId: string) => followerId === user?.uid
+                )
+              }
+              toggleTexts={["Follow", "Unfollow"]}
+              onFollow={async () => {
+                console.log("follow");
                 onFollowUser({
                   newFollowerId: user?.uid,
                   userFollowedId: pageOwner?.id,
+                });
+              }}
+              onUnfollow={async () => {
+                console.log("unfollow");
+                onUnfollowUser({
+                  unfollowRequesterId: user?.uid,
+                  accountToUnfollowId: pageOwner?.id,
                 });
               }}
             />

@@ -93,7 +93,7 @@ function addAnImageSet(props: addAnImageSetProps) {
 
   for (const [index, image] of srcText.entries()) {
     let imageSrc: any = image;
-    saveImage(image).then((res) => (imageSrc = res.url));
+    saveImage(image).then((res) => (imageSrc = res.data.url));
 
     let currentImageToAdd: imageComponentProps = {
       id: uuid(),

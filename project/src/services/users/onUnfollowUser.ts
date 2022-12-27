@@ -13,11 +13,11 @@ import PropsReturn from "../../models/core.response";
 import { firestore } from "../config/firebase";
 
 interface onUnfollowUserProps {
-  accountToUnfollowId: string;
-  unfollowRequesterId: string;
+  accountToUnfollowId: string | null | undefined;
+  unfollowRequesterId: string | null | undefined;
 }
 
-const onUnfollowUserFunction = async (
+const onUnfollowUser = async (
   props: onUnfollowUserProps
 ): Promise<PropsReturn> => {
   const { accountToUnfollowId, unfollowRequesterId } = props;
@@ -68,18 +68,15 @@ const onUnfollowUserFunction = async (
       1
     );
 
-    await updateDoc(doc(firestore, "users", accountToUnfollowId), {
+    await updateDoc(doc(firestore, "users", accountToUnfollowId!), {
       followers: accountToUnfollowFollowers,
       updatedAt,
     });
 
-    await updateDoc(
-      doc(firestore, "users", unfollowRequesterFollowingAccount),
-      {
-        following: unfollowRequesterFollowingAccount,
-        updatedAt,
-      }
-    );
+    await updateDoc(doc(firestore, "users", unfollowRequesterId!), {
+      following: unfollowRequesterFollowingAccount,
+      updatedAt,
+    });
   } catch (error: any) {
     return {
       message: "It wasn't possible to finish the unfollow operation",
@@ -91,4 +88,4 @@ const onUnfollowUserFunction = async (
   return { message: "Unfollowing proccess was succeed!" };
 };
 
-export { onUnfollowUserFunction };
+export { onUnfollowUser };
