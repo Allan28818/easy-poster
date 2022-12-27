@@ -1,27 +1,47 @@
-import admin from "firebase-admin";
-import { PropsReturn } from "../models/core.response";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  serverTimestamp,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 
-interface onUnfollowUserModuleFunctionProps {
-  accountToUnfollowId: string;
-  unfollowRequesterId: string;
-  db: FirebaseFirestore.Firestore;
+import PropsReturn from "../../models/core.response";
+
+import { firestore } from "../config/firebase";
+
+interface onUnfollowUserProps {
+  accountToUnfollowId: string | null | undefined;
+  unfollowRequesterId: string | null | undefined;
 }
 
-const onUnfollowUserModuleFunction = async (
-  props: onUnfollowUserModuleFunctionProps
+const onUnfollowUser = async (
+  props: onUnfollowUserProps
 ): Promise<PropsReturn> => {
-  const { accountToUnfollowId, unfollowRequesterId, db } = props;
-  const accountToUnfollowRef = db.collection("users").doc(accountToUnfollowId);
-  const unfollowRequesterRef = db.collection("users").doc(unfollowRequesterId);
+  const { accountToUnfollowId, unfollowRequesterId } = props;
+  const accountToUnfollowRef = query(
+    collection(firestore, "users"),
+    where("id", "==", accountToUnfollowId)
+  );
+  const unfollowRequesterRef = query(
+    collection(firestore, "users"),
+    where("id", "==", unfollowRequesterId)
+  );
 
   try {
-    const accountToUnfollowData = await accountToUnfollowRef.get();
-    const unfollowRequesterData = await unfollowRequesterRef.get();
+    const accountToUnfollowData = (
+      await getDocs(accountToUnfollowRef)
+    ).docs.map((user) => user.data());
+    const unfollowRequesterData = (
+      await getDocs(unfollowRequesterRef)
+    ).docs.map((user) => user.data());
 
     const accountToUnfollowFollowers =
-      accountToUnfollowData.data()?.followers || [];
+      accountToUnfollowData[0]?.followers || [];
     const unfollowRequesterFollowingAccount =
-      unfollowRequesterData.data()?.following || [];
+      unfollowRequesterData[0]?.following || [];
 
     if (
       !accountToUnfollowFollowers.length ||
@@ -37,7 +57,7 @@ const onUnfollowUserModuleFunction = async (
     const userToUnfollowIndexInsideTheRequesterList =
       unfollowRequesterFollowingAccount.indexOf(accountToUnfollowId);
 
-    const updatedAt = admin.firestore.FieldValue.serverTimestamp();
+    const updatedAt = serverTimestamp();
 
     accountToUnfollowFollowers.splice(
       unfollowRequesterIndexInsideTheUserList,
@@ -48,12 +68,12 @@ const onUnfollowUserModuleFunction = async (
       1
     );
 
-    await accountToUnfollowRef.update({
+    await updateDoc(doc(firestore, "users", accountToUnfollowId!), {
       followers: accountToUnfollowFollowers,
       updatedAt,
     });
 
-    await unfollowRequesterRef.update({
+    await updateDoc(doc(firestore, "users", unfollowRequesterId!), {
       following: unfollowRequesterFollowingAccount,
       updatedAt,
     });
@@ -68,4 +88,4 @@ const onUnfollowUserModuleFunction = async (
   return { message: "Unfollowing proccess was succeed!" };
 };
 
-export { onUnfollowUserModuleFunction };
+export { onUnfollowUser };

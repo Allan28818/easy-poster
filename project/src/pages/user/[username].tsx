@@ -1,12 +1,15 @@
 import { DocumentData } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import FollowUserButton from "../../components/Buttons/FollowUserButton";
 import ShortHeader from "../../components/Headers/ShortHeader";
 import { BasicProfileImage } from "../../components/Images/BasicProfileImage";
 import ProfileImage from "../../components/Images/ProfileImage";
 import withAuth from "../../components/withAuth";
 import { useAuth } from "../../hooks/useAuth";
 import { getUserByField } from "../../services/users/getUserByField";
+import { onFollowUser } from "../../services/users/onFollowUser";
+import { onUnfollowUser } from "../../services/users/onUnfollowUser";
 
 import styles from "../../styles/user/profile-page.module.scss";
 
@@ -17,6 +20,8 @@ function ProfilePage() {
   const { username } = router.query;
 
   const [pageOwner, setPageOwner] = useState<DocumentData>();
+  const [isCurrentUserPageOwner, setIsCurrentUserPageOwner] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const getPageOwner = async () => {
@@ -27,6 +32,7 @@ function ProfilePage() {
         });
 
         setPageOwner(getUserByFieldResponse.data);
+        setIsCurrentUserPageOwner(getUserByFieldResponse.data.id === user?.uid);
       }
     };
 
@@ -39,7 +45,7 @@ function ProfilePage() {
 
       <section className={styles.userInfo}>
         <div>
-          {pageOwner?.id === user?.uid ? (
+          {isCurrentUserPageOwner ? (
             <ProfileImage
               photoURL={pageOwner?.photoURL}
               userName={pageOwner?.displayName}
@@ -52,10 +58,35 @@ function ProfilePage() {
           )}
         </div>
         <div>
+          {!isCurrentUserPageOwner && (
+            <FollowUserButton
+              following={
+                pageOwner &&
+                pageOwner.followers.some(
+                  (followerId: string) => followerId === user?.uid
+                )
+              }
+              toggleTexts={["Follow", "Unfollow"]}
+              onFollow={async () => {
+                console.log("follow");
+                onFollowUser({
+                  newFollowerId: user?.uid,
+                  userFollowedId: pageOwner?.id,
+                });
+              }}
+              onUnfollow={async () => {
+                console.log("unfollow");
+                onUnfollowUser({
+                  unfollowRequesterId: user?.uid,
+                  accountToUnfollowId: pageOwner?.id,
+                });
+              }}
+            />
+          )}
           <h2 className={styles.userName}>{pageOwner?.displayName}</h2>
           <div className={styles.follows}>
-            <span>Following: 1.000</span>
-            <span>Followers: 975</span>
+            <span>Following: {pageOwner?.following.length || "0"}</span>
+            <span>Followers: {pageOwner?.followers.length || "0"}</span>
           </div>
           <h3 className={styles.userEmail}>{pageOwner?.email}</h3>
         </div>
