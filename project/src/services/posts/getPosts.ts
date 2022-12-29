@@ -12,12 +12,12 @@ import PropsReturn from "../../models/core.response";
 import { firestore } from "../config/firebase";
 
 interface getPostsProps {
-  id?: string | string[];
+  postId?: string | string[];
   postOwnerId?: string | null;
 }
 
 async function getPosts(props: getPostsProps): Promise<PropsReturn> {
-  const { id, postOwnerId } = props;
+  const { postId, postOwnerId } = props;
 
   let postsRef: Query<DocumentData>;
   let postsSnapshot: QuerySnapshot<DocumentData> =
@@ -26,20 +26,20 @@ async function getPosts(props: getPostsProps): Promise<PropsReturn> {
   let mappedPosts: DocumentData[];
 
   try {
-    if (!!id && !!postOwnerId) {
+    if (!!postId && !!postOwnerId) {
       postsRef = query(
         collection(firestore, "posts"),
-        where("id", "==", id),
+        where("id", "==", postId),
         where("creatorData.id", "==", postOwnerId),
         where("isActive", "==", true),
         orderBy("createdAt")
       );
 
       postsSnapshot = await getDocs(postsRef);
-    } else if (!!id) {
+    } else if (!!postId) {
       postsRef = query(
         collection(firestore, "posts"),
-        where("id", "==", id),
+        where("id", "==", postId),
         where("isActive", "==", true),
         orderBy("createdAt")
       );

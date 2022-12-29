@@ -1,0 +1,35 @@
+@import "../../_functions.scss";
+@import "../../_variables.scss";
+
+.container {
+  display: flex;
+  width: 100%;
+  height: auto;
+  margin-top: convertToRem(20rem);
+  align-items: center;
+  justify-content: center;
+
+  .iconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: converToRem(60rem);
+    height: converToRem(60rem);
+    background: none;
+    border: 2px solid $black-pearl;
+    border-radius: convertToRem(60rem);
+    padding: convertToRem(10rem);
+    margin-right: convertToRem(20rem);
+
+    .icon {
+      font-size: convertToRem(50rem);
+      color: $black-pearl;
+    }
+  }
+
+  .message {
+    font-size: convertToRem(20rem);
+    color: $black-pearl;
+    font-family: "Roboto", sans-serif;
+  }
+}

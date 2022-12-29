@@ -43,6 +43,13 @@
   }
 }
 
+.separator {
+  color: $gray-peace;
+  margin-top: convertToRem(10rem);
+  margin-bottom: convertToRem(50rem);
+  border: 1px solid $gray-peace;
+}
+
 @media (max-width: 1000px) {
   .userInfo {
     margin-top: clamp(15%, convertToRem(35rem), 45%);

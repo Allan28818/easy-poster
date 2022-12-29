@@ -21,11 +21,17 @@ interface PostWrapperCardProps {
     React.SetStateAction<ReactNode | null | any>
   >;
   onUpdatePosts: () => Promise<void>;
+  isEditable: boolean;
 }
 
 const PostWrapperCard = (props: PostWrapperCardProps) => {
-  const { postsList, showPostOptions, setShowPostOptions, onUpdatePosts } =
-    props;
+  const {
+    postsList,
+    showPostOptions,
+    setShowPostOptions,
+    onUpdatePosts,
+    isEditable,
+  } = props;
 
   const { user } = useAuth();
 
@@ -60,20 +66,24 @@ const PostWrapperCard = (props: PostWrapperCardProps) => {
       <div className={styles.postsList}>
         {postsList.map((post) => (
           <div key={post.createdAt} className={styles.postWrapper}>
-            {user?.uid === post.creatorData.id && setShowPostOptions && (
-              <PostOptions
-                showPopUp={showPostOptions}
-                setShowPopUp={setShowPostOptions}
-                handleDeleteClick={() => {
-                  setPostToDelete(post);
-                  setShowPostDeletePopUp(true);
-                }}
-                editURL={
-                  window && `${window.location.href}posts/edit/${post.id}`
-                }
-                sharingURL={window && `${window.location.href}posts/${post.id}`}
-              />
-            )}
+            {user?.uid === post.creatorData.id &&
+              setShowPostOptions &&
+              isEditable && (
+                <PostOptions
+                  showPopUp={showPostOptions}
+                  setShowPopUp={setShowPostOptions}
+                  handleDeleteClick={() => {
+                    setPostToDelete(post);
+                    setShowPostDeletePopUp(true);
+                  }}
+                  editURL={
+                    window && `${window.location.origin}/posts/edit/${post.id}`
+                  }
+                  sharingURL={
+                    window && `${window.location.origin}/posts/${post.id}`
+                  }
+                />
+              )}
             <h1 className={styles.postTitle}>{post.postName}</h1>
             <div className={styles.postPreview}>
               {HandleCreatePreview(post.postData[0], styles)}
