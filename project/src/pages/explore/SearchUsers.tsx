@@ -9,11 +9,13 @@ import withAuth from "../../components/withAuth";
 import { getUsers } from "../../services/users/getUsers";
 
 import styles from "../../styles/explore/search-users.module.scss";
-import { getAllPublicPosts } from "../../services/posts/getAllPublicPosts";
+import { getPublicPosts } from "../../services/posts/getPublicPosts";
 import SimplifiedPostWrapperCard from "../../components/Cards/SimplifiedPostWrapperCard";
 import NoPostsMessage from "../../components/Messages/NoPostsMessage";
+import { useAuth } from "../../hooks/useAuth";
 
 function SearchUsers() {
+  const { user } = useAuth();
   const [username, setUsername] = useState<string>("");
   const [usersList, setUsersList] = useState<DocumentData[]>([]);
   const [popularPostsList, setPopularPostsList] = useState<DocumentData[]>([]);
@@ -29,11 +31,10 @@ function SearchUsers() {
     };
 
     const handleGetAllPublicPosts = async () => {
-      const queryResult = await getAllPublicPosts();
+      const queryResult = await getPublicPosts();
 
       if (queryResult.data instanceof Array) {
         setPopularPostsList(queryResult.data);
-        console.log(queryResult);
       }
     };
 
@@ -60,25 +61,37 @@ function SearchUsers() {
         {!!usersList.length && (
           <div className={styles.usersResultWrapper}>
             <ul className={styles.usersList}>
-              {usersList.map((currentUser) => (
-                <li>
-                  <Link href={`/user/${currentUser.email}`}>
-                    <a>
-                      <BasicProfileImage
-                        username={"static"}
-                        photoURL={currentUser.photoURL}
-                      />
-                      <div className={styles.textInfo}>
-                        <h4 className={styles.username}>{currentUser.email}</h4>
-                        <span className={styles.followsMe}>Follows you</span>
-                        <span className={styles.basicInfo}>
-                          1.5k followers | 1.6k following
-                        </span>
-                      </div>
-                    </a>
-                  </Link>
-                </li>
-              ))}
+              {usersList.map((currentUser) => {
+                const followsMe = currentUser.following.some(
+                  (currentUser: string) => currentUser === user?.uid
+                );
+                return (
+                  <li>
+                    <Link href={`/user/${currentUser.email}`}>
+                      <a>
+                        <BasicProfileImage
+                          username={"static"}
+                          photoURL={currentUser.photoURL}
+                        />
+                        <div className={styles.textInfo}>
+                          <h4 className={styles.username}>
+                            {currentUser.email}
+                          </h4>
+                          {followsMe && (
+                            <span className={styles.followsMe}>
+                              Follows you
+                            </span>
+                          )}
+                          <span className={styles.basicInfo}>
+                            {currentUser.followers.length} followers |{" "}
+                            {currentUser.following.length} following
+                          </span>
+                        </div>
+                      </a>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         )}

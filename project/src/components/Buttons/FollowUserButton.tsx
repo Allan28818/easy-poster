@@ -14,15 +14,22 @@ const FollowUserButton = (props: FollowUserButtonProps) => {
   const buttonText = following ? toggleTexts[1] : toggleTexts[0];
   const currentOnClickFunction = following ? onUnfollow : onFollow;
 
-  console.log("following", following);
+  const followingStyle: React.CSSProperties = {
+    background: "#a4b0be",
+    color: "#7f8c8d",
+  };
+  const notFollowingStyle: React.CSSProperties = {
+    background: "#0abde3",
+    color: "#f1f2f6",
+  };
 
   return (
     <div className={styles.btnWrapper}>
       <button
-        className={following ? styles.follow : styles.notFollowing}
         onClick={async () => {
           await currentOnClickFunction();
         }}
+        style={following ? followingStyle : notFollowingStyle}
       >
         {buttonText}
       </button>

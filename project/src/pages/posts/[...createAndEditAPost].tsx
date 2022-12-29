@@ -127,7 +127,7 @@ function CreateAndEditAPost() {
   useEffect(() => {
     const handleFecthPost = async () => {
       if (!!postId) {
-        const postsList = await getPosts({ id: postId });
+        const postsList = await getPosts({ postId });
         const currentPost: DocumentData =
           postsList.data instanceof Array ? postsList.data[0] : [];
 
@@ -500,6 +500,7 @@ function CreateAndEditAPost() {
                                 colors={currentElement.colors}
                                 labels={currentElement.labels}
                                 series={currentElement.series}
+                                contentEditable={false}
                               />
                             </PostElementCard>
                           </div>

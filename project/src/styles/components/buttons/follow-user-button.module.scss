@@ -32,22 +32,9 @@
     &:active {
       opacity: 0.7;
     }
-  }
-
-  .following {
-    background: $gray-peace;
-    color: $black-transparent;
-    &:hover {
-      box-shadow: 0px 0px 5px 2px $gray-peace;
-    }
-  }
-
-  .notFollwing {
-    background: $blue-cyanite;
-    color: $white-anti-flash;
 
     &:hover {
-      box-shadow: 0px 0px 5px 2px $blue-cyanite;
+      box-shadow: 0px 0px 10px 0px $black-transparent;
     }
   }
 }

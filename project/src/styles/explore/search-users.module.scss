@@ -39,6 +39,8 @@
 
   .usersResultWrapper {
     display: block;
+    position: absolute;
+    background: $white;
     width: 40%;
     height: auto;
     margin: auto;
@@ -46,6 +48,10 @@
     padding: convertToRem(20rem);
     border: 1px solid $gray-peace;
     border-radius: convertToRem(10rem);
+    z-index: 2;
+    left: 0;
+    right: 0;
+    box-shadow: 0px 2px 5px 0px $black-transparent;
   }
 }
 

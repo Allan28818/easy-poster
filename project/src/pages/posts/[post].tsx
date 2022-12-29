@@ -45,7 +45,7 @@ function PostDetails() {
   useEffect(() => {
     const handleFecthPost = async () => {
       if (!!post) {
-        const currentPost: PropsReturn = await getPosts({ id: post });
+        const currentPost: PropsReturn = await getPosts({ postId: post });
 
         if (currentPost.data) {
           setPostInformations({

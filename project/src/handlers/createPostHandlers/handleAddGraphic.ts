@@ -51,8 +51,6 @@ function handleAddGraphic(props: handleAddGraphicProps) {
 
   docElementRef.push(graphicToAdd);
 
-  console.log("chartDataStructure", chartDataStructure);
-
   setDocElements(docElementRef);
   setStepsPopUp(true);
 

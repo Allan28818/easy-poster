@@ -35,6 +35,11 @@ function Home() {
     posts();
   }, [user]);
 
+  async function handleUpdatePosts() {
+    const returnedPosts = await getPosts({ postOwnerId: user?.uid });
+    setPostsList(returnedPosts.data instanceof Array ? returnedPosts.data : []);
+  }
+
   return (
     <div className={styles.container}>
       <h3>{`${generateTimeMessage()} ${
@@ -44,15 +49,11 @@ function Home() {
 
       {!!postsList.length ? (
         <PostWrapperCard
+          isEditable={true}
           postsList={postsList}
           showPostOptions={showPostOptions}
           setShowPostOptions={setShowPostOptions}
-          onUpdatePosts={async () => {
-            const returnedPosts = await getPosts({ postOwnerId: user?.uid });
-            setPostsList(
-              returnedPosts.data instanceof Array ? returnedPosts.data : []
-            );
-          }}
+          onUpdatePosts={handleUpdatePosts}
         />
       ) : (
         <NoPostsCard />
