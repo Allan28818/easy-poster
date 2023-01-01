@@ -74,7 +74,7 @@ function ProfilePage() {
           )}
         </div>
         <div>
-          {!isCurrentPageOwner && (
+          {pageOwner?.id !== user?.uid && (
             <FollowUserButton
               following={
                 pageOwner?.followers &&
@@ -101,6 +101,7 @@ function ProfilePage() {
           <div className={styles.follows}>
             <span>Following: {pageOwner?.following?.length || "0"}</span>
             <span>Followers: {pageOwner?.followers?.length || "0"}</span>
+            <span>Posts: {postsList.length}</span>
           </div>
           <h3 className={styles.userEmail}>{pageOwner?.email}</h3>
         </div>
@@ -117,7 +118,11 @@ function ProfilePage() {
           />
         ) : (
           <BasicMessageCard
-            text="Humm... this user doesn't have any posts"
+            text={
+              pageOwner?.id === user?.uid
+                ? "Add content to your page"
+                : "Humm... this user doesn't have any posts"
+            }
             iconType="noDocument"
           />
         )}
