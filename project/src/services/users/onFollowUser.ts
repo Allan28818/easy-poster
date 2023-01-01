@@ -2,11 +2,13 @@ import {
   collection,
   doc,
   getDoc,
+  onSnapshot,
   getDocs,
   query,
   serverTimestamp,
   updateDoc,
   where,
+  DocumentData,
 } from "firebase/firestore";
 import { firestore } from "../config/firebase";
 
@@ -17,18 +19,31 @@ interface onFollowUserProps {
   userFollowedId: string | null | undefined;
 }
 
-async function onFollowUser(props: onFollowUserProps): Promise<PropsReturn> {
+interface isUserAlreadyFollowingProps {
+  userFollowed: DocumentData;
+  newFollowerId: string | null | undefined;
+}
+
+const onFollowUser = async (props: onFollowUserProps): Promise<PropsReturn> => {
   const { newFollowerId, userFollowedId } = props;
-  const userFollowedRef = query(
-    collection(firestore, "users"),
-    where("id", "==", userFollowedId)
-  );
-  const newFollowerRef = query(
-    collection(firestore, "users"),
-    where("id", "==", newFollowerId)
-  );
+
+  if (newFollowerId === userFollowedId) {
+    return {
+      errorCode: "403",
+      errorMessage: "Forbidden",
+      message: "You cannot follow yourself!",
+    };
+  }
 
   try {
+    const userFollowedRef = query(
+      collection(firestore, "users"),
+      where("id", "==", userFollowedId)
+    );
+    const newFollowerRef = query(
+      collection(firestore, "users"),
+      where("id", "==", newFollowerId)
+    );
     const userFollowedData = (await getDocs(userFollowedRef)).docs.map((user) =>
       user.data()
     );
@@ -36,12 +51,13 @@ async function onFollowUser(props: onFollowUserProps): Promise<PropsReturn> {
       user.data()
     );
 
-    const aleradyFollowing = userFollowedData[0].followers.some(
-      (followerId: string) => followerId === newFollowerId
-    );
+    const aleradyFollowing = isUserAlreadyFollowing({
+      newFollowerId,
+      userFollowed: userFollowedData,
+    });
 
     if (aleradyFollowing) {
-      return { message: "User already following!" };
+      return { message: "You're already following this user!" };
     }
 
     const userFollowedFollowers = userFollowedData[0]?.followers || [];
@@ -52,7 +68,7 @@ async function onFollowUser(props: onFollowUserProps): Promise<PropsReturn> {
     userFollowedFollowers.push(newFollowerId);
     newFollowerFollowingAccounts.push(userFollowedId);
 
-    await updateDoc(doc(firestore, "users", userFollowedId!), {
+    const resTest = await updateDoc(doc(firestore, "users", userFollowedId!), {
       followers: userFollowedFollowers,
       updatedAt,
     });
@@ -61,6 +77,8 @@ async function onFollowUser(props: onFollowUserProps): Promise<PropsReturn> {
       following: newFollowerFollowingAccounts,
       updatedAt,
     });
+
+    console.log("resTest", resTest);
   } catch (error: any) {
     return {
       message: "It wasn't possible to finish the following operation!",
@@ -70,5 +88,14 @@ async function onFollowUser(props: onFollowUserProps): Promise<PropsReturn> {
   }
 
   return { message: "Following operation was succeed!" };
+};
+
+function isUserAlreadyFollowing(props: isUserAlreadyFollowingProps): boolean {
+  const { newFollowerId, userFollowed } = props;
+
+  return userFollowed.followers.some(
+    (followerId: string) => followerId === newFollowerId
+  );
 }
+
 export { onFollowUser };
