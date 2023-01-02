@@ -47,8 +47,6 @@ function ProfilePage() {
           postOwnerId: getUserByFieldResponse?.data.id,
         });
 
-        console.log("posts", posts);
-
         disptach({
           type: ReducerActionKind.SET_INITIAL_DATA,
           amIFollowing: getUserByFieldResponse.data?.followers.some(
