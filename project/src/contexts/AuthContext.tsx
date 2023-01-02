@@ -19,7 +19,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 
-import { doc, setDoc } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 import { auth, firestore } from "../services/config/firebase";
 import { UserLogin, UserSignUp } from "../models/userTypes/UserModel";
@@ -88,6 +88,7 @@ export function AuthContextProvider({ children }: AuthContextProps) {
 
       if (result.user) {
         const { displayName, photoURL, uid, email } = result.user;
+        const createdAt = serverTimestamp();
 
         if (!displayName || !photoURL) {
           throw new Error("Error! Missing Google account information!");
@@ -100,6 +101,13 @@ export function AuthContextProvider({ children }: AuthContextProps) {
           photoURL,
           followers: [],
           following: [],
+          createdAt,
+        });
+
+        await setDoc(doc(firestore, "feeds", uid), {
+          id: uid,
+          posts: [],
+          createdAt,
         });
 
         // setUser({
@@ -132,6 +140,7 @@ export function AuthContextProvider({ children }: AuthContextProps) {
 
       result = await signInWithPopup(auth, provider);
       const { displayName, photoURL, email, uid } = result.user;
+      const createdAt = serverTimestamp();
 
       if (!displayName || !photoURL) {
         throw new Error("Error! Missing Facebook account information");
@@ -144,6 +153,13 @@ export function AuthContextProvider({ children }: AuthContextProps) {
         photoURL,
         followers: [],
         following: [],
+        createdAt,
+      });
+
+      await setDoc(doc(firestore, "feeds", uid), {
+        id: uid,
+        posts: [],
+        createdAt,
       });
 
       // setUser({

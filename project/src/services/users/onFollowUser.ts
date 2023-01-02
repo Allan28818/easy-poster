@@ -19,19 +19,30 @@ interface onFollowUserProps {
   userFollowedId: string | null | undefined;
 }
 
+interface onFollowUserPropsReturn extends PropsReturn {
+  updatedUser: DocumentData;
+}
+
 interface isUserAlreadyFollowingProps {
   userFollowed: DocumentData;
   newFollowerId: string | null | undefined;
 }
 
-const onFollowUser = async (props: onFollowUserProps): Promise<PropsReturn> => {
+const onFollowUser = async (
+  props: onFollowUserProps
+): Promise<onFollowUserPropsReturn> => {
   const { newFollowerId, userFollowedId } = props;
+
+  console.log("function executed");
+
+  let updatedUser: DocumentData = {};
 
   if (newFollowerId === userFollowedId) {
     return {
       errorCode: "403",
       errorMessage: "Forbidden",
       message: "You cannot follow yourself!",
+      updatedUser,
     };
   }
 
@@ -57,7 +68,7 @@ const onFollowUser = async (props: onFollowUserProps): Promise<PropsReturn> => {
     });
 
     if (aleradyFollowing) {
-      return { message: "You're already following this user!" };
+      return { message: "You're already following this user!", updatedUser };
     }
 
     const userFollowedFollowers = userFollowedData[0]?.followers || [];
@@ -68,7 +79,7 @@ const onFollowUser = async (props: onFollowUserProps): Promise<PropsReturn> => {
     userFollowedFollowers.push(newFollowerId);
     newFollowerFollowingAccounts.push(userFollowedId);
 
-    const resTest = await updateDoc(doc(firestore, "users", userFollowedId!), {
+    await updateDoc(doc(firestore, "users", userFollowedId!), {
       followers: userFollowedFollowers,
       updatedAt,
     });
@@ -78,22 +89,25 @@ const onFollowUser = async (props: onFollowUserProps): Promise<PropsReturn> => {
       updatedAt,
     });
 
-    console.log("resTest", resTest);
+    updatedUser = (await getDocs(userFollowedRef)).docs.map((user) =>
+      user.data()
+    )[0];
   } catch (error: any) {
     return {
       message: "It wasn't possible to finish the following operation!",
       errorCode: error.code,
       errorMessage: error.message,
+      updatedUser,
     };
   }
 
-  return { message: "Following operation was succeed!" };
+  return { message: "Following operation was succeed!", updatedUser };
 };
 
 function isUserAlreadyFollowing(props: isUserAlreadyFollowingProps): boolean {
   const { newFollowerId, userFollowed } = props;
 
-  return userFollowed.followers.some(
+  return userFollowed?.followers?.some(
     (followerId: string) => followerId === newFollowerId
   );
 }

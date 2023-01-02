@@ -1,0 +1,52 @@
+@import "../../_variables.scss";
+@import "../../_functions.scss";
+
+.container {
+  display: flex;
+  width: auto;
+  height: auto;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: convertToRem(20rem);
+
+  .indicator {
+    max-width: convertToRem(280rem);
+    min-width: convertToRem(180rem);
+    height: convertToRem(5rem);
+    background: $blue-light;
+    display: block;
+    flex-wrap: wrap;
+    margin: auto;
+  }
+}
+
+.selectorsWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+
+  .selector {
+    max-width: convertToRem(400rem);
+    min-width: convertToRem(200rem);
+    margin-left: convertToRem(5rem);
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    .selectorText {
+      color: $black-pearl;
+      font-family: "Roboto", sans-serif;
+      font-size: convertToRem(20rem);
+      font-weight: 400;
+    }
+  }
+}

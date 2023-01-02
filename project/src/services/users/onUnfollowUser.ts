@@ -6,6 +6,7 @@ import {
   serverTimestamp,
   updateDoc,
   doc,
+  DocumentData,
 } from "firebase/firestore";
 
 import PropsReturn from "../../models/core.response";
@@ -17,23 +18,40 @@ interface onUnfollowUserProps {
   unfollowRequesterId: string | null | undefined;
 }
 
+interface onUnfollowUserPropsReturn extends PropsReturn {
+  updatedUser: DocumentData;
+}
+
 const onUnfollowUser = async (
   props: onUnfollowUserProps
-): Promise<PropsReturn> => {
+): Promise<onUnfollowUserPropsReturn> => {
   const { accountToUnfollowId, unfollowRequesterId } = props;
-  const accountToUnfollowRef = query(
-    collection(firestore, "users"),
-    where("id", "==", accountToUnfollowId)
-  );
-  const unfollowRequesterRef = query(
-    collection(firestore, "users"),
-    where("id", "==", unfollowRequesterId)
-  );
+
+  let updatedUser: DocumentData = {};
+
+  if (accountToUnfollowId === unfollowRequesterId) {
+    return {
+      message: "You cannot unfollow yourself!",
+      errorCode: "403",
+      errorMessage: "Forbidden",
+      updatedUser,
+    };
+  }
 
   try {
+    const accountToUnfollowRef = query(
+      collection(firestore, "users"),
+      where("id", "==", accountToUnfollowId)
+    );
+
+    const unfollowRequesterRef = query(
+      collection(firestore, "users"),
+      where("id", "==", unfollowRequesterId)
+    );
     const accountToUnfollowData = (
       await getDocs(accountToUnfollowRef)
     ).docs.map((user) => user.data());
+
     const unfollowRequesterData = (
       await getDocs(unfollowRequesterRef)
     ).docs.map((user) => user.data());
@@ -77,15 +95,20 @@ const onUnfollowUser = async (
       following: unfollowRequesterFollowingAccount,
       updatedAt,
     });
+
+    updatedUser = (await getDocs(accountToUnfollowRef)).docs.map((user) =>
+      user.data()
+    )[0];
   } catch (error: any) {
     return {
       message: "It wasn't possible to finish the unfollow operation",
       errorCode: error.code,
       errorMessage: error.message,
+      updatedUser,
     };
   }
 
-  return { message: "Unfollowing proccess was succeed!" };
+  return { message: "Unfollowing proccess was succeed!", updatedUser };
 };
 
 export { onUnfollowUser };
