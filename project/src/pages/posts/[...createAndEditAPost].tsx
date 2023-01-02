@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { v4 as uuid } from "uuid";
+import { useEffect, useState } from "react";
 
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
-import styles from "../../styles/posts/create-a-post.module.scss";
 import HoverButton from "../../components/Buttons/HoverButton";
 import TextComponent from "../../components/TextComponents/TextComponent";
+import styles from "../../styles/posts/create-a-post.module.scss";
 
 import docElementsProp from "../../models/DocElementsProp";
 
+import { useRouter } from "next/router";
 import { savePostController } from "../../controllers/savePostController";
 import { useAuth } from "../../hooks/useAuth";
-import { useRouter } from "next/router";
 
+import BasicBurgerMenu from "../../components/BurgersMenu/BasicBurgerMenu";
+import BasicMenu from "../../components/Menu/BasicMenu";
 import BasicMessage from "../../components/Messages/BasicMessage";
 import BasicMessageProps from "../../models/components/BasicMessageProps";
-import BasicMenu from "../../components/Menu/BasicMenu";
-import BasicBurgerMenu from "../../components/BurgersMenu/BasicBurgerMenu";
 
 import dynamic from "next/dynamic";
 
@@ -26,21 +25,24 @@ import ChartDataProps, {
 
 import { getPosts } from "../../services/posts/getPosts";
 
+import PostElementCard from "../../components/Cards/PostElementCard";
 import CreateChartPopUp from "../../components/PopUps/CreateChartPopUp";
 import CreateImagePopUp from "../../components/PopUps/CreateImagePopUp";
 import CreateLinkPopUp from "../../components/PopUps/CreateLinkPopUp";
-import PostElementCard from "../../components/Cards/PostElementCard";
 
 import { DocumentData } from "firebase/firestore";
 import { handleAddElement } from "../../handlers/createPostHandlers/handleAddElement";
-import { handleAddImage } from "../../handlers/createPostHandlers/handleAddImage";
 import { handleAddGraphic } from "../../handlers/createPostHandlers/handleAddGraphic";
+import { handleAddImage } from "../../handlers/createPostHandlers/handleAddImage";
 import { handleAddLink } from "../../handlers/createPostHandlers/handleAddLink";
 import { handleEditPost } from "../../handlers/createPostHandlers/handleEditPost";
-import { emptyChartModel, emptyLinkModel } from "../../utils/emptyModels";
 import { ImageDataProps } from "../../models/components/ImageDataProps";
-import { emptyImageModel } from "../../utils/emptyModels";
 import { LinkDataModel } from "../../models/components/LinkDataModel";
+import {
+  emptyChartModel,
+  emptyImageModel,
+  emptyLinkModel,
+} from "../../utils/emptyModels";
 
 const Piechart: any = dynamic(
   () => import("../../components/Graphics/PieChart"),

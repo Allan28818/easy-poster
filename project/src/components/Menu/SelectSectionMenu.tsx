@@ -15,8 +15,6 @@ const SelectSectionMenu = (props: SelectSectionMenuProps) => {
     sectionsText.length
   );
 
-  console.log("gridTemplateColumnsString", gridTemplateColumnsString);
-
   return (
     <div className={styles.container}>
       <div

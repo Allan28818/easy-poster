@@ -31,8 +31,6 @@ function Home() {
 
   const [selectedIndexTab, setSelectedIndexTab] = useState<number>(1);
 
-  console.log("selectedIndexTab", selectedIndexTab);
-
   const { user } = useAuth();
 
   const myPosts = !!state.myPosts.length ? (
@@ -70,7 +68,6 @@ function Home() {
     const feedPosts = async () => {
       if (!!user?.uid) {
         const returnedPosts = await getFeedPosts({ feedId: user?.uid });
-        console.log("feedPosts", returnedPosts.feedPosts);
 
         dispatch({
           type: ReducerActionKind.GET_FEED,

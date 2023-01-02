@@ -33,8 +33,6 @@ const onFollowUser = async (
 ): Promise<onFollowUserPropsReturn> => {
   const { newFollowerId, userFollowedId } = props;
 
-  console.log("function executed");
-
   let updatedUser: DocumentData = {};
 
   if (newFollowerId === userFollowedId) {

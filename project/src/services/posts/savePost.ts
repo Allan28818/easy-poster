@@ -37,7 +37,6 @@ async function savePost(props: savePostProps): Promise<PropsReturn> {
       ...postInfo,
       createdAt: serverTimestamp(),
     });
-    console.log(await sendNewPostToFeeds({ postInfo }));
   } catch (error: any) {
     return {
       message: "It wasn't possible to save your post! Try it later...",
