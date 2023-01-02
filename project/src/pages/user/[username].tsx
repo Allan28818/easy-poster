@@ -1,6 +1,6 @@
 import { DocumentData } from "firebase/firestore";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import FollowUserButton from "../../components/Buttons/FollowUserButton";
 import { BasicMessageCard } from "../../components/Cards/BasicMessageCard";
 import PostWrapperCard from "../../components/Cards/PostWrapperCard";
@@ -9,6 +9,11 @@ import { BasicProfileImage } from "../../components/Images/BasicProfileImage";
 import ProfileImage from "../../components/Images/ProfileImage";
 import withAuth from "../../components/withAuth";
 import { useAuth } from "../../hooks/useAuth";
+import {
+  ReducerActionKind,
+  userDataInitialState,
+  userDataReducer,
+} from "../../reducers/userDataReducer";
 import { getPosts } from "../../services/posts/getPosts";
 import { getUserByField } from "../../services/users/getUserByField";
 import { onFollowUser } from "../../services/users/onFollowUser";
@@ -22,11 +27,11 @@ function ProfilePage() {
   const router = useRouter();
   const { username } = router.query;
 
+  const [state, disptach] = useReducer(userDataReducer, userDataInitialState);
+
   const [pageOwner, setPageOwner] = useState<DocumentData>();
   const [postsList, setPostsList] = useState<DocumentData[]>([]);
   const [showPostOptions, setShowPostOptions] = useState<boolean>(false);
-
-  let isCurrentPageOwner = false;
 
   useEffect(() => {
     const getPageOwnerData = async () => {
@@ -37,13 +42,29 @@ function ProfilePage() {
         });
 
         setPageOwner(getUserByFieldResponse.data);
-        isCurrentPageOwner = getUserByFieldResponse.data.id === user?.uid;
 
         const posts = await getPosts({
           postOwnerId: getUserByFieldResponse?.data.id,
         });
 
-        setPostsList(posts.data instanceof Array ? posts.data : []);
+        console.log("posts", posts);
+
+        disptach({
+          type: ReducerActionKind.SET_INITIAL_DATA,
+          amIFollowing: getUserByFieldResponse.data?.followers.some(
+            (userId: string) => userId === user?.uid
+          ),
+          followersAmount: getUserByFieldResponse.data?.followers.length,
+          followingAmount: getUserByFieldResponse.data?.following.length,
+          pageOwnerId: getUserByFieldResponse.data?.id,
+          pageVisitorId: user?.uid,
+          userPostsList: posts.data,
+        });
+
+        disptach({
+          type: ReducerActionKind.SET_POSTS,
+          userPostsList: posts.data,
+        });
       }
     };
 
@@ -61,7 +82,7 @@ function ProfilePage() {
 
       <section className={styles.userInfo}>
         <div>
-          {isCurrentPageOwner ? (
+          {state.amIPageOwner ? (
             <ProfileImage
               photoURL={pageOwner?.photoURL}
               userName={pageOwner?.displayName}
@@ -76,42 +97,49 @@ function ProfilePage() {
         <div>
           {pageOwner?.id !== user?.uid && (
             <FollowUserButton
-              following={
-                pageOwner?.followers &&
-                pageOwner?.followers.some(
-                  (followerId: string) => followerId === user?.uid
-                )
-              }
+              following={state.amIFollowing}
               toggleTexts={["Follow", "Unfollow"]}
               onFollow={async () => {
-                onFollowUser({
+                const response = await onFollowUser({
                   newFollowerId: user?.uid,
                   userFollowedId: pageOwner?.id,
                 });
+
+                disptach({
+                  type: ReducerActionKind.FOLLOW_USER,
+                  followingAmount: response.updatedUser.following.length,
+                  followersAmount: response.updatedUser.followers.length,
+                });
               }}
               onUnfollow={async () => {
-                onUnfollowUser({
+                const response = await onUnfollowUser({
                   unfollowRequesterId: user?.uid,
                   accountToUnfollowId: pageOwner?.id,
+                });
+
+                disptach({
+                  type: ReducerActionKind.UNFOLLOW_USER,
+                  followingAmount: response.updatedUser.following?.length,
+                  followersAmount: response.updatedUser.followers?.length,
                 });
               }}
             />
           )}
           <h2 className={styles.userName}>{pageOwner?.displayName}</h2>
           <div className={styles.follows}>
-            <span>Following: {pageOwner?.following?.length || "0"}</span>
-            <span>Followers: {pageOwner?.followers?.length || "0"}</span>
-            <span>Posts: {postsList.length}</span>
+            <span>Following: {state.followingAmount}</span>
+            <span>Followers: {state.followersAmount}</span>
+            <span>Posts: {state.postsAmount}</span>
           </div>
           <h3 className={styles.userEmail}>{pageOwner?.email}</h3>
         </div>
       </section>
       <hr className={styles.separator} />
       <section className={styles.userPosts}>
-        {!!postsList.length ? (
+        {state.postsAmount ? (
           <PostWrapperCard
-            isEditable={isCurrentPageOwner}
-            postsList={postsList}
+            isEditable={state.amIPageOwner}
+            postsList={state.userPostsList}
             onUpdatePosts={handleUpdatePosts}
             showPostOptions={showPostOptions}
             setShowPostOptions={setShowPostOptions}
@@ -119,9 +147,9 @@ function ProfilePage() {
         ) : (
           <BasicMessageCard
             text={
-              pageOwner?.id === user?.uid
+              state.amIPageOwner
                 ? "Add content to your page"
-                : "Humm... this user doesn't have any posts"
+                : "Humm... this user doesn't have any public posts"
             }
             iconType="noDocument"
           />
