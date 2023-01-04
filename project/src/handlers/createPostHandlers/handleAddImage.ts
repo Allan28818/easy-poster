@@ -1,6 +1,11 @@
+import { Dispatch } from "react";
 import { v4 as uuid } from "uuid";
 import { ImageDataProps } from "../../models/components/ImageDataProps";
 import docElementsProp from "../../models/DocElementsProp";
+import {
+  VisualBooleanAction,
+  VisualBooleanActionKind,
+} from "../../reducers/createAndEditAPost/visualBooleanReducer";
 import saveImage from "../../services/posts/saveImage";
 import { emptyImageModel } from "../../utils/emptyModels";
 
@@ -8,7 +13,7 @@ export interface handleAddImageProps {
   imageDataStructure: ImageDataProps;
   setDocElements: React.Dispatch<React.SetStateAction<docElementsProp[]>>;
   setImageDataStructure: React.Dispatch<React.SetStateAction<ImageDataProps>>;
-  setShowImageModal: React.Dispatch<React.SetStateAction<boolean>>;
+  dispatchShowImageModal: Dispatch<VisualBooleanAction>;
 }
 
 interface addASingleImageProps {
@@ -37,7 +42,7 @@ async function handleAddImage(props: handleAddImageProps) {
     imageDataStructure,
     setDocElements,
     setImageDataStructure,
-    setShowImageModal,
+    dispatchShowImageModal,
   } = props;
 
   if (
@@ -62,7 +67,10 @@ async function handleAddImage(props: handleAddImageProps) {
 
   setImageDataStructure(emptyImageModel);
 
-  setShowImageModal(false);
+  dispatchShowImageModal({
+    type: VisualBooleanActionKind.IMAGE_MODAL,
+    isImageModalVisible: false,
+  });
 }
 
 function addASingleImage(props: addASingleImageProps) {
