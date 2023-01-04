@@ -6,48 +6,55 @@ import ChartDataProps, {
 
 import docElementsProp from "../../models/DocElementsProp";
 import {
+  ChartDataAction,
+  ChartDataActionKind,
+  ChartDataState,
+} from "../../reducers/createAndEditAPost/chartDataReducer";
+import {
   VisualBooleanAction,
   VisualBooleanActionKind,
 } from "../../reducers/createAndEditAPost/visualBooleanReducer";
 import { emptyChartModel } from "../../utils/emptyModels";
 
 interface handleAddGraphicProps {
-  chartDataStructure: ChartUseStateStructure;
-  setChartDataStructure: React.Dispatch<
-    React.SetStateAction<ChartUseStateStructure>
-  >;
-  chartData: ChartDataProps[];
+  // chartDataStructure: ChartUseStateStructure;
+  // setChartDataStructure: React.Dispatch<
+  //   React.SetStateAction<ChartUseStateStructure>
+  // >;
+  // chartData: ChartDataProps[];
   docElements: docElementsProp[];
+  chartDataState: ChartDataState;
+  dispatchChartData: Dispatch<ChartDataAction>;
   setDocElements: React.Dispatch<React.SetStateAction<docElementsProp[]>>;
   dispatchBooleanVisibility: Dispatch<VisualBooleanAction>;
 }
 
 function handleAddGraphic(props: handleAddGraphicProps) {
   const {
-    chartDataStructure,
-    chartData,
+    chartDataState,
+    dispatchChartData,
     docElements,
-    setChartDataStructure,
     setDocElements,
     dispatchBooleanVisibility,
   } = props;
 
-  const graphicLabelsArray = chartDataStructure.graphicLabels
+  const graphicLabelsArray = chartDataState.chartFinalFormat.graphicLabels
     ?.split(",")
     .map((label) => label.trim());
-  const graphicSeriesArray = chartDataStructure.graphicSeries
+
+  const graphicSeriesArray = chartDataState.chartFinalFormat.graphicSeries
     ?.split(",")
     .map((serie) => parseInt(serie.trim()));
 
   const graphicToAdd: docElementsProp = {
     id: uuid(),
-    elementName: chartDataStructure.graphicType || "",
-    type: chartDataStructure.graphicType || "",
-    colors: chartDataStructure.graphicColors || [],
+    elementName: chartDataState.chartFinalFormat.graphicType || "",
+    type: chartDataState.chartFinalFormat.graphicType || "",
+    colors: chartDataState.chartFinalFormat.graphicColors || [],
     labels: graphicLabelsArray,
     series: graphicSeriesArray,
-    chartTitle: chartDataStructure.chartTitle,
-    chartData,
+    chartTitle: chartDataState.chartFinalFormat.chartTitle,
+    chartData: chartDataState.chartDataSet,
   };
 
   const docElementRef = Array.from(docElements);
@@ -56,7 +63,10 @@ function handleAddGraphic(props: handleAddGraphicProps) {
 
   setDocElements(docElementRef);
 
-  setChartDataStructure(emptyChartModel);
+  dispatchChartData({
+    type: ChartDataActionKind.SET_FINAL_CHART_MODEL,
+    chartFinalFormat: emptyChartModel,
+  });
 
   dispatchBooleanVisibility({
     type: VisualBooleanActionKind.GRAPHIC_POP_UP,

@@ -1,28 +1,21 @@
-import React from "react";
-import ChartDataProps from "../../models/components/ChartDataProps";
+import { Dispatch } from "react";
 
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
 import styles from "../../styles/components/pop-ups/pop-up.module.scss";
+import {
+  ChartDataAction,
+  ChartDataActionKind,
+  ChartDataState,
+} from "../../reducers/createAndEditAPost/chartDataReducer";
 
 interface SelectSeriesAndLabelsProps {
-  nameInput: string;
-  setNameInput: React.Dispatch<React.SetStateAction<string>>;
-  seriesInput: string;
-  setSeriesInput: React.Dispatch<React.SetStateAction<string>>;
-  chartData: ChartDataProps[];
-  setChartData: React.Dispatch<React.SetStateAction<ChartDataProps[]>>;
+  chartDataState: ChartDataState;
+  dispatchChartData: Dispatch<ChartDataAction>;
 }
 
 const SelectSeriesAndLabels = (props: SelectSeriesAndLabelsProps) => {
-  const {
-    nameInput,
-    setNameInput,
-    seriesInput,
-    setSeriesInput,
-    chartData,
-    setChartData,
-  } = props;
+  const { chartDataState, dispatchChartData } = props;
 
   return (
     <div className={styles.formWrapper}>
@@ -31,9 +24,12 @@ const SelectSeriesAndLabels = (props: SelectSeriesAndLabelsProps) => {
         name="name-input"
         type="text"
         onChange={(e: any) => {
-          setNameInput(e.target.value);
+          dispatchChartData({
+            type: ChartDataActionKind.SET_NAME,
+            chartName: e.target.value,
+          });
         }}
-        value={nameInput}
+        value={chartDataState.chartName}
         autoComplete="off"
       />
 
@@ -42,13 +38,16 @@ const SelectSeriesAndLabels = (props: SelectSeriesAndLabelsProps) => {
         type="text"
         name="series-input"
         onChange={(e: any) => {
-          setSeriesInput(e.target.value);
+          dispatchChartData({
+            type: ChartDataActionKind.SET_SERIES,
+            chartSeries: e.target.value,
+          });
         }}
-        value={seriesInput}
+        value={chartDataState.chartSeries}
         autoComplete="off"
       />
       <div className={styles.seriesWrapper}>
-        {chartData.map((currentData, currentIndex) => {
+        {chartDataState.chartDataSet.map((currentData, currentIndex) => {
           return (
             <div
               key={Math.floor(Math.random() * (10000 - 1)) + 1}
@@ -60,11 +59,12 @@ const SelectSeriesAndLabels = (props: SelectSeriesAndLabelsProps) => {
               <AiOutlineCloseCircle
                 className={styles.closeSeriesCard}
                 onClick={(e: any) => {
-                  setChartData(
-                    chartData.filter(
+                  dispatchChartData({
+                    type: ChartDataActionKind.SET_DATA_SET,
+                    chartDataSet: chartDataState.chartDataSet.filter(
                       (_, dataIndex) => dataIndex !== currentIndex
-                    )
-                  );
+                    ),
+                  });
                 }}
               />
             </div>
@@ -75,18 +75,25 @@ const SelectSeriesAndLabels = (props: SelectSeriesAndLabelsProps) => {
       <button
         className={styles.smallBtn}
         onClick={() => {
-          setChartData((oldValues) => {
-            const currentData = {
-              name: nameInput,
-              data: seriesInput
-                .split(", ")
-                .map((serie) => parseInt(serie.trim())),
-            };
+          const currentChartData = {
+            name: chartDataState.chartName,
+            data: chartDataState.chartSeries
+              .split(", ")
+              .map((serie) => parseInt(serie.trim())),
+          };
 
-            return [...oldValues, currentData];
+          dispatchChartData({
+            type: ChartDataActionKind.SET_DATA_SET,
+            chartDataSet: [...chartDataState.chartDataSet, currentChartData],
           });
-          setNameInput("");
-          setSeriesInput("");
+          dispatchChartData({
+            type: ChartDataActionKind.SET_NAME,
+            chartName: "",
+          });
+          dispatchChartData({
+            type: ChartDataActionKind.SET_SERIES,
+            chartSeries: "",
+          });
         }}
       >
         Add Data

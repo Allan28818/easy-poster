@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch } from "react";
 
 import ChartDataProps, {
   ChartUseStateStructure,
@@ -8,37 +8,20 @@ import SelectColors from "./SelectColors";
 import SelectSeriesAndLabels from "./SelectSeriesAndLabels";
 
 import styles from "../../styles/components/pop-ups/pop-up.module.scss";
+import {
+  ChartDataAction,
+  ChartDataActionKind,
+  ChartDataState,
+} from "../../reducers/createAndEditAPost/chartDataReducer";
 
 interface LineChartAddFormProps {
-  chartDataStructure: ChartUseStateStructure;
-  setChartDataStructure: React.Dispatch<
-    React.SetStateAction<ChartUseStateStructure>
-  >;
-  colorInput: string;
-  setColorInput: React.Dispatch<React.SetStateAction<string>>;
-  nameInput: string;
-  setNameInput: React.Dispatch<React.SetStateAction<string>>;
-  seriesInput: string;
-  setSeriesInput: React.Dispatch<React.SetStateAction<string>>;
-  chartData: ChartDataProps[];
-  setChartData: React.Dispatch<React.SetStateAction<ChartDataProps[]>>;
+  chartDataState: ChartDataState;
+  dispatchChartData: Dispatch<ChartDataAction>;
   handleAddGraphic: () => void;
 }
 
 const LineChartAddForm = (props: LineChartAddFormProps) => {
-  const {
-    chartDataStructure,
-    setChartDataStructure,
-    colorInput,
-    setColorInput,
-    handleAddGraphic,
-    nameInput,
-    setNameInput,
-    seriesInput,
-    setSeriesInput,
-    chartData,
-    setChartData,
-  } = props;
+  const { chartDataState, dispatchChartData, handleAddGraphic } = props;
 
   return (
     <>
@@ -48,29 +31,27 @@ const LineChartAddForm = (props: LineChartAddFormProps) => {
           name="labels"
           placeholder="dogs, cats, birds..."
           onChange={(e: any) =>
-            setChartDataStructure((oldValues) => {
-              return { ...oldValues, graphicLabels: e.target.value };
+            dispatchChartData({
+              type: ChartDataActionKind.SET_FINAL_CHART_MODEL,
+              chartFinalFormat: {
+                ...chartDataState.chartFinalFormat,
+                graphicLabels: e.target.value,
+              },
             })
           }
-          value={chartDataStructure.graphicLabels || ""}
+          value={chartDataState.chartFinalFormat.graphicLabels || ""}
           autoComplete="off"
         />
       </div>
 
       <SelectSeriesAndLabels
-        nameInput={nameInput}
-        setNameInput={setNameInput}
-        seriesInput={seriesInput}
-        setSeriesInput={setSeriesInput}
-        chartData={chartData}
-        setChartData={setChartData}
+        chartDataState={chartDataState}
+        dispatchChartData={dispatchChartData}
       />
 
       <SelectColors
-        chartDataStructure={chartDataStructure}
-        setChartDataStructure={setChartDataStructure}
-        colorInput={colorInput}
-        setColorInput={setColorInput}
+        chartDataState={chartDataState}
+        dispatchChartData={dispatchChartData}
       />
 
       <button
