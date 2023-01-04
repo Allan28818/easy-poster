@@ -30,7 +30,6 @@ function ProfilePage() {
   const [state, disptach] = useReducer(userDataReducer, userDataInitialState);
 
   const [pageOwner, setPageOwner] = useState<DocumentData>();
-  const [postsList, setPostsList] = useState<DocumentData[]>([]);
   const [showPostOptions, setShowPostOptions] = useState<boolean>(false);
 
   useEffect(() => {
@@ -71,7 +70,10 @@ function ProfilePage() {
 
   async function handleUpdatePosts() {
     const returnedPosts = await getPosts({ postOwnerId: user?.uid });
-    setPostsList(returnedPosts.data instanceof Array ? returnedPosts.data : []);
+    disptach({
+      type: ReducerActionKind.SET_POSTS,
+      userPostsList: returnedPosts.data,
+    });
   }
 
   return (

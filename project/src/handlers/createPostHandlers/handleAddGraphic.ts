@@ -1,9 +1,14 @@
+import { Dispatch } from "react";
 import { v4 as uuid } from "uuid";
 import ChartDataProps, {
   ChartUseStateStructure,
 } from "../../models/components/ChartDataProps";
 
 import docElementsProp from "../../models/DocElementsProp";
+import {
+  VisualBooleanAction,
+  VisualBooleanActionKind,
+} from "../../reducers/createAndEditAPost/visualBooleanReducer";
 import { emptyChartModel } from "../../utils/emptyModels";
 
 interface handleAddGraphicProps {
@@ -14,8 +19,7 @@ interface handleAddGraphicProps {
   chartData: ChartDataProps[];
   docElements: docElementsProp[];
   setDocElements: React.Dispatch<React.SetStateAction<docElementsProp[]>>;
-  setStepsPopUp: React.Dispatch<React.SetStateAction<boolean>>;
-  setShowGraphicPopUp: React.Dispatch<React.SetStateAction<boolean>>;
+  dispatchBooleanVisibility: Dispatch<VisualBooleanAction>;
 }
 
 function handleAddGraphic(props: handleAddGraphicProps) {
@@ -25,8 +29,7 @@ function handleAddGraphic(props: handleAddGraphicProps) {
     docElements,
     setChartDataStructure,
     setDocElements,
-    setShowGraphicPopUp,
-    setStepsPopUp,
+    dispatchBooleanVisibility,
   } = props;
 
   const graphicLabelsArray = chartDataStructure.graphicLabels
@@ -52,11 +55,17 @@ function handleAddGraphic(props: handleAddGraphicProps) {
   docElementRef.push(graphicToAdd);
 
   setDocElements(docElementRef);
-  setStepsPopUp(true);
 
   setChartDataStructure(emptyChartModel);
 
-  setShowGraphicPopUp(false);
+  dispatchBooleanVisibility({
+    type: VisualBooleanActionKind.GRAPHIC_POP_UP,
+    isGraphicPopUpVisible: false,
+  });
+  dispatchBooleanVisibility({
+    type: VisualBooleanActionKind.GRAPHIC_STEPS_POP_UP,
+    isFirstGraphicStep: true,
+  });
 }
 
 export { handleAddGraphic };

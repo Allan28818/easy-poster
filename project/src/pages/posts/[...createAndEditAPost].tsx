@@ -43,6 +43,12 @@ import {
   emptyImageModel,
   emptyLinkModel,
 } from "../../utils/emptyModels";
+import { useReducer } from "react";
+import {
+  initialVisualBoolean,
+  VisualBooleanActionKind,
+  visualBooleanReducer,
+} from "../../reducers/createAndEditAPost/visualBooleanReducer";
 
 const Piechart: any = dynamic(
   () => import("../../components/Graphics/PieChart"),
@@ -86,12 +92,16 @@ function CreateAndEditAPost() {
 
   const [docElements, setDocElements] = useState<docElementsProp[]>([]);
 
-  const [stepsPopUp, setStepsPopUp] = useState<boolean>(true);
+  const [visualBooleanState, dispatchVisualBooleanState] = useReducer(
+    visualBooleanReducer,
+    initialVisualBoolean
+  );
 
-  const [showImageModal, setShowImageModal] = useState<boolean>(false);
-  const [showGraphicPopUp, setShowGraphicPopUp] = useState<boolean>(false);
-  const [showLinkModal, setShowLinkModal] = useState<boolean>(false);
-  const [showMenu, setShowMenu] = useState<boolean>(false);
+  // const [stepsPopUp, setStepsPopUp] = useState<boolean>(true);
+  // const [showGraphicPopUp, setShowGraphicPopUp] = useState<boolean>(false);
+  // const [showImageModal, setShowImageModal] = useState<boolean>(false);
+  // const [showLinkModal, setShowLinkModal] = useState<boolean>(false);
+  // const [showMenu, setShowMenu] = useState<boolean>(false);
 
   const [imageDataStructure, setImageDataStructure] =
     useState<ImageDataProps>(emptyImageModel);
@@ -243,8 +253,8 @@ function CreateAndEditAPost() {
         handleEditPost={handleEditPost}
         postTitle={postTitle}
         setPostTitle={setPostTitle}
-        showMenu={showMenu}
-        setShowMenu={setShowMenu}
+        showMenuState={visualBooleanState}
+        dispatchShowMenu={dispatchVisualBooleanState}
         postData={{ postId, postBody }}
         docElements={docElements}
         setBasicMessageConfig={setBasicMessageConfig}
@@ -255,8 +265,8 @@ function CreateAndEditAPost() {
       <CreateImagePopUp
         imageDataStructure={imageDataStructure}
         setImageDataStructure={setImageDataStructure}
-        showImageModal={showImageModal}
-        setShowImageModal={setShowImageModal}
+        showImageModalState={visualBooleanState}
+        dispatchShowImageModal={dispatchVisualBooleanState}
         setDocElements={setDocElements}
         handleAddImage={handleAddImage}
       />
@@ -266,10 +276,8 @@ function CreateAndEditAPost() {
         setChartDataStructure={setChartDataStructure}
         colorInput={colorInput}
         setColorInput={setColorInput}
-        showGraphicPopUp={showGraphicPopUp}
-        setShowGraphicPopUp={setShowGraphicPopUp}
-        stepsPopUp={stepsPopUp}
-        setStepsPopUp={setStepsPopUp}
+        booleanVisibilityState={visualBooleanState}
+        dispatchBooleanVisibility={dispatchVisualBooleanState}
         nameInput={nameInput}
         setNameInput={setNameInput}
         seriesInput={seriesInput}
@@ -283,8 +291,7 @@ function CreateAndEditAPost() {
             docElements,
             setChartDataStructure,
             setDocElements,
-            setShowGraphicPopUp,
-            setStepsPopUp,
+            dispatchBooleanVisibility: dispatchVisualBooleanState,
           })
         }
       />
@@ -292,15 +299,15 @@ function CreateAndEditAPost() {
       <CreateLinkPopUp
         linkDataStructure={linkDataStructure}
         setLinkDataStructure={setLinkDataStructure}
-        showLinkModal={showLinkModal}
-        setShowLinkModal={setShowLinkModal}
+        showLinkModalState={visualBooleanState}
+        dispatchShowLinkModal={dispatchVisualBooleanState}
         handleAddLink={() =>
           handleAddLink({
             linkDataStructure,
             docElements,
             setLinkDataStructure,
             setDocElements,
-            setShowLinkModal,
+            dispatchShowLinkModal: dispatchVisualBooleanState,
           })
         }
       />
@@ -362,22 +369,44 @@ function CreateAndEditAPost() {
         >
           <span>span</span>
         </HoverButton>
-        <HoverButton onClickFunction={() => setShowLinkModal(true)}>
+        <HoverButton
+          onClickFunction={() =>
+            dispatchVisualBooleanState({
+              type: VisualBooleanActionKind.LINK_MODAL,
+              isLinkModalVisible: true,
+            })
+          }
+        >
           link
         </HoverButton>
         <HoverButton
-          onClickFunction={() => {
-            setShowImageModal(true);
-          }}
+          onClickFunction={() =>
+            dispatchVisualBooleanState({
+              type: VisualBooleanActionKind.IMAGE_MODAL,
+              isImageModalVisible: true,
+            })
+          }
         >
           img
         </HoverButton>
-        <HoverButton onClickFunction={() => setShowGraphicPopUp(true)}>
+        <HoverButton
+          onClickFunction={() =>
+            dispatchVisualBooleanState({
+              type: VisualBooleanActionKind.GRAPHIC_POP_UP,
+              isGraphicPopUpVisible: true,
+            })
+          }
+        >
           Graphic
         </HoverButton>
         <BasicBurgerMenu
           position="end"
-          onClickFunction={() => setShowMenu(true)}
+          onClickFunction={() =>
+            dispatchVisualBooleanState({
+              type: VisualBooleanActionKind.MENU,
+              isMenuVisible: true,
+            })
+          }
         />
       </header>
 

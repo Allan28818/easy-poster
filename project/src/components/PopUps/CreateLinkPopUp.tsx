@@ -1,14 +1,19 @@
-import React from "react";
+import React, { Dispatch } from "react";
 import { GrFormClose } from "react-icons/gr";
 import { LinkDataModel } from "../../models/components/LinkDataModel";
+import {
+  VisualBooleanAction,
+  VisualBooleanActionKind,
+  VisualBooleanState,
+} from "../../reducers/createAndEditAPost/visualBooleanReducer";
 
 import styles from "../../styles/components/pop-ups/pop-up.module.scss";
 
 interface CreateLinkPopUp {
   linkDataStructure: LinkDataModel;
   setLinkDataStructure: React.Dispatch<React.SetStateAction<LinkDataModel>>;
-  showLinkModal: boolean;
-  setShowLinkModal: React.Dispatch<React.SetStateAction<boolean>>;
+  showLinkModalState: VisualBooleanState;
+  dispatchShowLinkModal: Dispatch<VisualBooleanAction>;
   handleAddLink: () => void;
 }
 
@@ -16,16 +21,25 @@ const CreateLinkPopUp = (props: CreateLinkPopUp) => {
   const {
     linkDataStructure,
     setLinkDataStructure,
-    showLinkModal,
-    setShowLinkModal,
+    showLinkModalState,
+    dispatchShowLinkModal,
     handleAddLink,
   } = props;
 
   return (
-    <div className={showLinkModal ? styles.imgPopUp : "hidden"}>
+    <div
+      className={
+        showLinkModalState.isLinkModalVisible ? styles.imgPopUp : "hidden"
+      }
+    >
       <GrFormClose
         className={styles.close}
-        onClick={() => setShowLinkModal(false)}
+        onClick={() =>
+          dispatchShowLinkModal({
+            type: VisualBooleanActionKind.LINK_MODAL,
+            isLinkModalVisible: false,
+          })
+        }
       />
 
       <div className={styles.card}>

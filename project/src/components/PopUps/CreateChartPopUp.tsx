@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch } from "react";
 
 import { GrFormClose } from "react-icons/gr";
 import ChartDataProps, {
@@ -9,16 +9,19 @@ import BasicChartAddForm from "../Forms/BasicChartAddForm";
 import LineChartAddForm from "../Forms/LineChartAddForm";
 
 import styles from "../../styles/components/pop-ups/pop-up.module.scss";
+import {
+  VisualBooleanAction,
+  VisualBooleanActionKind,
+  VisualBooleanState,
+} from "../../reducers/createAndEditAPost/visualBooleanReducer";
 
 interface CreateChartPopUpProps {
   chartDataStructure: ChartUseStateStructure;
   setChartDataStructure: React.Dispatch<
     React.SetStateAction<ChartUseStateStructure>
   >;
-  showGraphicPopUp: boolean;
-  setShowGraphicPopUp: React.Dispatch<React.SetStateAction<boolean>>;
-  stepsPopUp: boolean;
-  setStepsPopUp: React.Dispatch<React.SetStateAction<boolean>>;
+  booleanVisibilityState: VisualBooleanState;
+  dispatchBooleanVisibility: Dispatch<VisualBooleanAction>;
   colorInput: string;
   setColorInput: React.Dispatch<React.SetStateAction<string>>;
   nameInput: string;
@@ -34,10 +37,8 @@ const CreateChartPopUp = (props: CreateChartPopUpProps) => {
   const {
     chartDataStructure,
     setChartDataStructure,
-    showGraphicPopUp,
-    setShowGraphicPopUp,
-    stepsPopUp,
-    setStepsPopUp,
+    booleanVisibilityState,
+    dispatchBooleanVisibility,
     colorInput,
     setColorInput,
     nameInput,
@@ -52,15 +53,26 @@ const CreateChartPopUp = (props: CreateChartPopUpProps) => {
   const lineTemplateCharts = ["line", "bar", "radar"];
 
   return (
-    <div className={showGraphicPopUp ? styles.graphicPopUp : "hidden"}>
+    <div
+      className={
+        booleanVisibilityState.isGraphicPopUpVisible
+          ? styles.graphicPopUp
+          : "hidden"
+      }
+    >
       <GrFormClose
         className={styles.close}
-        onClick={() => setShowGraphicPopUp(false)}
+        onClick={() =>
+          dispatchBooleanVisibility({
+            type: VisualBooleanActionKind.GRAPHIC_POP_UP,
+            isGraphicPopUpVisible: false,
+          })
+        }
       />
       <div className={styles.card}>
         <h1>Type your graphic informations</h1>
 
-        {stepsPopUp ? (
+        {booleanVisibilityState.isFirstGraphicStep ? (
           <>
             <div className={styles.formWrapper}>
               <label htmlFor="title">Type your title (optional)</label>
@@ -94,7 +106,15 @@ const CreateChartPopUp = (props: CreateChartPopUpProps) => {
                 <option value="radar">Radar</option>
               </select>
             </div>
-            <button onClick={() => setStepsPopUp(false)}>Next</button>
+            <button
+              onClick={() =>
+                dispatchBooleanVisibility({
+                  type: VisualBooleanActionKind.GRAPHIC_STEPS_POP_UP,
+                })
+              }
+            >
+              Next
+            </button>
           </>
         ) : (
           <>

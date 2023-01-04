@@ -1,16 +1,21 @@
-import React from "react";
+import React, { Dispatch } from "react";
 import { GrFormClose } from "react-icons/gr";
 import { handleAddImageProps } from "../../handlers/createPostHandlers/handleAddImage";
 import { ImageDataProps } from "../../models/components/ImageDataProps";
 import docElementsProp from "../../models/DocElementsProp";
+import {
+  VisualBooleanAction,
+  VisualBooleanActionKind,
+  VisualBooleanState,
+} from "../../reducers/createAndEditAPost/visualBooleanReducer";
 
 import styles from "../../styles/components/pop-ups/pop-up.module.scss";
 
 interface CreateImagePopUpProps {
   imageDataStructure: ImageDataProps;
   setImageDataStructure: React.Dispatch<React.SetStateAction<ImageDataProps>>;
-  showImageModal: boolean;
-  setShowImageModal: React.Dispatch<React.SetStateAction<boolean>>;
+  showImageModalState: VisualBooleanState;
+  dispatchShowImageModal: Dispatch<VisualBooleanAction>;
   setDocElements: React.Dispatch<React.SetStateAction<docElementsProp[]>>;
   handleAddImage: (props: handleAddImageProps) => void;
 }
@@ -19,8 +24,8 @@ const CreateImagePopUp = (props: CreateImagePopUpProps) => {
   const {
     imageDataStructure,
     setImageDataStructure,
-    showImageModal,
-    setShowImageModal,
+    showImageModalState,
+    dispatchShowImageModal,
     setDocElements,
     handleAddImage,
   } = props;
@@ -73,10 +78,19 @@ const CreateImagePopUp = (props: CreateImagePopUpProps) => {
   }
 
   return (
-    <div className={showImageModal ? styles.imgPopUp : "hidden"}>
+    <div
+      className={
+        showImageModalState.isImageModalVisible ? styles.imgPopUp : "hidden"
+      }
+    >
       <GrFormClose
         className={styles.close}
-        onClick={() => setShowImageModal(false)}
+        onClick={() =>
+          dispatchShowImageModal({
+            type: VisualBooleanActionKind.IMAGE_MODAL,
+            isImageModalVisible: false,
+          })
+        }
       />
 
       <div className={styles.card}>
@@ -151,7 +165,7 @@ const CreateImagePopUp = (props: CreateImagePopUpProps) => {
           onClick={() =>
             handleAddImage({
               setDocElements,
-              setShowImageModal,
+              dispatchShowImageModal,
               setImageDataStructure,
               imageDataStructure,
             })

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch } from "react";
 
 import Link from "next/link";
 import { IoIosSave } from "react-icons/io";
@@ -14,6 +14,11 @@ import docElementsProp from "../../models/DocElementsProp";
 import BasicMessageProps from "../../models/components/BasicMessageProps";
 import { useAuth } from "../../hooks/useAuth";
 import SwitchButton from "../Buttons/SwitchButton";
+import {
+  VisualBooleanAction,
+  VisualBooleanActionKind,
+  VisualBooleanState,
+} from "../../reducers/createAndEditAPost/visualBooleanReducer";
 
 interface BasicMenuProps {
   postTitle: string;
@@ -21,8 +26,8 @@ interface BasicMenuProps {
   pageOperation: string;
   handleSavePost: () => Promise<void>;
   handleEditPost: (props: handleEditPostProps) => Promise<void>;
-  showMenu: boolean;
-  setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
+  showMenuState: VisualBooleanState;
+  dispatchShowMenu: Dispatch<VisualBooleanAction>;
   isAPublicPost: boolean;
   setIsAPublicPost: React.Dispatch<React.SetStateAction<boolean>>;
   setBasicMessageConfig: React.Dispatch<
@@ -41,8 +46,8 @@ const BasicMenu = (props: BasicMenuProps) => {
     setPostTitle,
     handleSavePost,
     handleEditPost,
-    showMenu,
-    setShowMenu,
+    showMenuState,
+    dispatchShowMenu,
     setBasicMessageConfig,
     pageOperation,
     docElements,
@@ -55,7 +60,7 @@ const BasicMenu = (props: BasicMenuProps) => {
   const history = useRouter();
 
   return (
-    <div className={showMenu ? styles.menu : "hidden"}>
+    <div className={showMenuState.isMenuVisible ? styles.menu : "hidden"}>
       <div
         className={styles.menuPublicSwitchWrapper}
         title={`Your post is ${isAPublicPost ? "public" : "private"}`}
@@ -72,7 +77,12 @@ const BasicMenu = (props: BasicMenuProps) => {
       </div>
       <GrFormClose
         className={styles.closeButton}
-        onClick={() => setShowMenu(false)}
+        onClick={() =>
+          dispatchShowMenu({
+            type: VisualBooleanActionKind.MENU,
+            isMenuVisible: false,
+          })
+        }
       />
       <input
         type="text"
