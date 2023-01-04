@@ -19,10 +19,6 @@ import BasicMessageProps from "../../models/components/BasicMessageProps";
 
 import dynamic from "next/dynamic";
 
-import ChartDataProps, {
-  ChartUseStateStructure,
-} from "../../models/components/ChartDataProps";
-
 import { getPosts } from "../../services/posts/getPosts";
 
 import PostElementCard from "../../components/Cards/PostElementCard";
@@ -49,6 +45,11 @@ import {
   VisualBooleanActionKind,
   visualBooleanReducer,
 } from "../../reducers/createAndEditAPost/visualBooleanReducer";
+import {
+  chartDataReducer,
+  initialChartData,
+} from "../../reducers/createAndEditAPost/chartDataReducer";
+import { handleSavePost } from "../../handlers/createPostHandlers/handleSavePost";
 
 const Piechart: any = dynamic(
   () => import("../../components/Graphics/PieChart"),
@@ -97,26 +98,16 @@ function CreateAndEditAPost() {
     initialVisualBoolean
   );
 
-  // const [stepsPopUp, setStepsPopUp] = useState<boolean>(true);
-  // const [showGraphicPopUp, setShowGraphicPopUp] = useState<boolean>(false);
-  // const [showImageModal, setShowImageModal] = useState<boolean>(false);
-  // const [showLinkModal, setShowLinkModal] = useState<boolean>(false);
-  // const [showMenu, setShowMenu] = useState<boolean>(false);
+  const [chartDataState, dispatchChartData] = useReducer(
+    chartDataReducer,
+    initialChartData
+  );
 
   const [imageDataStructure, setImageDataStructure] =
     useState<ImageDataProps>(emptyImageModel);
 
-  const [chartDataStructure, setChartDataStructure] =
-    useState<ChartUseStateStructure>(emptyChartModel);
-
   const [linkDataStructure, setLinkDataStructure] =
     useState<LinkDataModel>(emptyLinkModel);
-
-  const [nameInput, setNameInput] = useState<string>("");
-  const [colorInput, setColorInput] = useState<string>("");
-  const [seriesInput, setSeriesInput] = useState<string>("");
-
-  const [chartData, setChartData] = useState<ChartDataProps[]>([]);
 
   const [postTitle, setPostTitle] = useState<string>("");
 
@@ -156,80 +147,6 @@ function CreateAndEditAPost() {
     handleFecthPost();
   }, [postId]);
 
-  async function handleSavePost() {
-    if (postTitle) {
-      const creatorData = {
-        id: user?.uid,
-        fullName: user?.displayName,
-        email: user?.email,
-        photoURL: user?.photoURL,
-      };
-
-      const response = await savePostController({
-        postName: postTitle,
-        isPublic: isAPublicPost,
-        elementToMap: postBody,
-        creatorData,
-        docElements,
-      });
-
-      if (response.errorCode) {
-        setBasicMessageConfig({
-          title: "Humm, we had a problem!",
-          description: response.message,
-          onConfirm: () => {
-            history.push("/");
-            setBasicMessageConfig({
-              title: "",
-              description: "",
-              onConfirm: () => {},
-              showMessage: false,
-              type: "success",
-            });
-          },
-          showMessage: true,
-          type: "error",
-        });
-      } else {
-        setBasicMessageConfig({
-          title: "Your post was saved!",
-          description: response.message,
-          onConfirm: () => {
-            history.push("/");
-            setBasicMessageConfig({
-              title: "",
-              description: "",
-              onConfirm: () => {},
-              showMessage: false,
-              type: "success",
-            });
-          },
-          showMessage: true,
-          type: "success",
-        });
-      }
-
-      return;
-    }
-
-    setBasicMessageConfig({
-      title: "Insuficient data!",
-      description: "You must give a title to your post!",
-      onConfirm: () => {
-        setBasicMessageConfig({
-          title: "",
-          description: "",
-          onConfirm: () => {},
-          showMessage: false,
-          type: "success",
-        });
-      },
-      showMessage: true,
-      type: "error",
-    });
-    return;
-  }
-
   function onDragEnd(result: any) {
     const items = Array.from(docElements);
     const [reorderedItem] = items.splice(result.source.index, 1);
@@ -249,7 +166,19 @@ function CreateAndEditAPost() {
       />
       <BasicMenu
         pageOperation={pageOperation}
-        handleSavePost={handleSavePost}
+        handleSavePost={() =>
+          handleSavePost({
+            user,
+            history,
+            setBasicMessageConfig,
+            postInfo: {
+              postBody,
+              postTitle,
+              isAPublicPost,
+              docElements,
+            },
+          })
+        }
         handleEditPost={handleEditPost}
         postTitle={postTitle}
         setPostTitle={setPostTitle}
@@ -272,24 +201,15 @@ function CreateAndEditAPost() {
       />
 
       <CreateChartPopUp
-        chartDataStructure={chartDataStructure}
-        setChartDataStructure={setChartDataStructure}
-        colorInput={colorInput}
-        setColorInput={setColorInput}
         booleanVisibilityState={visualBooleanState}
         dispatchBooleanVisibility={dispatchVisualBooleanState}
-        nameInput={nameInput}
-        setNameInput={setNameInput}
-        seriesInput={seriesInput}
-        setSeriesInput={setSeriesInput}
-        chartData={chartData}
-        setChartData={setChartData}
+        chartDataState={chartDataState}
+        dispatchChartData={dispatchChartData}
         handleAddGraphic={() =>
           handleAddGraphic({
-            chartDataStructure,
-            chartData,
+            chartDataState,
+            dispatchChartData,
             docElements,
-            setChartDataStructure,
             setDocElements,
             dispatchBooleanVisibility: dispatchVisualBooleanState,
           })

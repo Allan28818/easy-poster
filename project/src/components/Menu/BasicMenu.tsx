@@ -19,6 +19,7 @@ import {
   VisualBooleanActionKind,
   VisualBooleanState,
 } from "../../reducers/createAndEditAPost/visualBooleanReducer";
+import { handleSavePostProps } from "../../handlers/createPostHandlers/handleSavePost";
 
 interface BasicMenuProps {
   postTitle: string;

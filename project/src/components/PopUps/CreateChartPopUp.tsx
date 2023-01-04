@@ -14,39 +14,26 @@ import {
   VisualBooleanActionKind,
   VisualBooleanState,
 } from "../../reducers/createAndEditAPost/visualBooleanReducer";
+import {
+  ChartDataAction,
+  ChartDataActionKind,
+  ChartDataState,
+} from "../../reducers/createAndEditAPost/chartDataReducer";
 
 interface CreateChartPopUpProps {
-  chartDataStructure: ChartUseStateStructure;
-  setChartDataStructure: React.Dispatch<
-    React.SetStateAction<ChartUseStateStructure>
-  >;
   booleanVisibilityState: VisualBooleanState;
   dispatchBooleanVisibility: Dispatch<VisualBooleanAction>;
-  colorInput: string;
-  setColorInput: React.Dispatch<React.SetStateAction<string>>;
-  nameInput: string;
-  setNameInput: React.Dispatch<React.SetStateAction<string>>;
-  seriesInput: string;
-  setSeriesInput: React.Dispatch<React.SetStateAction<string>>;
-  chartData: ChartDataProps[];
-  setChartData: React.Dispatch<React.SetStateAction<ChartDataProps[]>>;
   handleAddGraphic: () => void;
+  chartDataState: ChartDataState;
+  dispatchChartData: Dispatch<ChartDataAction>;
 }
 
 const CreateChartPopUp = (props: CreateChartPopUpProps) => {
   const {
-    chartDataStructure,
-    setChartDataStructure,
     booleanVisibilityState,
     dispatchBooleanVisibility,
-    colorInput,
-    setColorInput,
-    nameInput,
-    setNameInput,
-    seriesInput,
-    setSeriesInput,
-    chartData,
-    setChartData,
+    chartDataState,
+    dispatchChartData,
     handleAddGraphic,
   } = props;
 
@@ -80,11 +67,15 @@ const CreateChartPopUp = (props: CreateChartPopUpProps) => {
                 name="title"
                 placeholder="This is my graphic"
                 onChange={(e: any) => {
-                  setChartDataStructure((oldValues) => {
-                    return { ...oldValues, chartTitle: e.target.value };
+                  dispatchChartData({
+                    type: ChartDataActionKind.SET_FINAL_CHART_MODEL,
+                    chartFinalFormat: {
+                      ...chartDataState.chartFinalFormat,
+                      chartTitle: e.target.value,
+                    },
                   });
                 }}
-                value={chartDataStructure.chartTitle || ""}
+                value={chartDataState.chartFinalFormat.chartTitle || ""}
                 autoComplete="off"
               />
             </div>
@@ -94,8 +85,12 @@ const CreateChartPopUp = (props: CreateChartPopUpProps) => {
               <select
                 name="graphicType"
                 onChange={(e: any) =>
-                  setChartDataStructure((oldValues) => {
-                    return { ...oldValues, graphicType: e.target.value };
+                  dispatchChartData({
+                    type: ChartDataActionKind.SET_FINAL_CHART_MODEL,
+                    chartFinalFormat: {
+                      ...chartDataState.chartFinalFormat,
+                      graphicType: e.target.value,
+                    },
                   })
                 }
               >
@@ -118,26 +113,18 @@ const CreateChartPopUp = (props: CreateChartPopUpProps) => {
           </>
         ) : (
           <>
-            {lineTemplateCharts.includes(chartDataStructure.graphicType!) ? (
+            {lineTemplateCharts.includes(
+              chartDataState.chartFinalFormat.graphicType!
+            ) ? (
               <LineChartAddForm
-                chartDataStructure={chartDataStructure}
-                setChartDataStructure={setChartDataStructure}
-                colorInput={colorInput}
-                setColorInput={setColorInput}
-                nameInput={nameInput}
-                setNameInput={setNameInput}
-                seriesInput={seriesInput}
-                setSeriesInput={setSeriesInput}
-                chartData={chartData}
-                setChartData={setChartData}
+                chartDataState={chartDataState}
+                dispatchChartData={dispatchChartData}
                 handleAddGraphic={handleAddGraphic}
               />
             ) : (
               <BasicChartAddForm
-                chartDataStructure={chartDataStructure}
-                setChartDataStructure={setChartDataStructure}
-                colorInput={colorInput}
-                setColorInput={setColorInput}
+                chartDataState={chartDataState}
+                dispatchChartData={dispatchChartData}
                 handleAddGraphic={handleAddGraphic}
               />
             )}
