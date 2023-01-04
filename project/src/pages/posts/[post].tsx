@@ -1,4 +1,4 @@
-import React, { ComponentType, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 
 import { getPosts } from "../../services/posts/getPosts";
@@ -10,7 +10,7 @@ import TextComponent from "../../components/TextComponents/TextComponent";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 import Link from "next/link";
-import dynamic, { LoaderComponent } from "next/dynamic";
+import dynamic from "next/dynamic";
 
 import styles from "../../styles/posts/post-details.module.scss";
 import PropsReturn from "../../models/core.response";
@@ -42,6 +42,8 @@ function PostDetails() {
 
   const router = useRouter();
   const postRef = useRef() as React.MutableRefObject<HTMLDivElement>;
+  const [isPostDownloaderOpened, setIsPostDownloaderOpened] =
+    useState<boolean>(false);
 
   const { post } = router.query;
 
@@ -67,16 +69,26 @@ function PostDetails() {
         <Link href={"/"}>
           <AiOutlineArrowLeft className={styles.arrowLeft} />
         </Link>
-        <h1 className={styles.postTitle}>{postInformations.postName}</h1>
-        <span className={styles.creatorCredits}>
-          This post belongs to &copy;{" "}
-          {!!postInformations.createdAt
-            ? `${postInformations.creatorData?.fullName} - ${formatDate(
-                postInformations.createdAt.toDate(),
-                "yyyy"
-              )}`
-            : ""}
-        </span>
+        <div className={styles.textsWrapper}>
+          <h1 className={styles.postTitle}>{postInformations.postName}</h1>
+          <span className={styles.creatorCredits}>
+            This post belongs to &copy;{" "}
+            {!!postInformations.createdAt
+              ? `${postInformations.creatorData?.fullName} - ${formatDate(
+                  postInformations.createdAt.toDate(),
+                  "yyyy"
+                )}`
+              : ""}
+          </span>
+        </div>
+        <div className={styles.downloaderWrapper}>
+          <GeneratePDF
+            htmlContent={postRef}
+            docName={postInformations.postName}
+            isOpened={isPostDownloaderOpened}
+            setIsOpened={setIsPostDownloaderOpened}
+          />
+        </div>
       </header>
       <div ref={postRef}>
         <div id="post-body">
@@ -152,8 +164,6 @@ function PostDetails() {
             })}
         </div>
       </div>
-
-      <GeneratePDF htmlContent={postRef} docName={postInformations.postName} />
     </>
   );
 }

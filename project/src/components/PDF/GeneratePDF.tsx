@@ -1,15 +1,39 @@
-import { jsPDF } from "jspdf";
+import { RiMore2Fill } from "react-icons/ri";
+
 import { toPng } from "html-to-image";
-import { useRouter } from "next/router";
+import { jsPDF } from "jspdf";
+
+import { BsFillFileEarmarkImageFill } from "react-icons/bs";
+import { MdPictureAsPdf } from "react-icons/md";
+import styles from "../../styles/components/PDF/generate-PDF.module.scss";
 
 interface GeneratePDFProps {
   htmlContent: React.MutableRefObject<HTMLDivElement>;
   docName: string;
+  isOpened: boolean;
+  setIsOpened: React.Dispatch<boolean>;
   orientation?: "portrait" | "landscape";
 }
 
 const GeneratePDF = (props: GeneratePDFProps) => {
-  const { htmlContent, docName, orientation } = props;
+  const { htmlContent, docName, orientation, isOpened, setIsOpened } = props;
+
+  function handleMouseLeave(event: any) {
+    event.target.style.background = "none";
+  }
+
+  function handleMouseMove(event: any) {
+    const rect = event.target.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    if (event.target instanceof HTMLButtonElement) {
+      event.target.style.background = `radial-gradient(circle at ${x}px ${y}px , rgba(255,255,255,0.2),rgba(255,255,255,0) )`;
+    } else {
+      event.target.parentElement.style.background = `radial-gradient(circle at ${x}px ${y}px , rgba(255,255,255,0.2),rgba(255,255,255,0) )`;
+    }
+  }
 
   async function generatePdf() {
     if (!!htmlContent) {
@@ -71,11 +95,36 @@ const GeneratePDF = (props: GeneratePDFProps) => {
   }
 
   return (
-    <div>
-      <button onClick={async () => await generatePdf()}>Generate PDF</button>
-      <button onClick={async () => await generateImage()}>
-        Generate Image
-      </button>
+    <div className={styles.downloaderContainer}>
+      {isOpened ? (
+        <div
+          className={styles.downloaderOptions}
+          onMouseLeave={() => setIsOpened(false)}
+        >
+          <button
+            onClick={async () => await generatePdf()}
+            className={styles.downloaderBtn}
+            onMouseLeave={(e) => handleMouseLeave(e)}
+            onMouseMove={(e) => handleMouseMove(e)}
+          >
+            Generate PDF <MdPictureAsPdf className={styles.icon} />
+          </button>
+          <button
+            onClick={async () => await generateImage()}
+            className={styles.downloaderBtn}
+            onMouseLeave={(e) => handleMouseLeave(e)}
+            onMouseMove={(e) => handleMouseMove(e)}
+          >
+            Generate Image{" "}
+            <BsFillFileEarmarkImageFill className={styles.icon} />
+          </button>
+        </div>
+      ) : (
+        <RiMore2Fill
+          className={styles.moreDetails}
+          onClick={() => setIsOpened(true)}
+        />
+      )}
     </div>
   );
 };

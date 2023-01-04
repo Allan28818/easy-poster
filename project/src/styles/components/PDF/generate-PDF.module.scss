@@ -1,2 +1,51 @@
 @import "../../_variables.scss";
 @import "../../_functions.scss";
+
+.downloaderContainer {
+  margin: convertToRem(20rem);
+
+  .downloaderOptions {
+    position: absolute;
+    background: $purple-periwinkle;
+    padding: convertToRem(20rem);
+    border-radius: convertToRem(20rem);
+    box-shadow: 0 0 5px 0 $black-transparent;
+    z-index: 20;
+    min-width: convertToRem(200rem);
+    max-width: convertToRem(350rem);
+    right: 2.5%;
+    height: auto;
+  }
+
+  .moreDetails {
+    color: $white-anti-flash;
+    width: convertToRem(25rem);
+    height: convertToRem(25rem);
+    transition: 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+.downloaderBtn {
+  background: none;
+  padding: convertToRem(10rem);
+  border-radius: convertToRem(10rem);
+  font-family: "Roboto", sans-serif;
+  font-size: clamp(
+    convertToRem(13rem),
+    convertToRem(15.5rem),
+    convertToRem(17.5rem)
+  );
+  color: $white-anti-flash;
+  cursor: pointer;
+
+  .icon {
+    color: $white-anti-flash;
+    width: convertToRem(20rem);
+    height: convertToRem(20rem);
+  }
+}
