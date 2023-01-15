@@ -1,4 +1,4 @@
-import { Dispatch } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 import SelectColors from "./SelectColors";
 
@@ -8,15 +8,50 @@ import {
   ChartDataState,
 } from "../../reducers/createAndEditAPost/chartDataReducer";
 import styles from "../../styles/components/pop-ups/pop-up.module.scss";
+import { handleChangeProps } from "../PopUps/CreateChartPopUp";
 
 interface BasicChartAddFormProps {
   chartDataState: ChartDataState;
   dispatchChartData: Dispatch<ChartDataAction>;
   handleAddGraphic: () => void;
+  invalidFields: string[];
+  setInvalidFields: Dispatch<SetStateAction<string[]>>;
+  handleInputChange: (props: handleChangeProps) => void;
 }
 
 const BasicChartAddForm = (props: BasicChartAddFormProps) => {
-  const { chartDataState, dispatchChartData, handleAddGraphic } = props;
+  const {
+    chartDataState,
+    dispatchChartData,
+    handleAddGraphic,
+    handleInputChange,
+    invalidFields,
+    setInvalidFields,
+  } = props;
+
+  function checkIsAbleToAdd() {
+    const containsEmptyField =
+      !chartDataState.chartFinalFormat.graphicLabels ||
+      !chartDataState.chartSeries ||
+      !chartDataState.chartName;
+
+    const invalidFieldsList = [...invalidFields];
+
+    if (containsEmptyField) {
+      if (!chartDataState.chartFinalFormat.graphicLabels) {
+        invalidFieldsList.push("labels");
+        setInvalidFields(invalidFieldsList);
+      }
+      if (!chartDataState.chartSeries) {
+        invalidFieldsList.push("series");
+        setInvalidFields(invalidFieldsList);
+      }
+
+      return;
+    }
+
+    return handleAddGraphic();
+  }
 
   return (
     <>
@@ -25,17 +60,26 @@ const BasicChartAddForm = (props: BasicChartAddFormProps) => {
         <input
           name="series"
           placeholder="1, 2, 3, ..."
-          onChange={(e: any) =>
-            dispatchChartData({
-              type: ChartDataActionKind.SET_FINAL_CHART_MODEL,
-              chartFinalFormat: {
-                ...chartDataState.chartFinalFormat,
-                graphicSeries: e.target.value,
-              },
-            })
-          }
+          onChange={(e: any) => {
+            const dispatch = () =>
+              dispatchChartData({
+                type: ChartDataActionKind.SET_FINAL_CHART_MODEL,
+                chartFinalFormat: {
+                  ...chartDataState.chartFinalFormat,
+                  graphicSeries: e.target.value,
+                },
+              });
+
+            handleInputChange({
+              callBackDispatch: dispatch,
+              currentFieldName: "series",
+            });
+          }}
           value={chartDataState.chartFinalFormat.graphicSeries || ""}
           autoComplete="off"
+          className={
+            invalidFields.includes("series") ? styles.invalidInput : ""
+          }
         />
       </div>
       <SelectColors
@@ -47,24 +91,33 @@ const BasicChartAddForm = (props: BasicChartAddFormProps) => {
         <input
           name="labels"
           placeholder="dogs, cats, birds..."
-          onChange={(e: any) =>
-            dispatchChartData({
-              type: ChartDataActionKind.SET_FINAL_CHART_MODEL,
-              chartFinalFormat: {
-                ...chartDataState.chartFinalFormat,
-                graphicLabels: e.target.value,
-              },
-            })
-          }
+          onChange={(e: any) => {
+            const dispatch = () =>
+              dispatchChartData({
+                type: ChartDataActionKind.SET_FINAL_CHART_MODEL,
+                chartFinalFormat: {
+                  ...chartDataState.chartFinalFormat,
+                  graphicLabels: e.target.value,
+                },
+              });
+
+            handleInputChange({
+              callBackDispatch: dispatch,
+              currentFieldName: "labels",
+            });
+          }}
           value={chartDataState.chartFinalFormat.graphicLabels || ""}
           autoComplete="off"
+          className={
+            invalidFields.includes("labels") ? styles.invalidInput : ""
+          }
         />
       </div>
 
       <button
         type="submit"
         onClick={() => {
-          handleAddGraphic();
+          checkIsAbleToAdd();
         }}
       >
         Create
