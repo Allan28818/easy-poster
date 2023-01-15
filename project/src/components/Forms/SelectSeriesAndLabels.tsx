@@ -8,14 +8,22 @@ import {
   ChartDataActionKind,
   ChartDataState,
 } from "../../reducers/createAndEditAPost/chartDataReducer";
+import { handleChangeProps } from "../PopUps/CreateChartPopUp";
 
 interface SelectSeriesAndLabelsProps {
   chartDataState: ChartDataState;
   dispatchChartData: Dispatch<ChartDataAction>;
+  handleInputChange: (props: handleChangeProps) => void;
+  invalidFields: string[];
 }
 
 const SelectSeriesAndLabels = (props: SelectSeriesAndLabelsProps) => {
-  const { chartDataState, dispatchChartData } = props;
+  const {
+    chartDataState,
+    dispatchChartData,
+    handleInputChange,
+    invalidFields,
+  } = props;
 
   return (
     <div className={styles.formWrapper}>
@@ -24,13 +32,21 @@ const SelectSeriesAndLabels = (props: SelectSeriesAndLabelsProps) => {
         name="name-input"
         type="text"
         onChange={(e: any) => {
-          dispatchChartData({
-            type: ChartDataActionKind.SET_NAME,
-            chartName: e.target.value,
+          const dispatch = () =>
+            dispatchChartData({
+              type: ChartDataActionKind.SET_NAME,
+              chartName: e.target.value,
+            });
+          handleInputChange({
+            callBackDispatch: dispatch,
+            currentFieldName: "name-input",
           });
         }}
         value={chartDataState.chartName}
         autoComplete="off"
+        className={
+          invalidFields.includes("name-input") ? styles.invalidInput : ""
+        }
       />
 
       <label htmlFor="series-input">Type the series for your label</label>
@@ -38,13 +54,22 @@ const SelectSeriesAndLabels = (props: SelectSeriesAndLabelsProps) => {
         type="text"
         name="series-input"
         onChange={(e: any) => {
-          dispatchChartData({
-            type: ChartDataActionKind.SET_SERIES,
-            chartSeries: e.target.value,
+          const dispatch = () =>
+            dispatchChartData({
+              type: ChartDataActionKind.SET_SERIES,
+              chartSeries: e.target.value,
+            });
+
+          handleInputChange({
+            callBackDispatch: dispatch,
+            currentFieldName: "series-input",
           });
         }}
         value={chartDataState.chartSeries}
         autoComplete="off"
+        className={
+          invalidFields.includes("series-input") ? styles.invalidInput : ""
+        }
       />
       <div className={styles.seriesWrapper}>
         {chartDataState.chartDataSet.map((currentData, currentIndex) => {

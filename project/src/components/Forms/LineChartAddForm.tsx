@@ -1,8 +1,4 @@
-import React, { Dispatch } from "react";
-
-import ChartDataProps, {
-  ChartUseStateStructure,
-} from "../../models/components/ChartDataProps";
+import React, { Dispatch, SetStateAction, useState } from "react";
 
 import SelectColors from "./SelectColors";
 import SelectSeriesAndLabels from "./SelectSeriesAndLabels";
@@ -13,15 +9,54 @@ import {
   ChartDataActionKind,
   ChartDataState,
 } from "../../reducers/createAndEditAPost/chartDataReducer";
+import { handleChangeProps } from "../PopUps/CreateChartPopUp";
 
 interface LineChartAddFormProps {
   chartDataState: ChartDataState;
   dispatchChartData: Dispatch<ChartDataAction>;
   handleAddGraphic: () => void;
+  invalidFields: string[];
+  setInvalidFields: Dispatch<SetStateAction<string[]>>;
+  handleInputChange: (props: handleChangeProps) => void;
 }
 
 const LineChartAddForm = (props: LineChartAddFormProps) => {
-  const { chartDataState, dispatchChartData, handleAddGraphic } = props;
+  const {
+    chartDataState,
+    dispatchChartData,
+    handleAddGraphic,
+    invalidFields,
+    setInvalidFields,
+    handleInputChange,
+  } = props;
+
+  function checkIsAbleToAdd() {
+    const containsEmptyField =
+      !chartDataState.chartFinalFormat.graphicLabels ||
+      !chartDataState.chartSeries ||
+      !chartDataState.chartName;
+
+    const invalidFieldsList = [...invalidFields];
+
+    if (containsEmptyField) {
+      if (!chartDataState.chartFinalFormat.graphicLabels) {
+        invalidFieldsList.push("labels");
+        setInvalidFields(invalidFieldsList);
+      }
+      if (!chartDataState.chartSeries) {
+        invalidFieldsList.push("series-input");
+        setInvalidFields(invalidFieldsList);
+      }
+      if (!chartDataState.chartName) {
+        invalidFieldsList.push("name-input");
+        setInvalidFields(invalidFieldsList);
+      }
+
+      return;
+    }
+
+    return handleAddGraphic();
+  }
 
   return (
     <>
@@ -30,15 +65,24 @@ const LineChartAddForm = (props: LineChartAddFormProps) => {
         <input
           name="labels"
           placeholder="dogs, cats, birds..."
-          onChange={(e: any) =>
-            dispatchChartData({
-              type: ChartDataActionKind.SET_FINAL_CHART_MODEL,
-              chartFinalFormat: {
-                ...chartDataState.chartFinalFormat,
-                graphicLabels: e.target.value,
-              },
-            })
+          className={
+            invalidFields.includes("labels") ? styles.invalidInput : ""
           }
+          onChange={(e: any) => {
+            const dispatch = () =>
+              dispatchChartData({
+                type: ChartDataActionKind.SET_FINAL_CHART_MODEL,
+                chartFinalFormat: {
+                  ...chartDataState.chartFinalFormat,
+                  graphicLabels: e.target.value,
+                },
+              });
+
+            handleInputChange({
+              callBackDispatch: dispatch,
+              currentFieldName: "labels",
+            });
+          }}
           value={chartDataState.chartFinalFormat.graphicLabels || ""}
           autoComplete="off"
         />
@@ -47,6 +91,8 @@ const LineChartAddForm = (props: LineChartAddFormProps) => {
       <SelectSeriesAndLabels
         chartDataState={chartDataState}
         dispatchChartData={dispatchChartData}
+        handleInputChange={handleInputChange}
+        invalidFields={invalidFields}
       />
 
       <SelectColors
@@ -57,7 +103,7 @@ const LineChartAddForm = (props: LineChartAddFormProps) => {
       <button
         type="submit"
         onClick={() => {
-          handleAddGraphic();
+          checkIsAbleToAdd();
         }}
       >
         Create

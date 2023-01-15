@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import React, { Dispatch, useState } from "react";
 
 import { GrFormClose } from "react-icons/gr";
 import ChartDataProps, {
@@ -28,6 +28,11 @@ interface CreateChartPopUpProps {
   dispatchChartData: Dispatch<ChartDataAction>;
 }
 
+export interface handleChangeProps {
+  callBackDispatch: () => void;
+  currentFieldName: string;
+}
+
 const CreateChartPopUp = (props: CreateChartPopUpProps) => {
   const {
     booleanVisibilityState,
@@ -36,8 +41,25 @@ const CreateChartPopUp = (props: CreateChartPopUpProps) => {
     dispatchChartData,
     handleAddGraphic,
   } = props;
+  const [invalidFields, setInvalidFields] = useState<string[]>([]);
 
   const lineTemplateCharts = ["line", "bar", "radar"];
+
+  function handleInputChange(props: handleChangeProps) {
+    const { callBackDispatch, currentFieldName } = props;
+
+    const isMarkedAsInvalid = invalidFields.includes(currentFieldName);
+
+    callBackDispatch();
+
+    if (isMarkedAsInvalid) {
+      const currentFieldIndex = invalidFields.indexOf(currentFieldName);
+      const invalidFieldsRef = [...invalidFields];
+      invalidFieldsRef.splice(currentFieldIndex, 1);
+
+      setInvalidFields(invalidFieldsRef);
+    }
+  }
 
   return (
     <div
@@ -117,15 +139,21 @@ const CreateChartPopUp = (props: CreateChartPopUpProps) => {
               chartDataState.chartFinalFormat.graphicType!
             ) ? (
               <LineChartAddForm
+                invalidFields={invalidFields}
+                setInvalidFields={setInvalidFields}
                 chartDataState={chartDataState}
                 dispatchChartData={dispatchChartData}
                 handleAddGraphic={handleAddGraphic}
+                handleInputChange={handleInputChange}
               />
             ) : (
               <BasicChartAddForm
                 chartDataState={chartDataState}
                 dispatchChartData={dispatchChartData}
                 handleAddGraphic={handleAddGraphic}
+                handleInputChange={handleInputChange}
+                invalidFields={invalidFields}
+                setInvalidFields={setInvalidFields}
               />
             )}
           </>
