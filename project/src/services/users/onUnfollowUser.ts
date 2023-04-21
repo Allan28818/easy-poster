@@ -7,6 +7,7 @@ import {
   updateDoc,
   doc,
   DocumentData,
+  limit,
 } from "firebase/firestore";
 
 import PropsReturn from "../../models/core.response";
@@ -27,48 +28,38 @@ const onUnfollowUser = async (
 ): Promise<onUnfollowUserPropsReturn> => {
   const { accountToUnfollowId, unfollowRequesterId } = props;
 
-  let updatedUser: DocumentData = {};
-
   if (accountToUnfollowId === unfollowRequesterId) {
     return {
       message: "You cannot unfollow yourself!",
       errorCode: "403",
       errorMessage: "Forbidden",
-      updatedUser,
+      updatedUser: {},
     };
   }
 
   try {
     const accountToUnfollowRef = query(
       collection(firestore, "users"),
-      where("id", "==", accountToUnfollowId)
+      where("id", "==", accountToUnfollowId),
+      limit(1)
     );
 
     const unfollowRequesterRef = query(
       collection(firestore, "users"),
-      where("id", "==", unfollowRequesterId)
+      where("id", "==", unfollowRequesterId),
+      limit(1)
     );
     const accountToUnfollowData = (
       await getDocs(accountToUnfollowRef)
-    ).docs.map((user) => user.data());
+    ).docs.map((user) => user.data())[0];
 
     const unfollowRequesterData = (
       await getDocs(unfollowRequesterRef)
-    ).docs.map((user) => user.data());
+    ).docs.map((user) => user.data())[0];
 
-    const accountToUnfollowFollowers =
-      accountToUnfollowData[0]?.followers || [];
+    const accountToUnfollowFollowers = accountToUnfollowData?.followers || [];
     const unfollowRequesterFollowingAccount =
-      unfollowRequesterData[0]?.following || [];
-
-    if (
-      !accountToUnfollowFollowers.length ||
-      !unfollowRequesterFollowingAccount.length
-    ) {
-      throw new Error(
-        "No data found! Probably the unfollow-requester doesn't follow the user anymore or the user isn't inside the unfollow-requester following list!"
-      );
-    }
+      unfollowRequesterData?.following || [];
 
     const unfollowRequesterIndexInsideTheUserList =
       accountToUnfollowFollowers.indexOf(unfollowRequesterId);
@@ -77,14 +68,18 @@ const onUnfollowUser = async (
 
     const updatedAt = serverTimestamp();
 
-    accountToUnfollowFollowers.splice(
-      unfollowRequesterIndexInsideTheUserList,
-      1
-    );
-    unfollowRequesterFollowingAccount.splice(
-      userToUnfollowIndexInsideTheRequesterList,
-      1
-    );
+    if (unfollowRequesterIndexInsideTheUserList !== -1) {
+      accountToUnfollowFollowers.splice(
+        unfollowRequesterIndexInsideTheUserList,
+        1
+      );
+    }
+    if (userToUnfollowIndexInsideTheRequesterList !== -1) {
+      unfollowRequesterFollowingAccount.splice(
+        userToUnfollowIndexInsideTheRequesterList,
+        1
+      );
+    }
 
     await updateDoc(doc(firestore, "users", accountToUnfollowId!), {
       followers: accountToUnfollowFollowers,
@@ -96,19 +91,20 @@ const onUnfollowUser = async (
       updatedAt,
     });
 
-    updatedUser = (await getDocs(accountToUnfollowRef)).docs.map((user) =>
-      user.data()
-    )[0];
+    return {
+      message: "Unfollowing proccess was succeed!",
+      updatedUser: (await getDocs(accountToUnfollowRef)).docs.map((user) =>
+        user.data()
+      )[0],
+    };
   } catch (error: any) {
     return {
       message: "It wasn't possible to finish the unfollow operation",
       errorCode: error.code,
       errorMessage: error.message,
-      updatedUser,
+      updatedUser: {},
     };
   }
-
-  return { message: "Unfollowing proccess was succeed!", updatedUser };
 };
 
 export { onUnfollowUser };

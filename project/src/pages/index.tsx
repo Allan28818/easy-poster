@@ -57,7 +57,7 @@ function Home() {
   useEffect(() => {
     const myPosts = async () => {
       if (!!user) {
-        const returnedPosts = await getPosts({ postOwnerId: user?.uid });
+        const returnedPosts = await getPosts({ postOwnerId: user?.id });
         dispatch({
           type: ReducerActionKind.GET_MY_POSTS,
           myPosts: returnedPosts.data,
@@ -66,8 +66,8 @@ function Home() {
     };
 
     const feedPosts = async () => {
-      if (!!user?.uid) {
-        const returnedPosts = await getFeedPosts({ feedId: user?.uid });
+      if (!!user?.id) {
+        const returnedPosts = await getFeedPosts({ feedId: user?.id });
 
         dispatch({
           type: ReducerActionKind.GET_FEED,
@@ -81,7 +81,7 @@ function Home() {
   }, [user]);
 
   async function handleUpdatePosts() {
-    const returnedPosts = await getPosts({ postOwnerId: user?.uid });
+    const returnedPosts = await getPosts({ postOwnerId: user?.id });
     dispatch({
       type: ReducerActionKind.GET_MY_POSTS,
       myPosts: returnedPosts?.data,

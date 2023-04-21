@@ -28,6 +28,8 @@ import {
   popUpFunctionMessage,
 } from "../models/FunctionMessage";
 
+import { getUserByField } from "../services/users/getUserByField";
+
 import DefaultLoader from "../components/Loaders/DefaultLoader";
 
 interface AuthContextProps {
@@ -36,7 +38,9 @@ interface AuthContextProps {
 
 export interface AuthenticationUser {
   email: string | null | undefined;
-  uid: string | null | undefined;
+  id: string | null | undefined;
+  followers: string[];
+  following: string[];
   photoURL?: string | null;
   displayName?: string | null;
 }
@@ -67,13 +71,21 @@ export function AuthContextProvider({ children }: AuthContextProps) {
       if (!authenticatedUser) {
         setUser(null);
       } else {
-        const token = await authenticatedUser.getIdToken();
-        setUser({
-          photoURL: authenticatedUser.photoURL,
-          displayName: authenticatedUser?.displayName,
-          email: authenticatedUser?.email,
-          uid: authenticatedUser?.uid,
+        const { data } = await getUserByField({
+          fieldToGet: "id",
+          fieldValue: authenticatedUser?.uid,
         });
+
+        if (data) {
+          setUser({
+            photoURL: data.photoURL,
+            displayName: data?.displayName,
+            email: data?.email,
+            followers: data?.followers,
+            following: data?.following,
+            id: data?.id,
+          });
+        }
       }
     });
 

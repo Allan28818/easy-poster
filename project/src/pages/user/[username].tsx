@@ -20,6 +20,7 @@ import { onFollowUser } from "../../services/users/onFollowUser";
 import { onUnfollowUser } from "../../services/users/onUnfollowUser";
 
 import styles from "../../styles/user/profile-page.module.scss";
+import { FollowInfoPopUp } from "../../components/PopUps/FollowInfoPopUp";
 
 function ProfilePage() {
   const { user } = useAuth();
@@ -31,6 +32,10 @@ function ProfilePage() {
 
   const [pageOwner, setPageOwner] = useState<DocumentData>();
   const [showPostOptions, setShowPostOptions] = useState<boolean>(false);
+
+  const [showPopUp, setShowPopUp] = useState<boolean>(false);
+  const [popUpTitle, setPopUpTitle] = useState<string>("");
+  const [popUpData, setPopUpData] = useState<DocumentData[]>([]);
 
   useEffect(() => {
     const getPageOwnerData = async () => {
@@ -49,12 +54,11 @@ function ProfilePage() {
         disptach({
           type: ReducerActionKind.SET_INITIAL_DATA,
           amIFollowing: getUserByFieldResponse.data?.followers.some(
-            (userId: string) => userId === user?.uid
+            (userId: string) => userId === user?.id
           ),
-          followersAmount: getUserByFieldResponse.data?.followers.length,
-          followingAmount: getUserByFieldResponse.data?.following.length,
+          followers: getUserByFieldResponse.data?.followers,
           pageOwnerId: getUserByFieldResponse.data?.id,
-          pageVisitorId: user?.uid,
+          pageVisitorId: user?.id,
           userPostsList: posts.data,
         });
 
@@ -69,17 +73,58 @@ function ProfilePage() {
   }, [username]);
 
   async function handleUpdatePosts() {
-    const returnedPosts = await getPosts({ postOwnerId: user?.uid });
+    const returnedPosts = await getPosts({ postOwnerId: user?.id });
     disptach({
       type: ReducerActionKind.SET_POSTS,
       userPostsList: returnedPosts.data,
     });
   }
 
+  async function handleFollow() {
+    const response = await onFollowUser({
+      newFollowerId: user?.id,
+      userFollowedId: pageOwner?.id,
+    });
+
+    disptach({
+      type: ReducerActionKind.FOLLOW_USER,
+      followers: response?.updatedUser?.followers,
+    });
+  }
+
+  async function handleUnfollow() {
+    const response = await onUnfollowUser({
+      unfollowRequesterId: user?.id,
+      accountToUnfollowId: pageOwner?.id,
+    });
+
+    disptach({
+      type: ReducerActionKind.UNFOLLOW_USER,
+      followers: response.updatedUser.followers,
+    });
+  }
+
+  async function handleFetchUsers(usersIds: string[]) {
+    const users = [];
+
+    for (const userId of usersIds) {
+      const response = await getUserByField({
+        fieldToGet: "id",
+        fieldValue: userId,
+      });
+      console.log("response", response.data);
+
+      if (typeof response?.data === "object") {
+        users.push(response.data);
+      }
+    }
+
+    return users;
+  }
+
   return (
     <>
       <ShortHeader />
-
       <section className={styles.userInfo}>
         <div>
           {state.amIPageOwner ? (
@@ -95,40 +140,44 @@ function ProfilePage() {
           )}
         </div>
         <div>
-          {pageOwner?.id !== user?.uid && (
+          {pageOwner?.id !== user?.id && (
             <FollowUserButton
-              following={state.amIFollowing}
+              following={user?.following?.indexOf(pageOwner?.id) !== -1}
               toggleTexts={["Follow", "Unfollow"]}
-              onFollow={async () => {
-                const response = await onFollowUser({
-                  newFollowerId: user?.uid,
-                  userFollowedId: pageOwner?.id,
-                });
-
-                disptach({
-                  type: ReducerActionKind.FOLLOW_USER,
-                  followingAmount: response.updatedUser.following.length,
-                  followersAmount: response.updatedUser.followers.length,
-                });
-              }}
-              onUnfollow={async () => {
-                const response = await onUnfollowUser({
-                  unfollowRequesterId: user?.uid,
-                  accountToUnfollowId: pageOwner?.id,
-                });
-
-                disptach({
-                  type: ReducerActionKind.UNFOLLOW_USER,
-                  followingAmount: response.updatedUser.following?.length,
-                  followersAmount: response.updatedUser.followers?.length,
-                });
-              }}
+              onFollow={async () => await handleFollow()}
+              onUnfollow={async () => await handleUnfollow()}
             />
           )}
           <h2 className={styles.userName}>{pageOwner?.displayName}</h2>
           <div className={styles.follows}>
-            <span>Following: {state.followingAmount}</span>
-            <span>Followers: {state.followersAmount}</span>
+            <span
+              className={styles.clickable}
+              onClick={async () => {
+                if (state?.following?.length) {
+                  const users = await handleFetchUsers(state?.following);
+                  setPopUpTitle("Following");
+                  setPopUpData(users);
+                  setShowPopUp(true);
+                }
+              }}
+            >
+              Following: {state?.following?.length || 0}
+            </span>
+            <span
+              className={styles.clickable}
+              onClick={async () => {
+                if (state?.followers?.length) {
+                  const users = await handleFetchUsers(state.followers);
+                  setPopUpTitle("Followers");
+                  setPopUpData(users);
+                  setShowPopUp(true);
+
+                  console.log("users", users);
+                }
+              }}
+            >
+              Followers: {state?.followers?.length || 0}
+            </span>
             <span>Posts: {state.postsAmount}</span>
           </div>
           <h3 className={styles.userEmail}>{pageOwner?.email}</h3>
@@ -155,6 +204,12 @@ function ProfilePage() {
           />
         )}
       </section>
+      <FollowInfoPopUp
+        isVisible={showPopUp}
+        setIsVisible={setShowPopUp}
+        title={popUpTitle}
+        users={popUpData}
+      />
     </>
   );
 }

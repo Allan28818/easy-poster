@@ -11,8 +11,8 @@ enum ReducerActionKind {
 interface ReducerAction {
   type: ReducerActionKind;
   amIFollowing?: boolean;
-  followingAmount?: number;
-  followersAmount?: number;
+  following?: string[];
+  followers?: string[];
   userPostsList?: DocumentData[];
   pageVisitorId?: string | null;
   pageOwnerId?: string;
@@ -21,8 +21,8 @@ interface ReducerAction {
 interface ReducerState {
   pageOwnerId: string;
   pageVisitorId: string;
-  followersAmount: number;
-  followingAmount: number;
+  followers: string[];
+  following: string[];
   postsAmount: number;
   userPostsList: DocumentData[];
   amIFollowing: boolean;
@@ -32,8 +32,8 @@ interface ReducerState {
 const userDataInitialState: ReducerState = {
   amIFollowing: false,
   amIPageOwner: false,
-  followersAmount: 0,
-  followingAmount: 0,
+  followers: [],
+  following: [],
   pageOwnerId: "",
   pageVisitorId: "",
   postsAmount: 0,
@@ -49,15 +49,13 @@ function userDataReducer(
       return {
         ...state,
         amIFollowing: true,
-        followersAmount: action.followersAmount || 0,
-        followingAmount: action.followingAmount || 0,
+        followers: action.followers || [],
       };
     case "UNFOLLOW_USER":
       return {
         ...state,
         amIFollowing: false,
-        followersAmount: action.followersAmount || 0,
-        followingAmount: action.followingAmount || 0,
+        followers: action.followers || [],
       };
 
     case "SET_POSTS":
@@ -75,8 +73,8 @@ function userDataReducer(
       return {
         amIFollowing: !!action.amIFollowing,
         amIPageOwner: action.pageOwnerId === action.pageVisitorId,
-        followersAmount: action.followersAmount || 0,
-        followingAmount: action.followingAmount || 0,
+        followers: action.followers || [],
+        following: action.following || [],
         pageOwnerId: action.pageOwnerId || "",
         pageVisitorId: action.pageVisitorId || "",
         postsAmount: action.userPostsList?.length || 0,

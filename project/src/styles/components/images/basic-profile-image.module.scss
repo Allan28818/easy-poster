@@ -5,8 +5,8 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: convertToRem(78.75rem);
-  height: convertToRem(78.75);
+  width: convertToRem(105rem);
+  height: convertToRem(105rem);
   background: $black-transparent;
   border: 2px solid $blue-deep-koamaru;
   border-radius: convertToRem(100rem);
@@ -14,8 +14,8 @@
   margin: 0;
 
   .image {
-    width: convertToRem(75rem);
-    height: convertToRem(75rem);
+    width: convertToRem(100rem);
+    height: convertToRem(100rem);
     border-radius: convertToRem(100rem);
     margin: 0;
     padding: 0;

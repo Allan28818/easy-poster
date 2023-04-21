@@ -53,7 +53,7 @@ const PostWrapperCard = (props: PostWrapperCardProps) => {
             await disablePost({
               id: postToDelete.id,
               postCreatorId: postToDelete.creatorData.id,
-              userId: user?.uid,
+              userId: user?.id,
             });
           }
           if (!!user && onUpdatePosts) {
@@ -66,7 +66,7 @@ const PostWrapperCard = (props: PostWrapperCardProps) => {
       <div className={styles.postsList}>
         {postsList.map((post) => (
           <div key={post.createdAt} className={styles.postWrapper}>
-            {user?.uid === post.creatorData.id &&
+            {user?.id === post.creatorData.id &&
               setShowPostOptions &&
               isEditable && (
                 <PostOptions

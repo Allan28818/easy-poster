@@ -6,7 +6,7 @@
   width: auto;
   min-width: 100%;
   height: auto;
-  max-height: convertToRem(100rem);
+  max-height: convertToRem(120rem);
   padding: convertToRem(10rem);
   background: $blue-merachant-marine-transparent;
   position: fixed;
@@ -16,6 +16,8 @@
   margin: 0;
   backdrop-filter: blur(4px);
   justify-content: space-between;
+  text-overflow: ellipsis;
+  overflow-y: hidden;
 
   .arrowLeft {
     width: convertToRem(35rem);
@@ -31,9 +33,12 @@
 
   .textsWrapper {
     .postTitle {
-      font-size: clamp(100%, convertToRem(200rem), 150%);
+      font-size: clamp(
+        convertToRem(15rem),
+        convertToRem(20rem),
+        convertToRem(30rem)
+      );
       width: auto;
-      max-width: 19%;
       font-family: "Baloo Bhaijaan 2", sans-serif;
       color: $blue-coastal-breeze;
       display: flex;
@@ -41,6 +46,7 @@
       justify-content: center;
       margin: auto;
       margin-top: convertToRem(15rem);
+      text-align: center;
       cursor: default;
     }
 
@@ -48,14 +54,25 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      text-align: center;
       font-size: clamp(
-        convertToRem(12rem),
-        convertToRem(15.5rem),
-        convertToRem(17.5rem)
+        convertToRem(10rem),
+        convertToRem(15rem),
+        convertToRem(20rem)
       );
       color: $white-anti-flash-transparent;
       font-family: "Baloo Bhaijaan 2", sans-serif;
       cursor: default;
     }
+  }
+}
+
+@media (max-width: 307px) {
+  .postHeader .textsWrapper .creatorCredits {
+    text-align: left;
+    width: convertToRem(150rem);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
 }
