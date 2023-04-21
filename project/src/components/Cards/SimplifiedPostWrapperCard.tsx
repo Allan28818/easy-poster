@@ -25,8 +25,8 @@ const SimplifiedPostWrapperCard = (props: SimplifiedPostWrapperCardProps) => {
               <Image
                 src={currentPost.creatorData.photoURL || ""}
                 alt={currentPost.creatorData.fullName}
-                width={40}
-                height={40}
+                width={50}
+                height={50}
                 className={styles.avatar}
                 layout={"fixed"}
                 objectFit={"cover"}

@@ -9,6 +9,7 @@ import {
   updateDoc,
   where,
   DocumentData,
+  limit,
 } from "firebase/firestore";
 import { firestore } from "../config/firebase";
 
@@ -47,18 +48,20 @@ const onFollowUser = async (
   try {
     const userFollowedRef = query(
       collection(firestore, "users"),
-      where("id", "==", userFollowedId)
+      where("id", "==", userFollowedId),
+      limit(1)
     );
     const newFollowerRef = query(
       collection(firestore, "users"),
-      where("id", "==", newFollowerId)
+      where("id", "==", newFollowerId),
+      limit(1)
     );
     const userFollowedData = (await getDocs(userFollowedRef)).docs.map((user) =>
       user.data()
-    );
+    )[0];
     const newFollowerData = (await getDocs(newFollowerRef)).docs.map((user) =>
       user.data()
-    );
+    )[0];
 
     const aleradyFollowing = isUserAlreadyFollowing({
       newFollowerId,
@@ -69,8 +72,8 @@ const onFollowUser = async (
       return { message: "You're already following this user!", updatedUser };
     }
 
-    const userFollowedFollowers = userFollowedData[0]?.followers || [];
-    const newFollowerFollowingAccounts = newFollowerData[0]?.following || [];
+    const userFollowedFollowers = userFollowedData?.followers || [];
+    const newFollowerFollowingAccounts = newFollowerData?.following || [];
 
     const updatedAt = serverTimestamp();
 
@@ -87,9 +90,12 @@ const onFollowUser = async (
       updatedAt,
     });
 
-    updatedUser = (await getDocs(userFollowedRef)).docs.map((user) =>
-      user.data()
-    )[0];
+    return {
+      message: "Now you're following another user!",
+      updatedUser: (await getDocs(userFollowedRef)).docs.map((user) =>
+        user.data()
+      )[0],
+    };
   } catch (error: any) {
     return {
       message: "It wasn't possible to finish the following operation!",
@@ -98,8 +104,6 @@ const onFollowUser = async (
       updatedUser,
     };
   }
-
-  return { message: "Following operation was succeed!", updatedUser };
 };
 
 function isUserAlreadyFollowing(props: isUserAlreadyFollowingProps): boolean {

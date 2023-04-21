@@ -18,8 +18,8 @@ const BasicProfileImage = (props: BasicProfileImage) => {
           className={styles.image}
           src={photoURL}
           alt={username}
-          width={75}
-          height={75}
+          width={100}
+          height={100}
           objectFit="cover"
         />
       ) : (

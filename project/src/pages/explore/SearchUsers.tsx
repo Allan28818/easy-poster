@@ -63,7 +63,7 @@ function SearchUsers() {
             <ul className={styles.usersList}>
               {usersList.map((currentUser) => {
                 const followsMe = currentUser.following.some(
-                  (currentUser: string) => currentUser === user?.uid
+                  (currentUser: string) => currentUser === user?.id
                 );
                 return (
                   <li>

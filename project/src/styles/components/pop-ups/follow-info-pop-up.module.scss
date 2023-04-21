@@ -1,0 +1,106 @@
+@import "../../_variables.scss";
+@import "../../_functions.scss";
+
+.hidden {
+  opacity: 1;
+  display: block;
+  position: absolute;
+  top: -200%;
+  left: -200%;
+  visibility: hidden;
+}
+
+.popUpBackground {
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $black-transparent;
+
+  .container {
+    width: auto;
+    max-width: convertToRem(850rem);
+    min-width: clamp(convertToRem(250rem), convertToRem(350rem), 50%);
+    height: auto;
+    padding-top: convertToRem(10rem);
+    border-radius: convertToRem(20rem);
+    background: $white-anti-flash;
+
+    .popUpData {
+      width: 100%;
+      height: auto;
+      overflow-y: scroll;
+    }
+  }
+}
+
+.popUpHeader {
+  display: flex;
+  border-bottom: 1px solid $gray-peace;
+  margin-bottom: convertToRem(5rem);
+  padding-right: convertToRem(10rem);
+  padding-bottom: convertToRem(10rem);
+  width: 100%;
+  height: auto;
+  .title {
+    margin: 0;
+    text-align: center;
+    font-family: "Baloo Bhaijaan", sans-serif;
+    font-size: convertToRem(20rem);
+    margin: auto;
+    color: $black-pearl;
+    cursor: default;
+  }
+  .closeIcon {
+    width: convertToRem(20rem);
+    height: convertToRem(20rem);
+    cursor: pointer;
+    color: $black-pearl;
+  }
+}
+
+.userContainer {
+  height: auto;
+  margin: convertToRem(5rem) convertToRem(10rem);
+  display: flex;
+  align-items: center;
+
+  .profileImage {
+    width: convertToRem(50rem);
+    height: convertToRem(50rem);
+    border-radius: convertToRem(50rem);
+  }
+
+  .profileInfo {
+    display: block;
+    height: auto;
+    width: auto;
+    margin-left: convertToRem(5rem);
+    margin: auto;
+
+    .userEmail {
+      font-size: convertToRem(15rem);
+      color: $black-pearl;
+      font-family: "Roboto Mono", sans-serif;
+      transition: all 0.3s;
+      cursor: pointer;
+      text-decoration: none;
+      margin-bottom: convertToRem(5rem);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .displayName {
+      font-size: convertToRem(13.5rem);
+      color: $gray-asbestos;
+      font-family: "Fira Sans", sans-serif;
+    }
+  }
+}

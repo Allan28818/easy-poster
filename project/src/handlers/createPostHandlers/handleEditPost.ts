@@ -30,7 +30,7 @@ async function handleEditPost(props: handleEditPostProps) {
 
   if (postTitle && postId) {
     const creatorData = {
-      id: user?.uid,
+      id: user?.id,
       fullName: user?.displayName,
     };
 
