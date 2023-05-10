@@ -6,12 +6,12 @@
   height: auto;
   margin-top: clamp(17.5%, convertToRem(40rem), 45%);
 
-  h3 {
+  .greetings {
     display: flex;
     align-items: center;
     font-size: clamp(80%, convertToRem(150rem), 160%);
     font-family: "Fira Sans", sans-serif;
-    margin-left: 23%;
+    justify-content: center;
     cursor: default;
   }
 }

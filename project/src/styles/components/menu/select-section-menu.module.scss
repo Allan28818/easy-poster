@@ -12,7 +12,7 @@
 
   .indicator {
     max-width: convertToRem(280rem);
-    min-width: convertToRem(180rem);
+    min-width: convertToRem(90rem);
     height: convertToRem(5rem);
     background: $blue-light;
     display: block;
@@ -29,7 +29,7 @@
 
   .selector {
     max-width: convertToRem(400rem);
-    min-width: convertToRem(200rem);
+    min-width: convertToRem(100rem);
     margin-left: convertToRem(5rem);
     height: auto;
     display: flex;

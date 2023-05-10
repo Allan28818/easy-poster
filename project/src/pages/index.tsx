@@ -4,14 +4,14 @@ import { useAuth } from "../hooks/useAuth";
 import withAuth from "../components/withAuth";
 
 import { getPosts } from "../services/posts/getPosts";
-import { DocumentData } from "firebase/firestore";
 
-import PostWrapperCard from "../components/Cards/PostWrapperCard";
 import NoPostsCard from "../components/Cards/NoPostsCard";
+import PostWrapperCard from "../components/Cards/PostWrapperCard";
 import ShortHeader from "../components/Headers/ShortHeader";
 import { generateTimeMessage } from "../utils/generateTimeMessage";
 
-import styles from "../styles/home.module.scss";
+import { BasicMessageCard } from "../components/Cards/BasicMessageCard";
+import SimplifiedPostWrapperCard from "../components/Cards/SimplifiedPostWrapperCard";
 import { SelectSectionMenu } from "../components/Menu/SelectSectionMenu";
 import {
   postsTypeInitialState,
@@ -19,8 +19,7 @@ import {
   ReducerActionKind,
 } from "../reducers/postsTypeReducer";
 import { getFeedPosts } from "../services/posts/getFeedPosts";
-import SimplifiedPostWrapperCard from "../components/Cards/SimplifiedPostWrapperCard";
-import { BasicMessageCard } from "../components/Cards/BasicMessageCard";
+import styles from "../styles/home.module.scss";
 
 function Home() {
   const [state, dispatch] = useReducer(postsTypeReducer, postsTypeInitialState);
@@ -91,8 +90,7 @@ function Home() {
   return (
     <div className={styles.container}>
       <ShortHeader />
-
-      <h3>{`${generateTimeMessage()} ${
+      <h3 className={styles.greetings}>{`${generateTimeMessage()} ${
         user?.displayName ? user.displayName : ""
       }`}</h3>
 
@@ -101,7 +99,6 @@ function Home() {
         selectedIndexTab={selectedIndexTab}
         setSelectedIndexTab={setSelectedIndexTab}
       />
-
       {selectedIndexTab === 1 ? feedPosts : myPosts}
     </div>
   );
