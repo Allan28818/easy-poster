@@ -11,6 +11,7 @@ enum ReducerActionKind {
 interface ReducerAction {
   type: ReducerActionKind;
   amIFollowing?: boolean;
+  amIPageOwner?: boolean;
   following?: string[];
   followers?: string[];
   userPostsList?: DocumentData[];
@@ -72,7 +73,7 @@ function userDataReducer(
     case "SET_INITIAL_DATA":
       return {
         amIFollowing: !!action.amIFollowing,
-        amIPageOwner: action.pageOwnerId === action.pageVisitorId,
+        amIPageOwner: !!action.amIPageOwner,
         followers: action.followers || [],
         following: action.following || [],
         pageOwnerId: action.pageOwnerId || "",

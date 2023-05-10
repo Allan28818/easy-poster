@@ -51,11 +51,15 @@ function ProfilePage() {
           postOwnerId: getUserByFieldResponse?.data.id,
         });
 
+        console.log("user", user);
+        console.log("pageOwner", getUserByFieldResponse);
+
         disptach({
           type: ReducerActionKind.SET_INITIAL_DATA,
           amIFollowing: getUserByFieldResponse.data?.followers.some(
             (userId: string) => userId === user?.id
           ),
+          amIPageOwner: getUserByFieldResponse.data?.email === user?.email,
           followers: getUserByFieldResponse.data?.followers,
           pageOwnerId: getUserByFieldResponse.data?.id,
           pageVisitorId: user?.id,
@@ -70,7 +74,7 @@ function ProfilePage() {
     };
 
     getPageOwnerData();
-  }, [username]);
+  }, [username, user]);
 
   async function handleUpdatePosts() {
     const returnedPosts = await getPosts({ postOwnerId: user?.id });
@@ -122,6 +126,8 @@ function ProfilePage() {
     return users;
   }
 
+  console.log("state", state);
+
   return (
     <>
       <ShortHeader />
@@ -131,6 +137,7 @@ function ProfilePage() {
             <ProfileImage
               photoURL={pageOwner?.photoURL}
               userName={pageOwner?.displayName}
+              size={100}
             />
           ) : (
             <BasicProfileImage

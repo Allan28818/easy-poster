@@ -24,7 +24,7 @@ async function handleSavePost(props: handleSavePostProps) {
 
   if (postTitle) {
     const creatorData = {
-      id: user?.uid,
+      id: user?.id,
       fullName: user?.displayName,
       email: user?.email,
       photoURL: user?.photoURL,
