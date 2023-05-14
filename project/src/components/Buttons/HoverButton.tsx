@@ -9,7 +9,7 @@ const HoverButton = (props: HoverButtonProps) => {
   const { onClickFunction, children } = props;
 
   function handleMouseLeave(event: any) {
-    event.target.style.background = "#0abde3";
+    event.target.style.background = "#3d77e4";
     event.target.style.borderImage = null;
   }
 

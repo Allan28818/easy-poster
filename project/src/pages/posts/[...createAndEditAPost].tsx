@@ -9,7 +9,6 @@ import styles from "../../styles/posts/create-a-post.module.scss";
 import docElementsProp from "../../models/DocElementsProp";
 
 import { useRouter } from "next/router";
-import { savePostController } from "../../controllers/savePostController";
 import { useAuth } from "../../hooks/useAuth";
 
 import BasicBurgerMenu from "../../components/BurgersMenu/BasicBurgerMenu";
@@ -27,29 +26,25 @@ import CreateImagePopUp from "../../components/PopUps/CreateImagePopUp";
 import CreateLinkPopUp from "../../components/PopUps/CreateLinkPopUp";
 
 import { DocumentData } from "firebase/firestore";
+import { useReducer } from "react";
 import { handleAddElement } from "../../handlers/createPostHandlers/handleAddElement";
 import { handleAddGraphic } from "../../handlers/createPostHandlers/handleAddGraphic";
 import { handleAddImage } from "../../handlers/createPostHandlers/handleAddImage";
 import { handleAddLink } from "../../handlers/createPostHandlers/handleAddLink";
 import { handleEditPost } from "../../handlers/createPostHandlers/handleEditPost";
+import { handleSavePost } from "../../handlers/createPostHandlers/handleSavePost";
 import { ImageDataProps } from "../../models/components/ImageDataProps";
 import { LinkDataModel } from "../../models/components/LinkDataModel";
-import {
-  emptyChartModel,
-  emptyImageModel,
-  emptyLinkModel,
-} from "../../utils/emptyModels";
-import { useReducer } from "react";
-import {
-  initialVisualBoolean,
-  VisualBooleanActionKind,
-  visualBooleanReducer,
-} from "../../reducers/createAndEditAPost/visualBooleanReducer";
 import {
   chartDataReducer,
   initialChartData,
 } from "../../reducers/createAndEditAPost/chartDataReducer";
-import { handleSavePost } from "../../handlers/createPostHandlers/handleSavePost";
+import {
+  VisualBooleanActionKind,
+  initialVisualBoolean,
+  visualBooleanReducer,
+} from "../../reducers/createAndEditAPost/visualBooleanReducer";
+import { emptyImageModel, emptyLinkModel } from "../../utils/emptyModels";
 
 const Piechart: any = dynamic(
   () => import("../../components/Graphics/PieChart"),

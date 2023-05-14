@@ -5,7 +5,7 @@
   width: 100%;
   height: auto;
   display: flex;
-  background: $blue-cyanite;
+  background: $blue-merachant-marine-lighter;
   position: absolute;
   justify-content: center;
   top: 0;
@@ -23,7 +23,7 @@
     height: convertToRem(40rem);
     align-items: center;
     justify-content: center;
-    background: $blue-cyanite;
+    background: $blue-merachant-marine-lighter;
     cursor: pointer;
     font-size: clamp(convertToRem(18rem), 45%, convertToRem(35rem));
     color: $blue-coastal-breeze;
