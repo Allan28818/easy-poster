@@ -5,12 +5,12 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: convertToRem(105rem);
-  height: convertToRem(105rem);
+  width: convertToRem(90rem);
+  height: convertToRem(90rem);
   background: $black-transparent;
   border: 2px solid $blue-deep-koamaru;
   border-radius: convertToRem(100rem);
-  padding: 0;
+  padding: 0px;
   margin: 0;
 
   .image {
@@ -41,5 +41,12 @@
       convertToRem(33.75rem),
       convertToRem(41.25rem)
     );
+  }
+}
+
+@media (max-width: 500px) {
+  .imageWrapper {
+    width: convertToRem(50rem);
+    height: convertToRem(50rem);
   }
 }

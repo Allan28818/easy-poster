@@ -157,7 +157,7 @@ function ProfilePage() {
           )}
           <h2 className={styles.userName}>{pageOwner?.displayName}</h2>
           <div className={styles.follows}>
-            <span
+            <p
               className={styles.clickable}
               onClick={async () => {
                 if (state?.following?.length) {
@@ -169,8 +169,8 @@ function ProfilePage() {
               }}
             >
               Following: {state?.following?.length || 0}
-            </span>
-            <span
+            </p>
+            <p
               className={styles.clickable}
               onClick={async () => {
                 if (state?.followers?.length) {
@@ -184,8 +184,8 @@ function ProfilePage() {
               }}
             >
               Followers: {state?.followers?.length || 0}
-            </span>
-            <span>Posts: {state.postsAmount}</span>
+            </p>
+            <p>Posts: {state.postsAmount}</p>
           </div>
           <h3 className={styles.userEmail}>{pageOwner?.email}</h3>
         </div>
