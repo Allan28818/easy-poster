@@ -12,6 +12,7 @@
   margin: auto;
   margin-top: clamp(10%, convertToRem(30rem), 40%);
   padding: convertToRem(20rem);
+  overflow: hidden;
 
   .userName {
     font-family: "Baloo Bhaijaan", sans-serif;
@@ -32,6 +33,10 @@
     font-size: clamp(65%, convertToRem(65rem), 85%);
   }
 
+  .follows span {
+    margin-right: convertToRem(5rem);
+  }
+
   .userEmail {
     font-family: "Baloo Bhaijaan", sans-serif;
     font-size: clamp(
@@ -40,6 +45,7 @@
       convertToRem(25rem)
     );
     color: $black-transparent;
+    text-overflow: ellipsis;
   }
 }
 
@@ -94,7 +100,10 @@
       font-size: convertToRem(14rem);
     }
     .follows {
+      display: block;
+      margin: auto;
       font-size: convertToRem(12.5rem);
+      text-align: center;
     }
     .userEmail {
       font-size: convertToRem(12rem);

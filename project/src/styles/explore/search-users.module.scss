@@ -62,13 +62,14 @@
   overflow: hidden;
   list-style: none;
   flex-wrap: wrap;
+  padding: 0px;
 
   li {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin: auto;
     padding: none;
+    margin-top: convertToRem(10rem);
   }
 
   li a {
@@ -82,7 +83,7 @@
   margin-left: convertToRem(15rem);
   .username {
     font-size: clamp(
-      convertToRem(15rem),
+      convertToRem(13rem),
       convertToRem(17.5rem),
       convertToRem(20rem)
     );
@@ -90,7 +91,6 @@
     color: $black-pearl;
     text-overflow: ellipsis;
     overflow: hidden;
-    width: 70%;
   }
 
   .followsMe {
@@ -122,4 +122,12 @@
   padding: convertToRem(10rem);
   width: 100%;
   height: 100%;
+}
+
+@media (max-width: 900px) {
+  .searchWrapper {
+    .usersResultWrapper {
+      width: 95%;
+    }
+  }
 }

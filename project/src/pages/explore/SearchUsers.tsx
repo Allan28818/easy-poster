@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DocumentData } from "firebase/firestore";
 
 import ShortHeader from "../../components/Headers/ShortHeader";
@@ -20,12 +20,17 @@ function SearchUsers() {
   const [usersList, setUsersList] = useState<DocumentData[]>([]);
   const [popularPostsList, setPopularPostsList] = useState<DocumentData[]>([]);
 
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+
+  const dropdownRef = useRef<any>(null);
+
   useEffect(() => {
     const handleGetUsers = async () => {
       if (!!username) {
         const queryResult = await getUsers({ username });
         if (queryResult.data instanceof Array) {
           setUsersList(queryResult.data);
+          setShowDropdown(true);
         }
       }
     };
@@ -41,6 +46,20 @@ function SearchUsers() {
     handleGetAllPublicPosts();
     handleGetUsers();
   }, [username]);
+
+  useEffect(() => {
+    const handleOutSideClick = (event: any) => {
+      if (!dropdownRef?.current?.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    window.addEventListener("click", handleOutSideClick);
+
+    return () => {
+      window.removeEventListener("click", handleOutSideClick);
+    };
+  }, []);
 
   return (
     <>
@@ -58,8 +77,8 @@ function SearchUsers() {
             value={username}
           />
         </header>
-        {!!usersList.length && (
-          <div className={styles.usersResultWrapper}>
+        {!!usersList.length && showDropdown && (
+          <div className={styles.usersResultWrapper} ref={dropdownRef}>
             <ul className={styles.usersList}>
               {usersList.map((currentUser) => {
                 const followsMe = currentUser.following.some(
@@ -73,6 +92,7 @@ function SearchUsers() {
                           username={"static"}
                           photoURL={currentUser.photoURL}
                         />
+
                         <div className={styles.textInfo}>
                           <h4 className={styles.username}>
                             {currentUser.email}
