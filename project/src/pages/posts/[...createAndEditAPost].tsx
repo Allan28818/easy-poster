@@ -46,6 +46,32 @@ import {
 } from "../../reducers/createAndEditAPost/visualBooleanReducer";
 import { emptyImageModel, emptyLinkModel } from "../../utils/emptyModels";
 
+import { $getRoot, $getSelection } from "lexical";
+
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
+import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
+import { TRANSFORMERS } from "@lexical/markdown";
+import { ListItemNode, ListNode } from "@lexical/list";
+import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
+import { AutoLinkNode, LinkNode } from "@lexical/link";
+import { HeadingNode, QuoteNode } from "@lexical/rich-text";
+import { CodeHighlightNode, CodeNode } from "@lexical/code";
+import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
+import ToolbarPlugin from "../../components/LexicalPlugins/ToolbarPlugin";
+import TreeViewPlugin from "../../components/LexicalPlugins/TreeViewPlugin";
+import CodeHighlightPlugin from "../../components/LexicalPlugins/CodeHighlightPlugin";
+import AutoLinkPlugin from "../../components/LexicalPlugins/AutoLinkPlugin";
+import ListMaxIndentLevelPlugin from "../../components/LexicalPlugins/ListMaxIndentLevelPlugin";
+
 const Piechart: any = dynamic(
   () => import("../../components/Graphics/PieChart"),
   {
@@ -122,6 +148,26 @@ function CreateAndEditAPost() {
 
   const postBody = document.querySelector("#post-body");
 
+  const initialConfig = {
+    namespace: "MyEditor",
+    onError: (error: Error) => {
+      console.log("Lexical error", error);
+    },
+    nodes: [
+      HeadingNode,
+      ListNode,
+      ListItemNode,
+      QuoteNode,
+      CodeNode,
+      CodeHighlightNode,
+      TableNode,
+      TableCellNode,
+      TableRowNode,
+      AutoLinkNode,
+      LinkNode,
+    ],
+  };
+
   useEffect(() => {
     const handleFecthPost = async () => {
       if (!!postId) {
@@ -150,430 +196,52 @@ function CreateAndEditAPost() {
     setDocElements(items);
   }
 
+  function onChange(editorState: any) {
+    editorState.read(() => {
+      // Read the contents of the EditorState here.
+      const root = $getRoot();
+      const selection = $getSelection();
+
+      console.log(root, selection);
+    });
+  }
+
+  function MyCustomAutoFocusPlugin() {
+    const [editor] = useLexicalComposerContext();
+
+    useEffect(() => {
+      // Focus the editor when the effect fires!
+      editor.focus();
+    }, [editor]);
+
+    return null;
+  }
+
   return (
     <>
-      <BasicMessage
-        title={basicMessageConfig.title}
-        description={basicMessageConfig.description}
-        showMessage={basicMessageConfig.showMessage}
-        onConfirm={basicMessageConfig.onConfirm}
-        type={basicMessageConfig.type}
-      />
-      <BasicMenu
-        pageOperation={pageOperation}
-        handleSavePost={() =>
-          handleSavePost({
-            user,
-            history,
-            setBasicMessageConfig,
-            postInfo: {
-              postBody,
-              postTitle,
-              isAPublicPost,
-              docElements,
-            },
-          })
-        }
-        handleEditPost={handleEditPost}
-        postTitle={postTitle}
-        setPostTitle={setPostTitle}
-        showMenuState={visualBooleanState}
-        dispatchShowMenu={dispatchVisualBooleanState}
-        postData={{ postId, postBody }}
-        docElements={docElements}
-        setBasicMessageConfig={setBasicMessageConfig}
-        isAPublicPost={isAPublicPost}
-        setIsAPublicPost={setIsAPublicPost}
-      />
+      <LexicalComposer initialConfig={initialConfig}>
+        <div>
+          <ToolbarPlugin />
+          <div>
+            <RichTextPlugin
+              contentEditable={<ContentEditable className="editor-input" />}
+              placeholder={<div>Enter with a text...</div>}
+              ErrorBoundary={LexicalErrorBoundary}
+            />
 
-      <CreateImagePopUp
-        imageDataStructure={imageDataStructure}
-        setImageDataStructure={setImageDataStructure}
-        showImageModalState={visualBooleanState}
-        dispatchShowImageModal={dispatchVisualBooleanState}
-        setDocElements={setDocElements}
-        handleAddImage={handleAddImage}
-      />
+            <HistoryPlugin />
+            <TreeViewPlugin />
+            <CodeHighlightPlugin />
+            <AutoLinkPlugin />
+            <ListMaxIndentLevelPlugin maxDepth={7} />
 
-      <CreateChartPopUp
-        booleanVisibilityState={visualBooleanState}
-        dispatchBooleanVisibility={dispatchVisualBooleanState}
-        chartDataState={chartDataState}
-        dispatchChartData={dispatchChartData}
-        handleAddGraphic={() =>
-          handleAddGraphic({
-            chartDataState,
-            dispatchChartData,
-            docElements,
-            setDocElements,
-            dispatchBooleanVisibility: dispatchVisualBooleanState,
-          })
-        }
-      />
-
-      <CreateLinkPopUp
-        linkDataStructure={linkDataStructure}
-        setLinkDataStructure={setLinkDataStructure}
-        showLinkModalState={visualBooleanState}
-        dispatchShowLinkModal={dispatchVisualBooleanState}
-        handleAddLink={() =>
-          handleAddLink({
-            linkDataStructure,
-            docElements,
-            setLinkDataStructure,
-            setDocElements,
-            dispatchShowLinkModal: dispatchVisualBooleanState,
-          })
-        }
-      />
-
-      <header className={styles.tagsHeader}>
-        <HoverButton
-          onClickFunction={() =>
-            handleAddElement({ elementName: "h1", setDocElements })
-          }
-        >
-          <h1>h1</h1>
-        </HoverButton>
-        <HoverButton
-          onClickFunction={() =>
-            handleAddElement({ elementName: "h2", setDocElements })
-          }
-        >
-          <h2>h2</h2>
-        </HoverButton>
-        <HoverButton
-          onClickFunction={() =>
-            handleAddElement({ elementName: "h3", setDocElements })
-          }
-        >
-          <h3>h3</h3>
-        </HoverButton>
-        <HoverButton
-          onClickFunction={() =>
-            handleAddElement({ elementName: "h4", setDocElements })
-          }
-        >
-          <h4>h4</h4>
-        </HoverButton>
-        <HoverButton
-          onClickFunction={() =>
-            handleAddElement({ elementName: "h5", setDocElements })
-          }
-        >
-          <h5>h5</h5>
-        </HoverButton>
-        <HoverButton
-          onClickFunction={() =>
-            handleAddElement({ elementName: "h6", setDocElements })
-          }
-        >
-          <h6>h6</h6>
-        </HoverButton>
-        <HoverButton
-          onClickFunction={() =>
-            handleAddElement({ elementName: "p", setDocElements })
-          }
-        >
-          <p>p</p>
-        </HoverButton>
-        <HoverButton
-          onClickFunction={() =>
-            handleAddElement({ elementName: "span", setDocElements })
-          }
-        >
-          <span>span</span>
-        </HoverButton>
-        <HoverButton
-          onClickFunction={() =>
-            dispatchVisualBooleanState({
-              type: VisualBooleanActionKind.LINK_MODAL,
-              isLinkModalVisible: true,
-            })
-          }
-        >
-          link
-        </HoverButton>
-        <HoverButton
-          onClickFunction={() =>
-            dispatchVisualBooleanState({
-              type: VisualBooleanActionKind.IMAGE_MODAL,
-              isImageModalVisible: true,
-            })
-          }
-        >
-          img
-        </HoverButton>
-        <HoverButton
-          onClickFunction={() =>
-            dispatchVisualBooleanState({
-              type: VisualBooleanActionKind.GRAPHIC_POP_UP,
-              isGraphicPopUpVisible: true,
-            })
-          }
-        >
-          Graphic
-        </HoverButton>
-        <BasicBurgerMenu
-          position="end"
-          onClickFunction={() =>
-            dispatchVisualBooleanState({
-              type: VisualBooleanActionKind.MENU,
-              isMenuVisible: true,
-            })
-          }
-        />
-      </header>
-
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="post-elements">
-          {(provided) => (
-            <div
-              id="post-body"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {docElements.map((currentElement, index) => {
-                if (!!currentElement.src && currentElement.type === "img") {
-                  return (
-                    <Draggable
-                      key={currentElement.id}
-                      draggableId={currentElement.id}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <div
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          ref={provided.innerRef}
-                        >
-                          <PostElementCard
-                            index={index}
-                            setDocElements={setDocElements}
-                            docElements={docElements}
-                          >
-                            <img
-                              src={currentElement.src}
-                              alt={currentElement.alt}
-                            />
-                          </PostElementCard>
-                        </div>
-                      )}
-                    </Draggable>
-                  );
-                } else if (currentElement.textContent && currentElement.src) {
-                  return (
-                    <Draggable
-                      key={currentElement.id}
-                      draggableId={currentElement.id}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <div
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          ref={provided.innerRef}
-                        >
-                          <PostElementCard
-                            index={index}
-                            setDocElements={setDocElements}
-                            docElements={docElements}
-                          >
-                            <a
-                              id={currentElement.id}
-                              href={currentElement.src}
-                              target="_blank"
-                              contentEditable={true}
-                            >
-                              {currentElement.textContent}
-                            </a>
-                          </PostElementCard>
-                        </div>
-                      )}
-                    </Draggable>
-                  );
-                } else if (currentElement.textContent) {
-                  return (
-                    <Draggable
-                      key={currentElement.id}
-                      draggableId={currentElement.id}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <div
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          ref={provided.innerRef}
-                        >
-                          <PostElementCard
-                            index={index}
-                            setDocElements={setDocElements}
-                            docElements={docElements}
-                          >
-                            <TextComponent
-                              key={currentElement.id}
-                              id={currentElement.id}
-                              elementName={currentElement.elementName}
-                              textContent={currentElement.textContent}
-                              isEditable={true}
-                            />
-                          </PostElementCard>
-                        </div>
-                      )}
-                    </Draggable>
-                  );
-                } else if (!!currentElement.series) {
-                  const chartOptions: any = {
-                    pie: (
-                      <Draggable
-                        key={currentElement.id}
-                        draggableId={currentElement.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            ref={provided.innerRef}
-                          >
-                            <PostElementCard
-                              index={index}
-                              setDocElements={setDocElements}
-                              docElements={docElements}
-                            >
-                              <Piechart
-                                key={currentElement.id}
-                                colors={currentElement.colors}
-                                labels={currentElement.labels}
-                                series={currentElement.series}
-                                contentEditable={false}
-                              />
-                            </PostElementCard>
-                          </div>
-                        )}
-                      </Draggable>
-                    ),
-                    donut: (
-                      <Draggable
-                        key={currentElement.id}
-                        draggableId={currentElement.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            ref={provided.innerRef}
-                          >
-                            <PostElementCard
-                              index={index}
-                              setDocElements={setDocElements}
-                              docElements={docElements}
-                            >
-                              <Donut
-                                key={currentElement.id}
-                                colors={currentElement.colors}
-                                labels={currentElement.labels}
-                                series={currentElement.series}
-                              />
-                            </PostElementCard>
-                          </div>
-                        )}
-                      </Draggable>
-                    ),
-                    bar: (
-                      <Draggable
-                        key={currentElement.id}
-                        draggableId={currentElement.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            ref={provided.innerRef}
-                          >
-                            <PostElementCard
-                              index={index}
-                              setDocElements={setDocElements}
-                              docElements={docElements}
-                            >
-                              <BarChart
-                                title={currentElement.chartTitle}
-                                xLabels={currentElement.labels}
-                                series={currentElement.chartData}
-                                colors={currentElement.colors}
-                              />
-                            </PostElementCard>
-                          </div>
-                        )}
-                      </Draggable>
-                    ),
-                    line: (
-                      <Draggable
-                        key={currentElement.id}
-                        draggableId={currentElement.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            ref={provided.innerRef}
-                          >
-                            <PostElementCard
-                              index={index}
-                              setDocElements={setDocElements}
-                              docElements={docElements}
-                            >
-                              <LineChart
-                                title={currentElement.chartTitle}
-                                xLabels={currentElement.labels}
-                                series={currentElement.chartData}
-                                colors={currentElement.colors}
-                              />
-                            </PostElementCard>
-                          </div>
-                        )}
-                      </Draggable>
-                    ),
-                    radar: (
-                      <Draggable
-                        key={currentElement.id}
-                        draggableId={currentElement.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            ref={provided.innerRef}
-                          >
-                            <PostElementCard
-                              index={index}
-                              setDocElements={setDocElements}
-                              docElements={docElements}
-                            >
-                              <Radar
-                                title={currentElement.chartTitle}
-                                xLabels={currentElement.labels}
-                                series={currentElement.chartData}
-                                colors={currentElement.colors}
-                              />
-                            </PostElementCard>
-                          </div>
-                        )}
-                      </Draggable>
-                    ),
-                  };
-                  return chartOptions[currentElement.type];
-                }
-              })}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+            <AutoFocusPlugin />
+            <ListPlugin />
+            <LinkPlugin />
+            <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+          </div>
+        </div>
+      </LexicalComposer>
     </>
   );
 }
