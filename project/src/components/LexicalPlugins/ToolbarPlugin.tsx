@@ -41,6 +41,18 @@ import {
 } from "@lexical/code";
 
 import styles from "../../styles/components/lexical-plugins/toolbar-plugin.module.scss";
+import { IoIosArrowDown } from "react-icons/io";
+import { BiBold, BiItalic, BiLinkAlt } from "react-icons/bi";
+import { FaStrikethrough, FaUnderline } from "react-icons/fa";
+import {
+  GrCode,
+  GrRedo,
+  GrTextAlignCenter,
+  GrTextAlignFull,
+  GrTextAlignLeft,
+  GrTextAlignRight,
+  GrUndo,
+} from "react-icons/gr";
 
 const LowPriority = 1;
 
@@ -378,40 +390,40 @@ function BlockOptionsDropdownList({
 
   return (
     <div className={styles.dropdown} ref={dropDownRef}>
-      <button className="item" onClick={formatParagraph}>
+      <button className={styles.item} onClick={formatParagraph}>
         <span className="icon paragraph" />
-        <span className="text">Normal</span>
+        <span className={styles.text}>Normal</span>
         {blockType === "paragraph" && <span className="active" />}
       </button>
-      <button className="item" onClick={formatLargeHeading}>
+      <button className={styles.item} onClick={formatLargeHeading}>
         <span className="icon large-heading" />
-        <span className="text">Large Heading</span>
+        <span className={styles.text}>Large Heading</span>
         {blockType === "h1" && <span className="active" />}
       </button>
-      <button className="item" onClick={formatSmallHeading}>
+      <button className={styles.item} onClick={formatSmallHeading}>
         <span className="icon small-heading" />
-        <span className="text">Small Heading</span>
+        <span className={styles.text}>Small Heading</span>
         {blockType === "h2" && <span className="active" />}
       </button>
-      <button className="item" onClick={formatBulletList}>
+      <button className={styles.item} onClick={formatBulletList}>
         <span className="icon bullet-list" />
-        <span className="text">Bullet List</span>
+        <span className={styles.text}>Bullet List</span>
         {blockType === "ul" && <span className="active" />}
       </button>
-      <button className="item" onClick={formatNumberedList}>
+      <button className={styles.item} onClick={formatNumberedList}>
         <span className="icon numbered-list" />
-        <span className="text">Numbered List</span>
+        <span className={styles.text}>Numbered List</span>
         {blockType === "ol" && <span className="active" />}
       </button>
-      <button className="item" onClick={formatQuote}>
+      <button className={styles.item} onClick={formatQuote}>
         <span className="icon quote" />
-        <span className="text">Quote</span>
+        <span className={styles.text}>Quote</span>
         {blockType === "quote" && <span className="active" />}
       </button>
-      <button className="item" onClick={formatCode}>
+      <button className={styles.item} onClick={formatCode}>
         <span className="icon code" />
-        <span className="text">Code Block</span>
-        {blockType === "code" && <span className="active" />}
+        <span className={styles.text}>Code Block</span>
+        {blockType === "code" && <span className={styles.active} />}
       </button>
     </div>
   );
@@ -538,40 +550,44 @@ export default function ToolbarPlugin() {
   }, [editor, isLink]);
 
   return (
-    <div className="toolbar" ref={toolbarRef}>
+    <div className={styles.toolbar} ref={toolbarRef}>
       <button
         disabled={!canUndo}
         onClick={() => {
           editor.dispatchCommand(UNDO_COMMAND, {} as any);
         }}
-        className="toolbar-item spaced"
+        className={`${styles.toolbarItem} ${styles.spaced}`}
         aria-label="Undo"
       >
-        <i className="format undo" />
+        <GrUndo />
       </button>
       <button
         disabled={!canRedo}
         onClick={() => {
           editor.dispatchCommand(REDO_COMMAND, {} as any);
         }}
-        className="toolbar-item"
+        className={styles.toolbarItem}
         aria-label="Redo"
       >
-        <i className="format redo" />
+        <GrRedo />
       </button>
       <Divider />
       {supportedBlockTypes.has(blockType) && (
         <>
           <button
-            className="toolbar-item block-controls"
+            className={`${styles.toolbarItem} ${styles.blockControls}`}
             onClick={() =>
               setShowBlockOptionsDropDown(!showBlockOptionsDropDown)
             }
             aria-label="Formatting Options"
           >
-            <span className={"icon block-type " + blockType} />
-            <span className="text">{blockTypeToBlockName[blockType]}</span>
-            <i className="chevron-down" />
+            <span
+              className={`${styles.icon} ${styles.blockType} ${styles[blockType]}`}
+            />
+            <span className={styles.text}>
+              {blockTypeToBlockName[blockType]}
+            </span>
+            <IoIosArrowDown />
           </button>
           {showBlockOptionsDropDown &&
             createPortal(
@@ -589,12 +605,12 @@ export default function ToolbarPlugin() {
       {blockType === "code" ? (
         <>
           <Select
-            className="toolbar-item code-language"
+            className={`${styles.toolbarItem} ${styles.codeLanguage}`}
             onChange={onCodeLanguageSelect}
             options={codeLanguges}
             value={codeLanguage}
           />
-          <i className="chevron-down inside" />
+          <IoIosArrowDown />
         </>
       ) : (
         <>
@@ -602,55 +618,65 @@ export default function ToolbarPlugin() {
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
             }}
-            className={"toolbar-item spaced " + (isBold ? "active" : "")}
+            className={`${styles.toolbarItem} ${styles.spaced} ${
+              isBold ? styles.active : ""
+            }`}
             aria-label="Format Bold"
           >
-            <i className="format bold" />
+            <BiBold />
           </button>
           <button
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
             }}
-            className={"toolbar-item spaced " + (isItalic ? "active" : "")}
+            className={`${styles.toolbarItem} ${styles.spaced} ${
+              isItalic ? styles.active : ""
+            }`}
             aria-label="Format Italics"
           >
-            <i className="format italic" />
+            <BiItalic />
           </button>
           <button
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
             }}
-            className={"toolbar-item spaced " + (isUnderline ? "active" : "")}
+            className={`${styles.toolbarItem} ${styles.spaced} ${
+              isUnderline ? styles.active : ""
+            }`}
             aria-label="Format Underline"
           >
-            <i className="format underline" />
+            <FaUnderline />
           </button>
           <button
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
             }}
-            className={
-              "toolbar-item spaced " + (isStrikethrough ? "active" : "")
-            }
+            className={`${styles.toolbarItem} ${styles.spaced} ${
+              isStrikethrough ? styles.active : ""
+            }`}
             aria-label="Format Strikethrough"
           >
-            <i className="format strikethrough" />
+            <FaStrikethrough />
           </button>
           <button
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");
             }}
-            className={"toolbar-item spaced " + (isCode ? "active" : "")}
+            className={`${styles.toolbarItem} ${styles.spaced} ${
+              isCode ? styles.active : ""
+            }`}
             aria-label="Insert Code"
           >
-            <i className="format code" />
+            <GrCode />
           </button>
           <button
             onClick={insertLink}
-            className={"toolbar-item spaced " + (isLink ? "active" : "")}
+            className={`${styles.toolbarItem} ${styles.spaced} ${
+              isLink ? styles.active : ""
+            }`}
             aria-label="Insert Link"
           >
-            <i className="format link" />
+            <BiLinkAlt />
           </button>
           {isLink &&
             createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
@@ -659,38 +685,38 @@ export default function ToolbarPlugin() {
             onClick={() => {
               editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
             }}
-            className="toolbar-item spaced"
+            className={`${styles.toolbarItem} ${styles.spaced}`}
             aria-label="Left Align"
           >
-            <i className="format left-align" />
+            <GrTextAlignLeft />
           </button>
           <button
             onClick={() => {
               editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
             }}
-            className="toolbar-item spaced"
+            className={`${styles.toolbarItem} ${styles.spaced}`}
             aria-label="Center Align"
           >
-            <i className="format center-align" />
+            <GrTextAlignCenter />
           </button>
           <button
             onClick={() => {
               editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
             }}
-            className="toolbar-item spaced"
+            className={`${styles.toolbarItem} ${styles.spaced}`}
             aria-label="Right Align"
           >
-            <i className="format right-align" />
+            <GrTextAlignRight />
           </button>
           <button
             onClick={() => {
               editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
             }}
-            className="toolbar-item"
+            className={styles.toolbarItem}
             aria-label="Justify Align"
           >
-            <i className="format justify-align" />
-          </button>{" "}
+            <GrTextAlignFull />
+          </button>
         </>
       )}
     </div>

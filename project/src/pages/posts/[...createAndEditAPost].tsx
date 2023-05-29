@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
@@ -46,15 +46,16 @@ import {
 } from "../../reducers/createAndEditAPost/visualBooleanReducer";
 import { emptyImageModel, emptyLinkModel } from "../../utils/emptyModels";
 
-import { $getRoot, $getSelection } from "lexical";
+import { $getRoot, $getSelection, EditorState, createEditor } from "lexical";
 
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { TRANSFORMERS } from "@lexical/markdown";
@@ -196,25 +197,12 @@ function CreateAndEditAPost() {
     setDocElements(items);
   }
 
-  function onChange(editorState: any) {
+  function onChange(editorState: EditorState) {
     editorState.read(() => {
       // Read the contents of the EditorState here.
       const root = $getRoot();
       const selection = $getSelection();
-
-      console.log(root, selection);
     });
-  }
-
-  function MyCustomAutoFocusPlugin() {
-    const [editor] = useLexicalComposerContext();
-
-    useEffect(() => {
-      // Focus the editor when the effect fires!
-      editor.focus();
-    }, [editor]);
-
-    return null;
   }
 
   return (
@@ -230,11 +218,10 @@ function CreateAndEditAPost() {
             />
 
             <HistoryPlugin />
-            <TreeViewPlugin />
             <CodeHighlightPlugin />
             <AutoLinkPlugin />
             <ListMaxIndentLevelPlugin maxDepth={7} />
-
+            <OnChangePlugin onChange={onChange} />
             <AutoFocusPlugin />
             <ListPlugin />
             <LinkPlugin />
