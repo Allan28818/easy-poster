@@ -1,38 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-
-import HoverButton from "../../components/Buttons/HoverButton";
-import TextComponent from "../../components/TextComponents/TextComponent";
-import styles from "../../styles/posts/create-a-post.module.scss";
-
 import docElementsProp from "../../models/DocElementsProp";
 
 import { useRouter } from "next/router";
 import { useAuth } from "../../hooks/useAuth";
 
-import BasicBurgerMenu from "../../components/BurgersMenu/BasicBurgerMenu";
-import BasicMenu from "../../components/Menu/BasicMenu";
-import BasicMessage from "../../components/Messages/BasicMessage";
 import BasicMessageProps from "../../models/components/BasicMessageProps";
 
 import dynamic from "next/dynamic";
 
 import { getPosts } from "../../services/posts/getPosts";
 
-import PostElementCard from "../../components/Cards/PostElementCard";
-import CreateChartPopUp from "../../components/PopUps/CreateChartPopUp";
-import CreateImagePopUp from "../../components/PopUps/CreateImagePopUp";
-import CreateLinkPopUp from "../../components/PopUps/CreateLinkPopUp";
-
 import { DocumentData } from "firebase/firestore";
 import { useReducer } from "react";
-import { handleAddElement } from "../../handlers/createPostHandlers/handleAddElement";
-import { handleAddGraphic } from "../../handlers/createPostHandlers/handleAddGraphic";
-import { handleAddImage } from "../../handlers/createPostHandlers/handleAddImage";
-import { handleAddLink } from "../../handlers/createPostHandlers/handleAddLink";
-import { handleEditPost } from "../../handlers/createPostHandlers/handleEditPost";
-import { handleSavePost } from "../../handlers/createPostHandlers/handleSavePost";
 import { ImageDataProps } from "../../models/components/ImageDataProps";
 import { LinkDataModel } from "../../models/components/LinkDataModel";
 import {
@@ -40,67 +20,19 @@ import {
   initialChartData,
 } from "../../reducers/createAndEditAPost/chartDataReducer";
 import {
-  VisualBooleanActionKind,
   initialVisualBoolean,
   visualBooleanReducer,
 } from "../../reducers/createAndEditAPost/visualBooleanReducer";
 import { emptyImageModel, emptyLinkModel } from "../../utils/emptyModels";
 
-import { $getRoot, $getSelection, EditorState, createEditor } from "lexical";
+import { EditorState } from "draft-js";
 
-import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
-import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
-import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
-import { ContentEditable } from "@lexical/react/LexicalContentEditable";
-import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
-import { TRANSFORMERS } from "@lexical/markdown";
-import { ListItemNode, ListNode } from "@lexical/list";
-import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
-import { ListPlugin } from "@lexical/react/LexicalListPlugin";
-import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
-import { AutoLinkNode, LinkNode } from "@lexical/link";
-import { HeadingNode, QuoteNode } from "@lexical/rich-text";
-import { CodeHighlightNode, CodeNode } from "@lexical/code";
-import { TableCellNode, TableNode, TableRowNode } from "@lexical/table";
-import ToolbarPlugin from "../../components/LexicalPlugins/ToolbarPlugin";
-import TreeViewPlugin from "../../components/LexicalPlugins/TreeViewPlugin";
-import CodeHighlightPlugin from "../../components/LexicalPlugins/CodeHighlightPlugin";
-import AutoLinkPlugin from "../../components/LexicalPlugins/AutoLinkPlugin";
-import ListMaxIndentLevelPlugin from "../../components/LexicalPlugins/ListMaxIndentLevelPlugin";
-
-const Piechart: any = dynamic(
-  () => import("../../components/Graphics/PieChart"),
+const Editor = dynamic(
+  () => import("react-draft-wysiwyg").then((module) => module.Editor),
   {
     ssr: false,
   }
 );
-
-const Donut: any = dynamic(() => import("../../components/Graphics/Donut"), {
-  ssr: false,
-});
-
-const BarChart: any = dynamic(
-  () => import("../../components/Graphics/BarChart"),
-  {
-    ssr: false,
-  }
-);
-
-const LineChart: any = dynamic(
-  () => import("../../components/Graphics/LineChart"),
-  {
-    ssr: false,
-  }
-);
-
-const Radar: any = dynamic(() => import("../../components/Graphics/Radar"), {
-  ssr: false,
-});
 
 function CreateAndEditAPost() {
   const router = useRouter();
@@ -144,30 +76,10 @@ function CreateAndEditAPost() {
       onConfirm: () => {},
     });
 
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
   const { user } = useAuth();
   const history = useRouter();
-
-  const postBody = document.querySelector("#post-body");
-
-  const initialConfig = {
-    namespace: "MyEditor",
-    onError: (error: Error) => {
-      console.log("Lexical error", error);
-    },
-    nodes: [
-      HeadingNode,
-      ListNode,
-      ListItemNode,
-      QuoteNode,
-      CodeNode,
-      CodeHighlightNode,
-      TableNode,
-      TableCellNode,
-      TableRowNode,
-      AutoLinkNode,
-      LinkNode,
-    ],
-  };
 
   useEffect(() => {
     const handleFecthPost = async () => {
@@ -189,47 +101,16 @@ function CreateAndEditAPost() {
     handleFecthPost();
   }, [postId]);
 
-  function onDragEnd(result: any) {
-    const items = Array.from(docElements);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    setDocElements(items);
-  }
-
-  function onChange(editorState: EditorState) {
-    editorState.read(() => {
-      // Read the contents of the EditorState here.
-      const root = $getRoot();
-      const selection = $getSelection();
-    });
-  }
-
   return (
-    <>
-      <LexicalComposer initialConfig={initialConfig}>
-        <div>
-          <ToolbarPlugin />
-          <div>
-            <RichTextPlugin
-              contentEditable={<ContentEditable className="editor-input" />}
-              placeholder={<div>Enter with a text...</div>}
-              ErrorBoundary={LexicalErrorBoundary}
-            />
-
-            <HistoryPlugin />
-            <CodeHighlightPlugin />
-            <AutoLinkPlugin />
-            <ListMaxIndentLevelPlugin maxDepth={7} />
-            <OnChangePlugin onChange={onChange} />
-            <AutoFocusPlugin />
-            <ListPlugin />
-            <LinkPlugin />
-            <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-          </div>
-        </div>
-      </LexicalComposer>
-    </>
+    <div>
+      <Editor
+        editorState={editorState}
+        onEditorStateChange={setEditorState}
+        toolbarClassName="toolbarClassName"
+        wrapperClassName="wrapperClassName"
+        editorClassName="editorClassName"
+      />
+    </div>
   );
 }
 
