@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import docElementsProp from "../../models/DocElementsProp";
 
@@ -6,8 +6,6 @@ import { useRouter } from "next/router";
 import { useAuth } from "../../hooks/useAuth";
 
 import BasicMessageProps from "../../models/components/BasicMessageProps";
-
-import dynamic from "next/dynamic";
 
 import { getPosts } from "../../services/posts/getPosts";
 
@@ -25,14 +23,8 @@ import {
 } from "../../reducers/createAndEditAPost/visualBooleanReducer";
 import { emptyImageModel, emptyLinkModel } from "../../utils/emptyModels";
 
-import { EditorState } from "draft-js";
-
-const Editor = dynamic(
-  () => import("react-draft-wysiwyg").then((module) => module.Editor),
-  {
-    ssr: false,
-  }
-);
+import "react-quill/dist/quill.snow.css";
+import { QuillEditor } from "../../components/Editors/QuillEditor";
 
 function CreateAndEditAPost() {
   const router = useRouter();
@@ -76,10 +68,9 @@ function CreateAndEditAPost() {
       onConfirm: () => {},
     });
 
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
-
   const { user } = useAuth();
   const history = useRouter();
+  const [editor, setEditor] = useState<string>("");
 
   useEffect(() => {
     const handleFecthPost = async () => {
@@ -103,13 +94,7 @@ function CreateAndEditAPost() {
 
   return (
     <div>
-      <Editor
-        editorState={editorState}
-        onEditorStateChange={setEditorState}
-        toolbarClassName="toolbarClassName"
-        wrapperClassName="wrapperClassName"
-        editorClassName="editorClassName"
-      />
+      <QuillEditor editor={editor} setEditor={setEditor} />
     </div>
   );
 }
