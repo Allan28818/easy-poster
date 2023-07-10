@@ -25,6 +25,7 @@ import { emptyImageModel, emptyLinkModel } from "../../utils/emptyModels";
 
 import "react-quill/dist/quill.snow.css";
 import { QuillEditor } from "../../components/Editors/QuillEditor";
+import { LexicalEditor } from "../../components/Editors/LexicalEditor";
 
 function CreateAndEditAPost() {
   const router = useRouter();
@@ -94,7 +95,7 @@ function CreateAndEditAPost() {
 
   return (
     <div>
-      <QuillEditor editor={editor} setEditor={setEditor} />
+      <LexicalEditor />
     </div>
   );
 }
