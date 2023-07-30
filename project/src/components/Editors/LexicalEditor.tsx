@@ -85,14 +85,6 @@ const LexicalEditor = (props: LexicalEditorProps) => {
         <OnChangePlugin onChange={onChange} />
         <HistoryPlugin />
         <AutoFocusPlugin />
-        <button onClick={onSubmit}>Save</button>
-        <button
-          onClick={() => {
-            $createImageNode("https://www.github.com/Allan28818.png");
-          }}
-        >
-          Image
-        </button>
       </LexicalComposer>
     </>
   );
