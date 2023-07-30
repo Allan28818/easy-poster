@@ -1,17 +1,30 @@
+import { useRef } from "react";
+
+import { $getRoot, $getSelection, EditorState } from "lexical";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+
+import { $createImageNode } from "../Nodes/ImageNode";
 import { AutoFocusPlugin } from "../Plugins/AutoFocusPlugin";
 
-import { useRef } from "react";
-import styles from "../../styles/components/editors/lexical-editor.module.scss";
-import { $getRoot, $getSelection, EditorState } from "lexical";
-import { $createImageNode } from "../Nodes/ImageNode";
+import { LexicalToolbar } from "../Toolbars/LexicalToolbar";
 
-const LexicalEditor = () => {
+import styles from "../../styles/components/editors/lexical-editor.module.scss";
+
+interface LexicalEditorProps {
+  isFavorite: boolean;
+  setIsFavorite: React.Dispatch<React.SetStateAction<boolean>>;
+  isPublicPost: boolean;
+  profileImageUrl: string | undefined | null;
+}
+
+const LexicalEditor = (props: LexicalEditorProps) => {
+  const { isFavorite, setIsFavorite, isPublicPost, profileImageUrl } = props;
+
   const editorStateRef = useRef<EditorState>();
 
   const theme = {
@@ -55,9 +68,17 @@ const LexicalEditor = () => {
 
   return (
     <>
+      <LexicalToolbar
+        isFavorite={isFavorite}
+        setIsFavorite={setIsFavorite}
+        isPublicPost={isPublicPost}
+        profileImageUrl={profileImageUrl}
+      />
       <LexicalComposer initialConfig={initialConfig}>
-        <PlainTextPlugin
-          contentEditable={<ContentEditable />}
+        <RichTextPlugin
+          contentEditable={
+            <ContentEditable className={styles.contentEditable} />
+          }
           placeholder={<div>Enter some text...</div>}
           ErrorBoundary={LexicalErrorBoundary}
         />

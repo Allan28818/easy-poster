@@ -10,21 +10,9 @@ import BasicMessageProps from "../../models/components/BasicMessageProps";
 import { getPosts } from "../../services/posts/getPosts";
 
 import { DocumentData } from "firebase/firestore";
-import { useReducer } from "react";
-import { ImageDataProps } from "../../models/components/ImageDataProps";
-import { LinkDataModel } from "../../models/components/LinkDataModel";
-import {
-  chartDataReducer,
-  initialChartData,
-} from "../../reducers/createAndEditAPost/chartDataReducer";
-import {
-  initialVisualBoolean,
-  visualBooleanReducer,
-} from "../../reducers/createAndEditAPost/visualBooleanReducer";
-import { emptyImageModel, emptyLinkModel } from "../../utils/emptyModels";
 
 import "react-quill/dist/quill.snow.css";
-import { QuillEditor } from "../../components/Editors/QuillEditor";
+
 import { LexicalEditor } from "../../components/Editors/LexicalEditor";
 
 function CreateAndEditAPost() {
@@ -37,29 +25,12 @@ function CreateAndEditAPost() {
   const [pageOperation, setPageOperation] = useState<"create" | "edit">(
     "create"
   );
-
   const [docElements, setDocElements] = useState<docElementsProp[]>([]);
 
-  const [visualBooleanState, dispatchVisualBooleanState] = useReducer(
-    visualBooleanReducer,
-    initialVisualBoolean
-  );
-
-  const [chartDataState, dispatchChartData] = useReducer(
-    chartDataReducer,
-    initialChartData
-  );
-
-  const [imageDataStructure, setImageDataStructure] =
-    useState<ImageDataProps>(emptyImageModel);
-
-  const [linkDataStructure, setLinkDataStructure] =
-    useState<LinkDataModel>(emptyLinkModel);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [isPublicPost, setIsPublicPost] = useState<boolean>(true);
 
   const [postTitle, setPostTitle] = useState<string>("");
-
-  const [isAPublicPost, setIsAPublicPost] = useState<boolean>(false);
-
   const [basicMessageConfig, setBasicMessageConfig] =
     useState<BasicMessageProps>({
       showMessage: false,
@@ -94,9 +65,14 @@ function CreateAndEditAPost() {
   }, [postId]);
 
   return (
-    <div>
-      <LexicalEditor />
-    </div>
+    <>
+      <LexicalEditor
+        isFavorite={isFavorite}
+        setIsFavorite={setIsFavorite}
+        isPublicPost={isPublicPost}
+        profileImageUrl={user?.photoURL}
+      />
+    </>
   );
 }
 

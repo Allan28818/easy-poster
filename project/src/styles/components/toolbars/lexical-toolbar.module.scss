@@ -1,0 +1,157 @@
+@import "../../_functions.scss";
+@import "../../_variables.scss";
+
+.toolbar {
+  display: flex;
+  width: 100%;
+  height: auto;
+  background: $blue-merachant-marine-transparent;
+  padding: convertToRem(16rem) convertToRem(12rem) 0px;
+
+  .imageContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10%;
+    margin-top: convertToRem(11rem);
+
+    .logoImage {
+      width: convertToRem(70rem);
+      height: convertToRem(70rem);
+    }
+  }
+}
+
+.toolsContainer {
+  display: block;
+  width: 100%;
+
+  .topInfo {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .bottomInfo {
+    display: flex;
+  }
+}
+
+.secondaryTools {
+  .postNameContainer {
+    display: flex;
+
+    .postNameInput {
+      display: flex;
+      background: none;
+      color: $white-anti-flash;
+      padding: convertToRem(2rem) convertToRem(1rem);
+      font-size: convertToRem(20rem);
+      font-family: "Fira Sans", sans-serif;
+      width: auto;
+      border: 1px solid transparent;
+      transition: all 0.3s ease;
+      margin-right: convertToRem(20rem);
+
+      &::placeholder {
+        color: $white-anti-flash-transparent;
+      }
+      &:focus {
+        border-bottom: 1px solid $blue-soul;
+      }
+    }
+  }
+
+  .secondaryToolsWrapper {
+    display: flex;
+    width: auto;
+    height: auto;
+
+    .secondaryToolButton {
+      display: flex;
+      font-size: convertToRem(15rem);
+      font-family: "Fira Sans", sans-serif;
+      color: $white-anti-flash;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      padding: convertToRem(5rem) convertToRem(8.5rem);
+      border-radius: convertToRem(10rem);
+      cursor: pointer;
+
+      &:hover {
+        transition: 0.2s ease;
+        background: $blue-soul;
+      }
+
+      &:active {
+        transition: 0.1s ease;
+        background: $blue-soul-dark;
+      }
+    }
+  }
+}
+
+.starPostButton {
+  background: none;
+  padding: convertToRem(5rem);
+  cursor: pointer;
+
+  .starIcon {
+    font-size: convertToRem(25rem);
+    color: $white-anti-flash;
+  }
+}
+
+.publishWrapper {
+  display: flex;
+  width: convertToRem(300rem);
+  align-items: center;
+  justify-content: flex-end;
+
+  .publishButton {
+    display: flex;
+    width: auto;
+    max-width: convertToRem(257rem);
+    min-width: convertToRem(170rem);
+    height: auto;
+    background: $blue-soul;
+    border-radius: 10px;
+    padding: convertToRem(12rem);
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    margin-right: convertToRem(44rem);
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    &:active {
+      background: $blue-soul-dark;
+    }
+
+    .publishButtonIcon {
+      font-size: convertToRem(20rem);
+      color: $white-anti-flash;
+      margin-right: convertToRem(10rem);
+    }
+
+    .publishButtonText {
+      font-size: convertToRem(17rem);
+      font-size: "Roboto", sans-serif;
+      color: $white-anti-flash;
+    }
+  }
+  .profileImage {
+    width: convertToRem(46rem);
+    height: convertToRem(46rem);
+    border-radius: convertToRem(50rem);
+  }
+}
+
+.primaryTools {
+  width: 100%;
+  background: $blue-free-speech;
+  border-radius: convertToRem(50rem);
+}
