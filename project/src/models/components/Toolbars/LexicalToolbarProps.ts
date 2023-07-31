@@ -13,7 +13,7 @@ enum ToolbarEvents {
   OPEN_LINK_POP_UP = "open-link-pop-up",
   OPEN_IMAGE_POP_UP = "open-image-pop-up",
   OPEN_COMMENTS_POP_UP = "open-comments-pop-up",
-  OPEN_IDENT_POP_UP = "open-ident-pop-up",
+  OPEN_INDENT_POP_UP = "open-indent-pop-up",
   CHECK_LIST = "check-list",
   OPEN_LIST_POP_UP = "open-list-pop-up",
   TAB_LEFT = "tab-left",

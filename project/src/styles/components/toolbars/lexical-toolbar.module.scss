@@ -151,7 +151,115 @@
 }
 
 .primaryTools {
+  display: flex;
   width: 100%;
   background: $blue-free-speech;
   border-radius: convertToRem(50rem);
+  padding: 0 convertToRem(10rem);
+
+  .toolGroup {
+    display: flex;
+
+    .toolButton {
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: convertToRem(2.5rem);
+      cursor: pointer;
+
+      .boldIcon {
+        font-size: convertToRem(25rem);
+        color: $white-anti-flash;
+      }
+      .italicIcon {
+        font-size: convertToRem(19rem);
+        color: $white-anti-flash;
+      }
+      .historyButtons,
+      .underlineIcon,
+      .linkIcon,
+      .imageIcon,
+      .commentIcon,
+      .checkListIcon,
+      .clearTextIcon {
+        font-size: convertToRem(20rem);
+        color: $white-anti-flash;
+      }
+
+      .indentIcon {
+        font-size: convertToRem(18rem);
+        color: $white-anti-flash;
+      }
+    }
+
+    .colorToolButton {
+      background: transparent;
+      display: block;
+      cursor: pointer;
+
+      .textColorTool {
+        font-size: convertToRem(17.5rem);
+        font-weight: bolder;
+        font-family: "Roboto", sans-serif;
+        color: $white-anti-flash;
+        text-align: center;
+      }
+
+      .inkBucket {
+        display: block;
+        font-size: convertToRem(20rem);
+        color: $white-anti-flash;
+        margin: auto;
+      }
+
+      .textColorIndicator {
+        width: convertToRem(19rem);
+        height: convertToRem(4rem);
+        background: #f00;
+        border: 0.5px solid $black-pearl;
+        border-radius: convertToRem(50rem);
+      }
+    }
+
+    .toolButtonSelect {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+
+      .fontSizeIcon {
+        font-size: convertToRem(27rem);
+        color: $white-anti-flash;
+      }
+
+      .fontFamilyIcon {
+        font-size: convertToRem(20rem);
+        color: $white-anti-flash;
+      }
+    }
+
+    .fontSizeInput {
+      background: none;
+      border: 1px solid $white-anti-flash;
+      border-radius: convertToRem(2rem);
+      font-size: convertToRem(13rem);
+      color: $white-anti-flash;
+      height: convertToRem(21rem);
+      width: convertToRem(37rem);
+      margin: auto;
+      text-align: center;
+    }
+
+    .fontSizeButton {
+      background: none;
+      cursor: pointer;
+
+      .fontSizeButtonIcon {
+        color: $white-anti-flash;
+        font-size: convertToRem(15rem);
+        font-weight: bold;
+      }
+    }
+  }
 }
