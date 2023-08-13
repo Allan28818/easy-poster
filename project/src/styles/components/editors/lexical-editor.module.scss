@@ -1,2 +1,26 @@
 @import "../../_functions.scss";
 @import "../../_variables.scss";
+
+.editorWrapper {
+  width: auto;
+  max-width: convertToRem(794rem);
+  min-width: convertToRem(200rem);
+  height: auto;
+  min-height: convertToRem(1123rem);
+  border-radius: convertToRem(20rem);
+  box-shadow: 0px 0px 10px 2.5px $transparent-gray-peace;
+  margin: auto;
+  margin-top: 5%;
+  padding: convertToRem(20rem);
+
+  .contentEditable {
+    font-family: "Roboto", sans-serif;
+    font-size: convertToRem(15rem);
+  }
+
+  .placeholderDiv {
+    font-family: "Roboto", sans-serif;
+    font-size: convertToRem(15rem);
+    color: $gray-peace;
+  }
+}
