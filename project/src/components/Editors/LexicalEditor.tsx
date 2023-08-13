@@ -74,18 +74,22 @@ const LexicalEditor = (props: LexicalEditorProps) => {
         isPublicPost={isPublicPost}
         profileImageUrl={profileImageUrl}
       />
-      <LexicalComposer initialConfig={initialConfig}>
-        <RichTextPlugin
-          contentEditable={
-            <ContentEditable className={styles.contentEditable} />
-          }
-          placeholder={<div>Enter some text...</div>}
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <OnChangePlugin onChange={onChange} />
-        <HistoryPlugin />
-        <AutoFocusPlugin />
-      </LexicalComposer>
+      <div className={styles.editorWrapper}>
+        <LexicalComposer initialConfig={initialConfig}>
+          <RichTextPlugin
+            contentEditable={
+              <ContentEditable className={styles.contentEditable} />
+            }
+            placeholder={
+              <div className={styles.placeholderDiv}>Enter some text...</div>
+            }
+            ErrorBoundary={LexicalErrorBoundary}
+          />
+          <OnChangePlugin onChange={onChange} />
+          <HistoryPlugin />
+          <AutoFocusPlugin />
+        </LexicalComposer>
+      </div>
     </>
   );
 };

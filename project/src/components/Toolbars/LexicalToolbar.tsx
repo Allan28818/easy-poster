@@ -17,9 +17,20 @@ import { MdOutlineInsertComment } from "react-icons/md";
 import { PiListChecksBold } from "react-icons/pi";
 import { RiSubtractFill } from "react-icons/ri";
 import { RxFontBold, RxText, RxTextNone } from "react-icons/rx";
-import { VscAdd } from "react-icons/vsc";
-import styles from "../../styles/components/toolbars/lexical-toolbar.module.scss";
 
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { useCallback, useEffect, useReducer, useState } from "react";
+import {
+  $getSelection,
+  COMMAND_PRIORITY_CRITICAL,
+  SELECTION_CHANGE_COMMAND,
+} from "lexical";
+
+import styles from "../../styles/components/toolbars/lexical-toolbar.module.scss";
+import {
+  initialToolbarState,
+  toolbarDataReducer,
+} from "../../reducers/createAndEditAPost/toolbarDataReducer";
 interface LexicalToolbarProps {
   isFavorite: boolean;
   setIsFavorite: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,6 +40,30 @@ interface LexicalToolbarProps {
 
 const LexicalToolbar = (props: LexicalToolbarProps) => {
   const { isFavorite, setIsFavorite, isPublicPost, profileImageUrl } = props;
+
+  const [toolbarState, dispatchToolbarState] = useReducer(
+    toolbarDataReducer,
+    initialToolbarState
+  );
+
+  const [editor] = useLexicalComposerContext();
+  const [activeEditor, setActiveEditor] = useState(editor);
+
+  const updateToolbar = useCallback(() => {
+    const selection = $getSelection();
+  }, [activeEditor]);
+
+  useEffect(() => {
+    return editor.registerCommand(
+      SELECTION_CHANGE_COMMAND,
+      (_payload, newEditor) => {
+        updateToolbar();
+        setActiveEditor(newEditor);
+        return false;
+      },
+      COMMAND_PRIORITY_CRITICAL
+    );
+  }, [editor, updateToolbar]);
 
   return (
     <header className={styles.toolbar}>
