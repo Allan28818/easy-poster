@@ -68,14 +68,14 @@ const LexicalEditor = (props: LexicalEditorProps) => {
 
   return (
     <>
-      <LexicalToolbar
-        isFavorite={isFavorite}
-        setIsFavorite={setIsFavorite}
-        isPublicPost={isPublicPost}
-        profileImageUrl={profileImageUrl}
-      />
-      <div className={styles.editorWrapper}>
-        <LexicalComposer initialConfig={initialConfig}>
+      <LexicalComposer initialConfig={initialConfig}>
+        <LexicalToolbar
+          isFavorite={isFavorite}
+          setIsFavorite={setIsFavorite}
+          isPublicPost={isPublicPost}
+          profileImageUrl={profileImageUrl}
+        />
+        <div className={styles.editorWrapper}>
           <RichTextPlugin
             contentEditable={
               <ContentEditable className={styles.contentEditable} />
@@ -88,8 +88,8 @@ const LexicalEditor = (props: LexicalEditorProps) => {
           <OnChangePlugin onChange={onChange} />
           <HistoryPlugin />
           <AutoFocusPlugin />
-        </LexicalComposer>
-      </div>
+        </div>
+      </LexicalComposer>
     </>
   );
 };

@@ -167,6 +167,12 @@
       justify-content: center;
       margin: convertToRem(2.5rem);
       cursor: pointer;
+      border-radius: convertToRem(5rem);
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: $blue-dark-periwinkle;
+      }
 
       .boldIcon {
         font-size: convertToRem(25rem);
@@ -196,7 +202,14 @@
     .colorToolButton {
       background: transparent;
       display: block;
+      border-radius: convertToRem(5rem);
+      margin: convertToRem(2.5rem);
+      transform: all 0.3s ease;
       cursor: pointer;
+
+      &:hover {
+        background: $blue-dark-periwinkle;
+      }
 
       .textColorTool {
         font-size: convertToRem(17.5rem);
@@ -222,11 +235,18 @@
       }
     }
 
-    .toolButtonSelect {
+    .toolButtonDropDown {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: none;
+      background: transparent;
+      border-radius: convertToRem(5rem);
+      transition: all 0.2s ease;
+      margin: convertToRem(2.5rem);
+
+      &:hover {
+        background: $blue-dark-periwinkle;
+      }
 
       .fontSizeIcon {
         font-size: convertToRem(27rem);
@@ -252,8 +272,15 @@
     }
 
     .fontSizeButton {
-      background: none;
+      background: transparent;
+      transition: all 0.2s ease;
+      border-radius: convertToRem(5rem);
+      margin: convertToRem(2.5rem);
       cursor: pointer;
+
+      &:hover {
+        background: $blue-dark-periwinkle;
+      }
 
       .fontSizeButtonIcon {
         color: $white-anti-flash;

@@ -31,6 +31,9 @@ import {
   initialToolbarState,
   toolbarDataReducer,
 } from "../../reducers/createAndEditAPost/toolbarDataReducer";
+import { CustomDropDown } from "../DropDowns/CustomSelector";
+import { CustomDropDownIcons } from "../../models/components/DropDowns/CustomDropDown";
+
 interface LexicalToolbarProps {
   isFavorite: boolean;
   setIsFavorite: React.Dispatch<React.SetStateAction<boolean>>;
@@ -140,21 +143,47 @@ const LexicalToolbar = (props: LexicalToolbarProps) => {
               </button>
             </div>
             <div className={styles.toolGroup}>
-              <button className={styles.toolButtonSelect}>
+              <button className={styles.toolButtonDropDown}>
                 <BiListPlus className={styles.fontSizeIcon} />
-                <select className={styles.toolOptions}>
-                  <option>Normal</option>
-                </select>
+                <CustomDropDown.Root buttonLabel="Normal">
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Text text="Normal" fontSize="normal" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Text text="Title" fontSize="title" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Text text="Subtitle" fontSize="subtitle" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Text text="Title 1" fontSize="title-1" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Text text="Title 2" fontSize="title-2" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Text text="Title 3" fontSize="title-3" />
+                  </CustomDropDown.Option>
+                </CustomDropDown.Root>
               </button>
             </div>
             <div className={styles.toolGroup}>
-              <button className={styles.toolButtonSelect}>
+              <button className={styles.toolButtonDropDown}>
                 <RxText className={styles.fontFamilyIcon} />
-                <select className={styles.toolOptions}>
-                  <option>
-                    <p>Regular</p>
-                  </option>
-                </select>
+                <CustomDropDown.Root buttonLabel="Aria Label">
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Text text="Aria Label" fontSize="normal" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Text text="Aria Label" fontSize="normal" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Text text="Aria Label" fontSize="normal" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Text text="Aria Label" fontSize="normal" />
+                  </CustomDropDown.Option>
+                </CustomDropDown.Root>
               </button>
             </div>
             <div className={styles.toolGroup}>
@@ -197,7 +226,7 @@ const LexicalToolbar = (props: LexicalToolbarProps) => {
               </button>
             </div>
             <div className={styles.toolGroup}>
-              <button className={styles.toolButtonSelect}>
+              <button className={styles.toolButtonDropDown}>
                 <select className={styles.toolOptions}>
                   <option>
                     <GrTextAlignFull className={styles.alignTextIcon} />
@@ -207,7 +236,7 @@ const LexicalToolbar = (props: LexicalToolbarProps) => {
               <button className={styles.toolButton}>
                 <PiListChecksBold className={styles.checkListIcon} />
               </button>
-              <button className={styles.toolButtonSelect}>
+              <button className={styles.toolButtonDropDown}>
                 <select className={styles.toolOptions}>
                   <option>
                     <BsListUl className={styles.listIcon} />
