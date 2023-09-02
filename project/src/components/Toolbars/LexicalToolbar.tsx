@@ -5,7 +5,7 @@ import { BiListPlus, BiSolidImageAdd } from "react-icons/bi";
 import { BsGlobe2, BsListUl } from "react-icons/bs";
 import { FaItalic, FaLock, FaRedo, FaUndo } from "react-icons/fa";
 import { FiUser } from "react-icons/fi";
-import { GrTextAlignFull } from "react-icons/gr";
+import { GrTextAlignCenter, GrTextAlignFull } from "react-icons/gr";
 import {
   ImIndentDecrease,
   ImIndentIncrease,
@@ -227,21 +227,59 @@ const LexicalToolbar = (props: LexicalToolbarProps) => {
             </div>
             <div className={styles.toolGroup}>
               <button className={styles.toolButtonDropDown}>
-                <select className={styles.toolOptions}>
-                  <option>
-                    <GrTextAlignFull className={styles.alignTextIcon} />
-                  </option>
-                </select>
+                <CustomDropDown.Root
+                  buttonIconLabel={CustomDropDownIcons.LEFT_ALIGN}
+                  additionalLabelStyles={{ width: "50px" }}
+                  additionalDropdownStyles={{ left: "-100%" }}
+                >
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Icon
+                      icon={CustomDropDownIcons.LEFT_ALIGN}
+                    />
+                    <CustomDropDown.Text text="Left Align" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Icon
+                      icon={CustomDropDownIcons.CENTER_ALIGN}
+                    />
+                    <CustomDropDown.Text text="Center Align" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Icon
+                      icon={CustomDropDownIcons.RIGHT_ALIGN}
+                    />
+                    <CustomDropDown.Text text="Right Align" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Icon
+                      icon={CustomDropDownIcons.JUSTIFY_ALIGN}
+                    />
+                    <CustomDropDown.Text text="Justify Align" />
+                  </CustomDropDown.Option>
+                </CustomDropDown.Root>
               </button>
               <button className={styles.toolButton}>
                 <PiListChecksBold className={styles.checkListIcon} />
               </button>
               <button className={styles.toolButtonDropDown}>
-                <select className={styles.toolOptions}>
-                  <option>
-                    <BsListUl className={styles.listIcon} />
-                  </option>
-                </select>
+                <CustomDropDown.Root
+                  buttonIconLabel={CustomDropDownIcons.BULLET_LIST}
+                  additionalLabelStyles={{ width: "50px" }}
+                  additionalDropdownStyles={{ left: "-100%" }}
+                >
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Icon
+                      icon={CustomDropDownIcons.BULLET_LIST}
+                    />
+                    <CustomDropDown.Text text="Bullet List" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Icon
+                      icon={CustomDropDownIcons.NUMBERED_LIST}
+                    />
+                    <CustomDropDown.Text text="Numbered List" />
+                  </CustomDropDown.Option>
+                </CustomDropDown.Root>
               </button>
               <button className={styles.toolButton}>
                 <ImIndentDecrease className={styles.indentIcon} />

@@ -1,4 +1,5 @@
 import {
+  CSSProperties,
   ReactNode,
   RefObject,
   createContext,
@@ -9,15 +10,18 @@ import {
   useState,
 } from "react";
 
-import { createPortal } from "react-dom";
-
 import styles from "../../../styles/components/selectors/custom-selector.module.scss";
 import { AiFillCaretDown } from "react-icons/ai";
+import { CustomDropDownIcons } from "../../../models/components/DropDowns/CustomDropDown";
+import { CustomDropDown } from ".";
 
 interface CustomDropDownRootProps {
   children: ReactNode;
   buttonLabel?: string;
+  buttonIconLabel?: CustomDropDownIcons;
   stopCloseOnClickSelf?: boolean;
+  additionalLabelStyles?: CSSProperties;
+  additionalDropdownStyles?: CSSProperties;
 }
 
 interface DropDownContextType {
@@ -29,7 +33,14 @@ const DropDownContext = createContext<DropDownContextType | null>(null);
 const dropDownPadding = 4;
 
 const CustomDropDownRoot = (props: CustomDropDownRootProps) => {
-  const { children, buttonLabel, stopCloseOnClickSelf } = props;
+  const {
+    children,
+    buttonLabel,
+    buttonIconLabel,
+    stopCloseOnClickSelf,
+    additionalLabelStyles,
+    additionalDropdownStyles,
+  } = props;
 
   const [dropDownItems, setDropDownItems] =
     useState<RefObject<HTMLButtonElement>[]>();
@@ -96,19 +107,7 @@ const CustomDropDownRoot = (props: CustomDropDownRootProps) => {
     console.log("buttonRef", buttonRef.current?.offsetHeight);
 
     if (showDropDown && button !== null && dropDown !== null) {
-      const { left } = button.getBoundingClientRect();
-      console.log("left", left);
-      console.log("dropDown.offsetWidth", dropDown.offsetWidth);
-      console.log(
-        "window.innerWidth - dropDown.offsetWidth - 20",
-        window.innerWidth - dropDown.offsetWidth - 20
-      );
-
       dropDown.style.top = `${button.offsetHeight + dropDownPadding}px`;
-      dropDown.style.left = `-${Math.max(
-        left / 2,
-        dropDown.offsetWidth * 0.7
-      )}px`;
     }
   }, [dropDownRef, buttonRef, showDropDown]);
 
@@ -145,7 +144,15 @@ const CustomDropDownRoot = (props: CustomDropDownRootProps) => {
           setShowDropDown(!showDropDown);
         }}
         className={styles.selectorButton}
+        style={additionalLabelStyles}
       >
+        {buttonIconLabel && (
+          <CustomDropDown.Icon
+            icon={buttonIconLabel}
+            additionalStyles={{ fontSize: "19px" }}
+          />
+        )}
+
         {buttonLabel && (
           <span className={styles.buttonLabel}>{buttonLabel}</span>
         )}
@@ -154,7 +161,7 @@ const CustomDropDownRoot = (props: CustomDropDownRootProps) => {
         />
       </button>
       {showDropDown && (
-        <div className={styles.container}>
+        <div className={styles.container} style={additionalDropdownStyles}>
           <DropDownContext.Provider value={contextValue}>
             <div
               className={styles.itemsWrapper}

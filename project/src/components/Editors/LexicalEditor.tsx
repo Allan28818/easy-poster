@@ -8,7 +8,6 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 
-import { $createImageNode } from "../Nodes/ImageNode";
 import { AutoFocusPlugin } from "../Plugins/AutoFocusPlugin";
 
 import { LexicalToolbar } from "../Toolbars/LexicalToolbar";
