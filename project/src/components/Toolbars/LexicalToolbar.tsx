@@ -49,6 +49,9 @@ const LexicalToolbar = (props: LexicalToolbarProps) => {
     initialToolbarState
   );
 
+  const [toolbarActionType, setToolbarActionType] =
+    useState<CustomDropDownIcons>();
+
   const [editor] = useLexicalComposerContext();
   const [activeEditor, setActiveEditor] = useState(editor);
 
