@@ -1,21 +1,26 @@
+import { FontSizesClassNames } from "../../../models/FontsProps";
 import styles from "../../../styles/components/selectors/custom-selector.module.scss";
+
+interface CustomDropDownOnClickParams {
+  fontSize?: FontSizesClassNames;
+  value: string;
+  displayValue: string;
+}
 
 interface CustomDropDownTextProps {
   text: string;
-  fontSize?:
-    | "title"
-    | "subtitle"
-    | "title-1"
-    | "title-2"
-    | "title-3"
-    | "normal";
+  value: string;
+  onClick: (props: CustomDropDownOnClickParams) => void;
+  fontSize?: FontSizesClassNames;
 }
 
 const CustomDropDownText = (props: CustomDropDownTextProps) => {
-  const { text, fontSize } = props;
-
+  const { text, fontSize, value, onClick } = props;
   return (
-    <p className={`${styles.customDropDownText} ${styles[fontSize || ""]}`}>
+    <p
+      className={`${styles.customDropDownText} ${styles[fontSize || ""]}`}
+      onClick={() => onClick({ displayValue: text, value, fontSize })}
+    >
       {text}
     </p>
   );

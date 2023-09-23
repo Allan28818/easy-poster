@@ -79,12 +79,15 @@
     color: $black-pearl;
   }
 
+  .normal {
+    font-size: convertToRem(15rem);
+  }
   .title {
     font-size: convertToRem(26rem);
   }
 
   .subtitle {
-    font-size: convertToRem(15rem);
+    font-size: convertToRem(17.5rem);
   }
 
   .title-1 {

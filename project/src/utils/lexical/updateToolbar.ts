@@ -218,6 +218,8 @@ function updateButtonsActions(props: UpdateButtonsActionsProps) {
       "#fff"
     ),
   });
+
+  // TODO: continue this function and implement the blockType
 }
 
 export { updateToolbar };

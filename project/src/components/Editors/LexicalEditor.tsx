@@ -13,6 +13,7 @@ import { AutoFocusPlugin } from "../Plugins/AutoFocusPlugin";
 import { LexicalToolbar } from "../Toolbars/LexicalToolbar";
 
 import styles from "../../styles/components/editors/lexical-editor.module.scss";
+import { HeadingNode } from "@lexical/rich-text";
 
 interface LexicalEditorProps {
   isFavorite: boolean;
@@ -38,6 +39,7 @@ const LexicalEditor = (props: LexicalEditorProps) => {
     editable: true,
     namespace: "Post editor",
     theme,
+    nodes: [HeadingNode],
     onError,
   };
 
@@ -84,6 +86,7 @@ const LexicalEditor = (props: LexicalEditorProps) => {
             }
             ErrorBoundary={LexicalErrorBoundary}
           />
+
           <OnChangePlugin onChange={onChange} />
           <HistoryPlugin />
           <AutoFocusPlugin />
