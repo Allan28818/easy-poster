@@ -8,12 +8,12 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 
-import { $createImageNode } from "../Nodes/ImageNode";
 import { AutoFocusPlugin } from "../Plugins/AutoFocusPlugin";
 
 import { LexicalToolbar } from "../Toolbars/LexicalToolbar";
 
 import styles from "../../styles/components/editors/lexical-editor.module.scss";
+import { HeadingNode } from "@lexical/rich-text";
 
 interface LexicalEditorProps {
   isFavorite: boolean;
@@ -39,6 +39,7 @@ const LexicalEditor = (props: LexicalEditorProps) => {
     editable: true,
     namespace: "Post editor",
     theme,
+    nodes: [HeadingNode],
     onError,
   };
 
@@ -68,14 +69,14 @@ const LexicalEditor = (props: LexicalEditorProps) => {
 
   return (
     <>
-      <LexicalToolbar
-        isFavorite={isFavorite}
-        setIsFavorite={setIsFavorite}
-        isPublicPost={isPublicPost}
-        profileImageUrl={profileImageUrl}
-      />
-      <div className={styles.editorWrapper}>
-        <LexicalComposer initialConfig={initialConfig}>
+      <LexicalComposer initialConfig={initialConfig}>
+        <LexicalToolbar
+          isFavorite={isFavorite}
+          setIsFavorite={setIsFavorite}
+          isPublicPost={isPublicPost}
+          profileImageUrl={profileImageUrl}
+        />
+        <div className={styles.editorWrapper}>
           <RichTextPlugin
             contentEditable={
               <ContentEditable className={styles.contentEditable} />
@@ -85,11 +86,12 @@ const LexicalEditor = (props: LexicalEditorProps) => {
             }
             ErrorBoundary={LexicalErrorBoundary}
           />
+
           <OnChangePlugin onChange={onChange} />
           <HistoryPlugin />
           <AutoFocusPlugin />
-        </LexicalComposer>
-      </div>
+        </div>
+      </LexicalComposer>
     </>
   );
 };

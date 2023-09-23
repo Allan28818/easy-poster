@@ -5,7 +5,7 @@ import { BiListPlus, BiSolidImageAdd } from "react-icons/bi";
 import { BsGlobe2, BsListUl } from "react-icons/bs";
 import { FaItalic, FaLock, FaRedo, FaUndo } from "react-icons/fa";
 import { FiUser } from "react-icons/fi";
-import { GrTextAlignFull } from "react-icons/gr";
+import { GrTextAlignCenter, GrTextAlignFull } from "react-icons/gr";
 import {
   ImIndentDecrease,
   ImIndentIncrease,
@@ -22,7 +22,9 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { useCallback, useEffect, useReducer, useState } from "react";
 import {
   $getSelection,
+  $isRangeSelection,
   COMMAND_PRIORITY_CRITICAL,
+  LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
 
@@ -31,11 +33,36 @@ import {
   initialToolbarState,
   toolbarDataReducer,
 } from "../../reducers/createAndEditAPost/toolbarDataReducer";
+import { CustomDropDown } from "../DropDowns/CustomSelector";
+import { CustomDropDownIcons } from "../../models/components/DropDowns/CustomDropDown";
+import {
+  FONT_FAMILY_OPTIONS,
+  FONT_SIZE_OPTIONS,
+  fontRefToFontInPixels,
+} from "../../utils/lexical/fontsOptions";
+import {
+  ToolbarDropdownValuesActionKind,
+  initialDropdownValuesState,
+  toolbarDropdownValuesReducer,
+} from "../../reducers/createAndEditAPost/toolbarDropdownValuesReducer";
+
+import { $setBlocksType, $patchStyleText } from "@lexical/selection";
+
+import { $createHeadingNode } from "@lexical/rich-text";
+import { handleDefineTextNodeModel } from "../../utils/lexical/functions/handleDefineTextNodeModel";
+import { FontSizesClassNames } from "../../models/FontsProps";
+
 interface LexicalToolbarProps {
   isFavorite: boolean;
   setIsFavorite: React.Dispatch<React.SetStateAction<boolean>>;
   isPublicPost: boolean;
   profileImageUrl: string | undefined | null;
+}
+
+interface HandleSetFontProps {
+  value: string;
+  displayValue: string;
+  editor: LexicalEditor;
 }
 
 const LexicalToolbar = (props: LexicalToolbarProps) => {
@@ -46,12 +73,43 @@ const LexicalToolbar = (props: LexicalToolbarProps) => {
     initialToolbarState
   );
 
+  const [dropdownValues, dispatchDropdownValues] = useReducer(
+    toolbarDropdownValuesReducer,
+    initialDropdownValuesState
+  );
+
+  const [toolbarActionType, setToolbarActionType] =
+    useState<CustomDropDownIcons>();
+
   const [editor] = useLexicalComposerContext();
   const [activeEditor, setActiveEditor] = useState(editor);
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection();
   }, [activeEditor]);
+
+  const handleSetFontSize = (props: HandleSetFontProps) => {
+    const { displayValue, value } = props;
+    console.log("displayValue", displayValue);
+    handleDefineTextNodeModel({
+      editor,
+      nodeModel: value as FontSizesClassNames,
+    });
+
+    dispatchDropdownValues({
+      type: ToolbarDropdownValuesActionKind.FONT_SIZE,
+      fontSize: displayValue,
+    });
+  };
+
+  const handleSetFontFamily = (props: HandleSetFontProps) => {
+    const { displayValue, value } = props;
+
+    dispatchDropdownValues({
+      type: ToolbarDropdownValuesActionKind.FONT_FAMILY,
+      fontFamily: value,
+    });
+  };
 
   useEffect(() => {
     return editor.registerCommand(
@@ -140,21 +198,50 @@ const LexicalToolbar = (props: LexicalToolbarProps) => {
               </button>
             </div>
             <div className={styles.toolGroup}>
-              <button className={styles.toolButtonSelect}>
+              <button className={styles.toolButtonDropDown}>
                 <BiListPlus className={styles.fontSizeIcon} />
-                <select className={styles.toolOptions}>
-                  <option>Normal</option>
-                </select>
+                <CustomDropDown.Root buttonLabel={dropdownValues.fontSize}>
+                  {FONT_SIZE_OPTIONS.map(([displayName, fontSize]) => {
+                    return (
+                      <CustomDropDown.Option key={fontSize}>
+                        <CustomDropDown.Text
+                          text={displayName}
+                          fontSize={fontSize}
+                          value={fontRefToFontInPixels[fontSize]}
+                          onClick={(props) =>
+                            handleSetFontSize({
+                              ...props,
+                              value: props?.fontSize || "",
+                              editor,
+                            })
+                          }
+                        />
+                      </CustomDropDown.Option>
+                    );
+                  })}
+                </CustomDropDown.Root>
               </button>
             </div>
             <div className={styles.toolGroup}>
-              <button className={styles.toolButtonSelect}>
+              <button className={styles.toolButtonDropDown}>
                 <RxText className={styles.fontFamilyIcon} />
-                <select className={styles.toolOptions}>
-                  <option>
-                    <p>Regular</p>
-                  </option>
-                </select>
+                <CustomDropDown.Root buttonLabel={dropdownValues.fontFamily}>
+                  {FONT_FAMILY_OPTIONS.map((fontFamily) => {
+                    return (
+                      <CustomDropDown.Option key={fontFamily}>
+                        <CustomDropDown.Text
+                          key={fontFamily}
+                          text={fontFamily}
+                          fontSize="normal"
+                          value={fontFamily}
+                          onClick={(props) =>
+                            handleSetFontFamily({ ...props, editor })
+                          }
+                        />
+                      </CustomDropDown.Option>
+                    );
+                  })}
+                </CustomDropDown.Root>
               </button>
             </div>
             <div className={styles.toolGroup}>
@@ -197,22 +284,60 @@ const LexicalToolbar = (props: LexicalToolbarProps) => {
               </button>
             </div>
             <div className={styles.toolGroup}>
-              <button className={styles.toolButtonSelect}>
-                <select className={styles.toolOptions}>
-                  <option>
-                    <GrTextAlignFull className={styles.alignTextIcon} />
-                  </option>
-                </select>
+              <button className={styles.toolButtonDropDown}>
+                {/* <CustomDropDown.Root
+                  buttonIconLabel={CustomDropDownIcons.LEFT_ALIGN}
+                  additionalLabelStyles={{ width: "50px" }}
+                  additionalDropdownStyles={{ left: "-100%" }}
+                >
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Icon
+                      icon={CustomDropDownIcons.LEFT_ALIGN}
+                    />
+                    <CustomDropDown.Text text="Left Align" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Icon
+                      icon={CustomDropDownIcons.CENTER_ALIGN}
+                    />
+                    <CustomDropDown.Text text="Center Align" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Icon
+                      icon={CustomDropDownIcons.RIGHT_ALIGN}
+                    />
+                    <CustomDropDown.Text text="Right Align" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Icon
+                      icon={CustomDropDownIcons.JUSTIFY_ALIGN}
+                    />
+                    <CustomDropDown.Text text="Justify Align" />
+                  </CustomDropDown.Option>
+                </CustomDropDown.Root> */}
               </button>
               <button className={styles.toolButton}>
                 <PiListChecksBold className={styles.checkListIcon} />
               </button>
-              <button className={styles.toolButtonSelect}>
-                <select className={styles.toolOptions}>
-                  <option>
-                    <BsListUl className={styles.listIcon} />
-                  </option>
-                </select>
+              <button className={styles.toolButtonDropDown}>
+                {/* <CustomDropDown.Root
+                  buttonIconLabel={CustomDropDownIcons.BULLET_LIST}
+                  additionalLabelStyles={{ width: "50px" }}
+                  additionalDropdownStyles={{ left: "-100%" }}
+                >
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Icon
+                      icon={CustomDropDownIcons.BULLET_LIST}
+                    />
+                    <CustomDropDown.Text text="Bullet List" />
+                  </CustomDropDown.Option>
+                  <CustomDropDown.Option>
+                    <CustomDropDown.Icon
+                      icon={CustomDropDownIcons.NUMBERED_LIST}
+                    />
+                    <CustomDropDown.Text text="Numbered List" />
+                  </CustomDropDown.Option>
+                </CustomDropDown.Root> */}
               </button>
               <button className={styles.toolButton}>
                 <ImIndentDecrease className={styles.indentIcon} />

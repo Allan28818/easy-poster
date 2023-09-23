@@ -1,2 +1,112 @@
 @import "../../_variables.scss";
 @import "../../_functions.scss";
+
+.container {
+  position: relative;
+}
+
+.itemsWrapper {
+  width: auto;
+  min-width: convertToRem(200rem);
+  max-width: convertToRem(400rem);
+  height: auto;
+  background: $secondary-white;
+  border-radius: convertToRem(10rem);
+  box-shadow: $transparent-gray-peace 0px 5px 10px;
+  position: absolute;
+  z-index: 300;
+  padding: convertToRem(10rem);
+}
+
+.selectorButton {
+  display: flex;
+  background: transparent;
+  align-items: center;
+  justify-content: space-between;
+  font-size: convertToRem(12rem);
+  font-size: convertToRem(13rem);
+  color: $white-anti-flash;
+  width: convertToRem(88rem);
+  border-radius: convertToRem(10rem);
+
+  .arrow {
+    font-size: convertToRem(10rem);
+    transition: all 0.3s ease;
+    animation: rotate-reverse 0.3s ease;
+  }
+
+  .arrow.active {
+    transform: rotate(180deg);
+    transition: all 0.3s ease;
+    animation: rotate 0.3s ease;
+  }
+
+  cursor: pointer;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes rotate-reverse {
+  from {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.customDropDownOption {
+  display: flex;
+  padding-top: convertToRem(5rem);
+  height: convertToRem(35rem);
+  width: 100%;
+  align-items: center;
+  background: $secondary-white;
+  border-radius: convertToRem(5rem);
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  .customDropDownText {
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 500;
+    color: $black-pearl;
+  }
+
+  .normal {
+    font-size: convertToRem(15rem);
+  }
+  .title {
+    font-size: convertToRem(26rem);
+  }
+
+  .subtitle {
+    font-size: convertToRem(17.5rem);
+  }
+
+  .title-1 {
+    font-size: convertToRem(20rem);
+  }
+  .title-2 {
+    font-size: convertToRem(16rem);
+  }
+  .title-3 {
+    font-size: convertToRem(14rem);
+    font-family: 400;
+  }
+
+  .icon {
+    font-size: convertToRem(17.5rem);
+    margin-right: convertToRem(10rem);
+  }
+
+  &:hover {
+    background: $white-anti-flash;
+  }
+}
