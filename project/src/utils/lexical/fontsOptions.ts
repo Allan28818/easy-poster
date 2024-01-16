@@ -1,10 +1,10 @@
-import { FontSizesClassNames } from "../../models/FontsProps";
+import { FontSizesOptions, ListOptions } from "../../models/ToolbarProps";
 
 type fontRefToFontInPixelsProps = {
-  [key in FontSizesClassNames]: string;
+  [key in FontSizesOptions]: string;
 };
 
-const FONT_SIZE_OPTIONS: [string, FontSizesClassNames][] = [
+const FONT_SIZE_OPTIONS: [string, FontSizesOptions][] = [
   ["Normal", "normal"],
   ["Title", "title"],
   ["Subtitle", "subtitle"],
@@ -22,6 +22,13 @@ const FONT_FAMILY_OPTIONS: string[] = [
   "Verdana",
 ];
 
+// Should match with LexicalToolbarProps.ts
+const LIST_OPTIONS: [string, ListOptions][] = [
+  ["Bullet List", "bullet-list"],
+  ["Check List", "check-list"],
+  ["Numbered List", "numbered-list"],
+];
+
 const fontRefToFontInPixels: fontRefToFontInPixelsProps = {
   normal: "11px",
   title: "26px",
@@ -31,4 +38,9 @@ const fontRefToFontInPixels: fontRefToFontInPixelsProps = {
   "title-3": "14px",
 };
 
-export { FONT_FAMILY_OPTIONS, FONT_SIZE_OPTIONS, fontRefToFontInPixels };
+export {
+  FONT_FAMILY_OPTIONS,
+  FONT_SIZE_OPTIONS,
+  LIST_OPTIONS,
+  fontRefToFontInPixels,
+};

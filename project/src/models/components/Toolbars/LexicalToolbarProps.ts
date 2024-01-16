@@ -20,6 +20,8 @@ enum ToolbarEvents {
   OPEN_COMMENTS_POP_UP = "open-comments-pop-up",
   OPEN_INDENT_POP_UP = "open-indent-pop-up",
   CHECK_LIST = "check-list",
+  BULLET_LIST = "bullet-list",
+  NUMBERED_LIST = "numbered-list",
   OPEN_LIST_POP_UP = "open-list-pop-up",
   TAB_LEFT = "tab-left",
   TAB_RIGHT = "tab-right",

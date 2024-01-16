@@ -12,7 +12,7 @@ import {
 
 import styles from "../../../styles/components/selectors/custom-selector.module.scss";
 import { AiFillCaretDown } from "react-icons/ai";
-import { CustomDropDownIcons } from "../../../models/components/DropDowns/CustomDropDown";
+import { CustomDropDownIcons } from "../../../models/ToolbarProps";
 import { CustomDropDown } from ".";
 
 interface CustomDropDownRootProps {
@@ -104,7 +104,6 @@ const CustomDropDownRoot = (props: CustomDropDownRootProps) => {
   useEffect(() => {
     const button = buttonRef.current;
     const dropDown = dropDownRef.current;
-    console.log("buttonRef", buttonRef.current?.offsetHeight);
 
     if (showDropDown && button !== null && dropDown !== null) {
       dropDown.style.top = `${button.offsetHeight + dropDownPadding}px`;

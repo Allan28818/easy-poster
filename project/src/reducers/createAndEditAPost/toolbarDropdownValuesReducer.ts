@@ -1,22 +1,26 @@
 enum ToolbarDropdownValuesActionKind {
   FONT_SIZE = "FONT_SIZE",
   FONT_FAMILY = "FONT_FAMILY",
+  LIST = "LIST",
 }
 
 export interface ToolbarDropdownValuesAction {
   type: ToolbarDropdownValuesActionKind;
   fontSize?: string;
   fontFamily?: string;
+  list?: string;
 }
 
 export interface ToolbarDropdownValuesState {
   fontSize: string;
   fontFamily: string;
+  list: string;
 }
 
 const initialDropdownValuesState: ToolbarDropdownValuesState = {
   fontSize: "Normal",
   fontFamily: "Aria Label",
+  list: "Bullet List",
 };
 
 function toolbarDropdownValuesReducer(
@@ -33,6 +37,11 @@ function toolbarDropdownValuesReducer(
       return {
         ...state,
         fontFamily: action.fontFamily || "",
+      };
+    case "LIST":
+      return {
+        ...state,
+        list: action.list || "",
       };
     default:
       return state;

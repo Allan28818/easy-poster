@@ -1,15 +1,15 @@
 import { $createHeadingNode } from "@lexical/rich-text";
 import { $patchStyleText, $setBlocksType } from "@lexical/selection";
 import { $getSelection, $isRangeSelection, LexicalEditor } from "lexical";
-import { FontSizesClassNames } from "../../../models/FontsProps";
+import { FontSizesOptions } from "../../../models/ToolbarProps";
 
 interface HandleDefineTextNodeModelProps {
-  nodeModel: FontSizesClassNames;
+  nodeModel: FontSizesOptions;
   editor: LexicalEditor;
 }
 
 type FunctionsModelsProps = {
-  [key in FontSizesClassNames]: (editor: LexicalEditor) => void;
+  [key in FontSizesOptions]: (editor: LexicalEditor) => void;
 };
 
 const functionsModels: FunctionsModelsProps = {
