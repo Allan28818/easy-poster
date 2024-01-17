@@ -13,21 +13,30 @@ import {
 import { IoLinkSharp } from "react-icons/io5";
 import { LuPaintBucket } from "react-icons/lu";
 import { MdOutlineInsertComment } from "react-icons/md";
-import { PiListChecksBold } from "react-icons/pi";
 import { RiSubtractFill } from "react-icons/ri";
 import { RxFontBold, RxText, RxTextNone } from "react-icons/rx";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
   $getSelection,
+  $isRangeSelection,
+  $isRootOrShadowRoot,
+  CAN_REDO_COMMAND,
+  CAN_UNDO_COMMAND,
   COMMAND_PRIORITY_CRITICAL,
   LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
 import { useCallback, useEffect, useReducer, useState } from "react";
 
-import { CustomDropDownIcons } from "../../models/ToolbarProps";
+import { $isCodeNode, CODE_LANGUAGE_MAP } from "@lexical/code";
+import { $isLinkNode } from "@lexical/link";
+import { $isListNode, ListNode } from "@lexical/list";
+import { $getSelectionStyleValueForProperty } from "@lexical/selection";
+import { $isTableNode } from "@lexical/table";
+import { CustomDropDownIcons, ListOptions } from "../../models/ToolbarProps";
 import {
+  ToolbarDataActionKind,
   initialToolbarState,
   toolbarDataReducer,
 } from "../../reducers/createAndEditAPost/toolbarDataReducer";
@@ -42,11 +51,20 @@ import {
   FONT_SIZE_OPTIONS,
   LIST_OPTIONS,
   fontRefToFontInPixels,
-} from "../../utils/lexical/fontsOptions";
+} from "../../utils/components/toolbarDropdownsOptions";
 import { CustomDropDown } from "../DropDowns/CustomSelector";
 
+import { $isHeadingNode } from "@lexical/rich-text";
+import {
+  $findMatchingParent,
+  $getNearestNodeOfType,
+  mergeRegister,
+} from "@lexical/utils";
 import { FontSizesOptions } from "../../models/ToolbarProps";
-import { handleDefineTextNodeModel } from "../../utils/lexical/functions/handleDefineTextNodeModel";
+import { handleDefineFontFamily } from "../../utils/lexical/functions/handleDefineFontFamily";
+import { handleDefineFontSize } from "../../utils/lexical/functions/handleDefineFontSize";
+import { getSelectedNode } from "../../utils/lexical/getSelectedNode";
+import { handleDefineList } from "../../utils/lexical/functions/handleDefineList";
 
 interface LexicalToolbarProps {
   isFavorite: boolean;
@@ -61,6 +79,21 @@ interface HandleSelectDropdownProps {
   editor: LexicalEditor;
   fontSize?: string;
 }
+
+export const blockTypeToBlockName = {
+  bullet: "Bulleted List",
+  check: "Check List",
+  code: "Code Block",
+  h1: "Heading 1",
+  h2: "Heading 2",
+  h3: "Heading 3",
+  h4: "Heading 4",
+  h5: "Heading 5",
+  h6: "Heading 6",
+  number: "Numbered List",
+  paragraph: "Normal",
+  quote: "Quote",
+};
 
 const LexicalToolbar = (props: LexicalToolbarProps) => {
   const { isFavorite, setIsFavorite, isPublicPost, profileImageUrl } = props;
@@ -83,12 +116,139 @@ const LexicalToolbar = (props: LexicalToolbarProps) => {
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection();
+    if ($isRangeSelection(selection)) {
+      const anchorNode = selection.anchor.getNode();
+      let element =
+        anchorNode.getKey() === "root"
+          ? anchorNode
+          : $findMatchingParent(anchorNode, (e) => {
+              const parent = e.getParent();
+              return parent !== null && $isRootOrShadowRoot(parent);
+            });
+
+      if (element === null) {
+        element = anchorNode.getTopLevelElementOrThrow();
+      }
+
+      const elementKey = element.getKey();
+      const elementDOM = activeEditor.getElementByKey(elementKey);
+
+      dispatchToolbarState({
+        type: ToolbarDataActionKind.SET_ALL,
+        bold: selection.hasFormat("bold"),
+        italic: selection.hasFormat("italic"),
+        underline: selection.hasFormat("underline"),
+        strikeLine: selection.hasFormat("strikethrough"),
+        subscript: selection.hasFormat("subscript"),
+        superscript: selection.hasFormat("superscript"),
+        code: selection.hasFormat("code"),
+      });
+
+      const node = getSelectedNode(selection);
+      const parent = node.getParent();
+
+      if ($isLinkNode(parent) || $isLinkNode(node)) {
+        dispatchToolbarState({ type: ToolbarDataActionKind.LINK, link: true });
+      } else {
+        dispatchToolbarState({ type: ToolbarDataActionKind.LINK, link: false });
+      }
+
+      const tableNode = $findMatchingParent(node, $isTableNode);
+      if ($isTableNode(tableNode)) {
+        dispatchToolbarState({
+          type: ToolbarDataActionKind.ROOT_TYPE,
+          rootType: "table",
+        });
+      } else {
+        dispatchToolbarState({
+          type: ToolbarDataActionKind.ROOT_TYPE,
+          rootType: "root",
+        });
+      }
+
+      if (element !== null) {
+        dispatchToolbarState({
+          type: ToolbarDataActionKind.ELEMENT_KEY,
+          elementKey,
+        });
+
+        if ($isListNode(element)) {
+          const parentList = $getNearestNodeOfType<ListNode>(
+            anchorNode,
+            ListNode
+          );
+          const type = parentList
+            ? parentList.getListTYpe()
+            : element.getListType();
+
+          dispatchToolbarState({
+            type: ToolbarDataActionKind.BLOCK_TYPE,
+            blockType: type,
+          });
+        } else {
+          const type = $isHeadingNode(element)
+            ? element.getTag()
+            : element.getType();
+
+          if (type in blockTypeToBlockName) {
+            dispatchToolbarState({
+              type: ToolbarDataActionKind.BLOCK_TYPE,
+              blockType: type as keyof typeof blockTypeToBlockName,
+            });
+          }
+          if ($isCodeNode(element)) {
+            const language =
+              element.getLanguage() as keyof typeof CODE_LANGUAGE_MAP;
+            dispatchToolbarState({
+              type: ToolbarDataActionKind.CODE_LANGUAGE,
+              codeLanguage: language
+                ? CODE_LANGUAGE_MAP[language] || language
+                : "",
+            });
+            return;
+          }
+        }
+      }
+
+      dispatchToolbarState({
+        type: ToolbarDataActionKind.FONT_SIZE,
+        fontSize: $getSelectionStyleValueForProperty(
+          selection,
+          "font-size",
+          "15px"
+        ),
+      });
+      dispatchToolbarState({
+        type: ToolbarDataActionKind.FONT_COLOR,
+        fontColor: $getSelectionStyleValueForProperty(
+          selection,
+          "color",
+          "#1e272e"
+        ),
+      });
+      dispatchToolbarState({
+        type: ToolbarDataActionKind.FONT_FAMILY,
+        fontFamily: $getSelectionStyleValueForProperty(
+          selection,
+          "font-family",
+          "Arial"
+        ),
+      });
+      dispatchToolbarState({
+        type: ToolbarDataActionKind.BACKGROUND_COLOR,
+        backgroundColor: $getSelectionStyleValueForProperty(
+          selection,
+          "background-color",
+          "#fff"
+        ),
+      });
+    }
   }, [activeEditor]);
 
   const handleSetFontSize = (props: HandleSelectDropdownProps) => {
     const { displayValue, value } = props;
-    console.log("displayValue", displayValue);
-    handleDefineTextNodeModel({
+
+    handleDefineFontSize({
       editor,
       nodeModel: value as FontSizesOptions,
     });
@@ -102,13 +262,28 @@ const LexicalToolbar = (props: LexicalToolbarProps) => {
   const handleSetFontFamily = (props: HandleSelectDropdownProps) => {
     const { displayValue, value } = props;
 
+    handleDefineFontFamily({ editor, fontFamily: displayValue });
+
     dispatchDropdownValues({
       type: ToolbarDropdownValuesActionKind.FONT_FAMILY,
       fontFamily: value,
     });
   };
 
-  const handleSetList = () => {};
+  const handleSetList = (props: HandleSelectDropdownProps) => {
+    const { displayValue, value } = props;
+
+    handleDefineList({
+      editor,
+      listType: displayValue as ListOptions,
+      toolbarState,
+    });
+
+    dispatchDropdownValues({
+      type: ToolbarDropdownValuesActionKind.LIST,
+      list: value,
+    });
+  };
 
   useEffect(() => {
     return editor.registerCommand(
@@ -121,6 +296,44 @@ const LexicalToolbar = (props: LexicalToolbarProps) => {
       COMMAND_PRIORITY_CRITICAL
     );
   }, [editor, updateToolbar]);
+
+  useEffect(() => {
+    return mergeRegister(
+      editor.registerEditableListener((editable) => {
+        dispatchToolbarState({
+          type: ToolbarDataActionKind.EDITABLE,
+          editable,
+        });
+      }),
+      activeEditor.registerUpdateListener(({ editorState }) => {
+        editorState.read(() => {
+          updateToolbar();
+        });
+      }),
+      activeEditor.registerCommand<boolean>(
+        CAN_UNDO_COMMAND,
+        (payload) => {
+          dispatchToolbarState({
+            type: ToolbarDataActionKind.UNDO,
+            undo: payload,
+          });
+          return false;
+        },
+        COMMAND_PRIORITY_CRITICAL
+      ),
+      activeEditor.registerCommand<boolean>(
+        CAN_REDO_COMMAND,
+        (payload) => {
+          dispatchToolbarState({
+            type: ToolbarDataActionKind.REDO,
+            redo: payload,
+          });
+          return false;
+        },
+        COMMAND_PRIORITY_CRITICAL
+      )
+    );
+  }, [updateToolbar, activeEditor, editor]);
 
   return (
     <header className={styles.toolbar}>
@@ -285,42 +498,11 @@ const LexicalToolbar = (props: LexicalToolbarProps) => {
               </button>
             </div>
             <div className={styles.toolGroup}>
-              <button className={styles.toolButtonDropDown}>
-                {/* <CustomDropDown.Root
-                  buttonIconLabel={CustomDropDownIcons.LEFT_ALIGN}
-                  additionalLabelStyles={{ width: "50px" }}
-                  additionalDropdownStyles={{ left: "-100%" }}
-                >
-                  <CustomDropDown.Option>
-                    <CustomDropDown.Icon
-                      icon={CustomDropDownIcons.LEFT_ALIGN}
-                    />
-                    <CustomDropDown.Text text="Left Align" />
-                  </CustomDropDown.Option>
-                  <CustomDropDown.Option>
-                    <CustomDropDown.Icon
-                      icon={CustomDropDownIcons.CENTER_ALIGN}
-                    />
-                    <CustomDropDown.Text text="Center Align" />
-                  </CustomDropDown.Option>
-                  <CustomDropDown.Option>
-                    <CustomDropDown.Icon
-                      icon={CustomDropDownIcons.RIGHT_ALIGN}
-                    />
-                    <CustomDropDown.Text text="Right Align" />
-                  </CustomDropDown.Option>
-                  <CustomDropDown.Option>
-                    <CustomDropDown.Icon
-                      icon={CustomDropDownIcons.JUSTIFY_ALIGN}
-                    />
-                    <CustomDropDown.Text text="Justify Align" />
-                  </CustomDropDown.Option>
-                </CustomDropDown.Root> */}
-              </button>
+              <button className={styles.toolButtonDropDown}></button>
               <button className={styles.toolButton}>
                 {/* List */}
-                <PiListChecksBold className={styles.checkListIcon} />
-                <CustomDropDown.Root buttonLabel={dropdownValues.list}>
+
+                <CustomDropDown.Root hideArrow buttonIconLabel="check-list">
                   {LIST_OPTIONS.map(([displayName, listType]) => {
                     return (
                       <CustomDropDown.Option key={listType}>
@@ -330,7 +512,7 @@ const LexicalToolbar = (props: LexicalToolbarProps) => {
                           text={displayName}
                           value={listType}
                           onClick={(props) =>
-                            handleSetFontSize({
+                            handleSetList({
                               ...props,
                               value: props?.fontSize || "",
                               editor,
@@ -342,26 +524,7 @@ const LexicalToolbar = (props: LexicalToolbarProps) => {
                   })}
                 </CustomDropDown.Root>
               </button>
-              <button className={styles.toolButtonDropDown}>
-                {/* <CustomDropDown.Root
-                  buttonIconLabel={CustomDropDownIcons.BULLET_LIST}
-                  additionalLabelStyles={{ width: "50px" }}
-                  additionalDropdownStyles={{ left: "-100%" }}
-                >
-                  <CustomDropDown.Option>
-                    <CustomDropDown.Icon
-                      icon={CustomDropDownIcons.BULLET_LIST}
-                    />
-                    <CustomDropDown.Text text="Bullet List" />
-                  </CustomDropDown.Option>
-                  <CustomDropDown.Option>
-                    <CustomDropDown.Icon
-                      icon={CustomDropDownIcons.NUMBERED_LIST}
-                    />
-                    <CustomDropDown.Text text="Numbered List" />
-                  </CustomDropDown.Option>
-                </CustomDropDown.Root> */}
-              </button>
+              <button className={styles.toolButtonDropDown}></button>
               <button className={styles.toolButton}>
                 <ImIndentDecrease className={styles.indentIcon} />
               </button>

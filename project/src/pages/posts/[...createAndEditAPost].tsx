@@ -65,14 +65,12 @@ function CreateAndEditAPost() {
   }, [postId]);
 
   return (
-    <>
-      <LexicalEditor
-        isFavorite={isFavorite}
-        setIsFavorite={setIsFavorite}
-        isPublicPost={isPublicPost}
-        profileImageUrl={user?.photoURL}
-      />
-    </>
+    <LexicalEditor
+      isFavorite={isFavorite}
+      setIsFavorite={setIsFavorite}
+      isPublicPost={isPublicPost}
+      profileImageUrl={user?.photoURL}
+    />
   );
 }
 

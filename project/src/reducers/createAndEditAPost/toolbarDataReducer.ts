@@ -1,4 +1,5 @@
-import { CustomDropDownIcons } from "../../models/components/DropDowns/CustomDropDown";
+import { blockTypeToBlockName } from "../../components/Toolbars/LexicalToolbar";
+import { CustomDropDownIcons } from "../../models/ToolbarProps";
 import { ToolbarEvents } from "../../models/components/Toolbars/LexicalToolbarProps";
 
 import { ListType } from "@lexical/list";
@@ -20,6 +21,9 @@ enum ToolbarDataActionKind {
   FONT_COLOR = "FONT_COLOR",
   FONT_FAMILY = "FONT_FAMILY",
   BACKGROUND_COLOR = "BACKGROUND_COLOR",
+  EDITABLE = "EDITABLE",
+  UNDO = "UNDO",
+  REDO = "REDO",
   SET_ALL = "SET_ALL",
 }
 
@@ -35,12 +39,19 @@ export interface ToolbarDataAction {
   link?: boolean;
   codeLanguage?: string;
   rootType?: "table" | "root";
-  blockType?: ToolbarEvents | ListType | CustomDropDownIcons;
+  blockType?:
+    | ToolbarEvents
+    | ListType
+    | CustomDropDownIcons
+    | keyof typeof blockTypeToBlockName;
   fontSize?: string;
   fontColor?: string;
   fontFamily?: string;
   backgroundColor?: string;
   elementKey?: string;
+  editable?: boolean;
+  undo?: boolean;
+  redo?: boolean;
 }
 
 export interface ToolbarDataState {
@@ -54,12 +65,19 @@ export interface ToolbarDataState {
   link: boolean;
   codeLanguage: string;
   rootType: "table" | "root";
-  blockType: ToolbarEvents | ListType | CustomDropDownIcons;
+  blockType:
+    | ToolbarEvents
+    | ListType
+    | CustomDropDownIcons
+    | keyof typeof blockTypeToBlockName;
   fontSize: string;
   fontColor: string;
   fontFamily: string;
   backgroundColor: string;
   elementKey: string | null;
+  editable: boolean;
+  undo: boolean;
+  redo: boolean;
 }
 
 const initialToolbarState: ToolbarDataState = {
@@ -79,6 +97,9 @@ const initialToolbarState: ToolbarDataState = {
   fontFamily: "",
   backgroundColor: "",
   elementKey: null,
+  editable: true,
+  undo: true,
+  redo: true,
 };
 
 function toolbarDataReducer(
@@ -89,99 +110,113 @@ function toolbarDataReducer(
     case "BOLD":
       return {
         ...state,
-        bold: !!state.bold,
+        bold: !!action.bold,
       };
     case "ITALIC":
       return {
         ...state,
-        italic: !!state.italic,
+        italic: !!action.italic,
       };
     case "UNDERLINE":
       return {
         ...state,
-        underline: !!state.underline,
+        underline: !!action.underline,
       };
     case "UNDERLINE":
       return {
         ...state,
-        underline: !!state.underline,
+        underline: !!action.underline,
       };
     case "STRIKE_LINE":
       return {
         ...state,
-        strikeLine: !!state.strikeLine,
+        strikeLine: !!action.strikeLine,
       };
     case "SUBSCRIPT":
       return {
         ...state,
-        subscript: !!state.subscript,
+        subscript: !!action.subscript,
       };
     case "SUPERSCRIPT":
       return {
         ...state,
-        superscript: !!state.superscript,
+        superscript: !!action.superscript,
       };
     case "CODE":
       return {
         ...state,
-        code: !!state.code,
+        code: !!action.code,
       };
     case "SUPERSCRIPT":
       return {
         ...state,
-        superscript: !!state.superscript,
+        superscript: !!action.superscript,
       };
     case "LINK":
       return {
         ...state,
-        link: !!state.link,
+        link: !!action.link,
       };
     case "ROOT_TYPE":
       return {
         ...state,
-        elementKey: state.elementKey || "",
+        elementKey: action.elementKey || "",
       };
     case "ROOT_TYPE":
       return {
         ...state,
-        blockType: state.blockType || ToolbarEvents.NORMAL_FONT_SIZE,
+        blockType: action.blockType || ToolbarEvents.NORMAL_FONT_SIZE,
       };
     case "ELEMENT_KEY":
       return {
         ...state,
-        elementKey: state.elementKey || "",
+        elementKey: action.elementKey || "",
       };
     case "FONT_SIZE":
       return {
         ...state,
-        fontSize: state.fontSize || "",
+        fontSize: action.fontSize || "",
       };
     case "FONT_COLOR":
       return {
         ...state,
-        fontColor: state.fontColor || "",
+        fontColor: action.fontColor || "",
       };
     case "FONT_FAMILY":
       return {
         ...state,
-        fontFamily: state.fontFamily || "",
+        fontFamily: action.fontFamily || "",
       };
     case "BACKGROUND_COLOR":
       return {
         ...state,
-        backgroundColor: state.backgroundColor || "",
+        backgroundColor: action.backgroundColor || "",
       };
-
+    case "EDITABLE":
+      return {
+        ...state,
+        editable: !!action.editable,
+      };
+    case "UNDO":
+      return {
+        ...state,
+        undo: !!action.undo,
+      };
+    case "REDO":
+      return {
+        ...state,
+        redo: !!action.redo,
+      };
     case "SET_ALL":
       return {
         ...state,
-        bold: !!state.bold,
-        italic: !!state.italic,
-        underline: !!state.underline,
-        strikeLine: !!state.strikeLine,
-        subscript: !!state.subscript,
-        superscript: !!state.superscript,
-        code: !!state.code,
+        bold: !!action.bold,
+        italic: !!action.italic,
+        underline: !!action.underline,
+        strikeLine: !!action.strikeLine,
+        subscript: !!action.subscript,
+        superscript: !!action.superscript,
+        code: !!action.code,
       };
 
     default:

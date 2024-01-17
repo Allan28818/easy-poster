@@ -22,6 +22,7 @@ interface CustomDropDownRootProps {
   stopCloseOnClickSelf?: boolean;
   additionalLabelStyles?: CSSProperties;
   additionalDropdownStyles?: CSSProperties;
+  hideArrow?: boolean;
 }
 
 interface DropDownContextType {
@@ -40,6 +41,7 @@ const CustomDropDownRoot = (props: CustomDropDownRootProps) => {
     stopCloseOnClickSelf,
     additionalLabelStyles,
     additionalDropdownStyles,
+    hideArrow,
   } = props;
 
   const [dropDownItems, setDropDownItems] =
@@ -155,9 +157,11 @@ const CustomDropDownRoot = (props: CustomDropDownRootProps) => {
         {buttonLabel && (
           <span className={styles.buttonLabel}>{buttonLabel}</span>
         )}
-        <AiFillCaretDown
-          className={`${styles.arrow} ${showDropDown && styles.active}`}
-        />
+        {!hideArrow && (
+          <AiFillCaretDown
+            className={`${styles.arrow} ${showDropDown && styles.active}`}
+          />
+        )}
       </button>
       {showDropDown && (
         <div className={styles.container} style={additionalDropdownStyles}>

@@ -1,6 +1,12 @@
 import { $createHeadingNode } from "@lexical/rich-text";
 import { $patchStyleText, $setBlocksType } from "@lexical/selection";
-import { $getSelection, $isRangeSelection, LexicalEditor } from "lexical";
+import {
+  $createParagraphNode,
+  $getSelection,
+  $isRangeSelection,
+  LexicalEditor,
+} from "lexical";
+
 import { FontSizesOptions } from "../../../models/ToolbarProps";
 
 interface HandleDefineTextNodeModelProps {
@@ -21,18 +27,13 @@ const functionsModels: FunctionsModelsProps = {
   subtitle: defineSubtitleNodeModel,
 };
 
-function handleDefineTextNodeModel(props: HandleDefineTextNodeModelProps) {
+function handleDefineFontSize(props: HandleDefineTextNodeModelProps) {
   const { nodeModel, editor } = props;
-
-  console.log("nodeModel", nodeModel);
-  console.log(" functionsModels[nodeModel]", functionsModels[nodeModel]);
 
   if (functionsModels[nodeModel]) {
     functionsModels[nodeModel](editor);
   }
 }
-
-// TODO: define others models
 
 function defineTitleNodeModel(editor: LexicalEditor) {
   editor.update(() => {
@@ -50,9 +51,9 @@ function defineNormalNodeModel(editor: LexicalEditor) {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
       $patchStyleText(selection, {
-        "font-size": "26px",
+        "font-size": "15px",
       });
-      $setBlocksType(selection, () => $createHeadingNode("h1"));
+      $setBlocksType(selection, () => $createParagraphNode());
     }
   });
 }
@@ -72,9 +73,9 @@ function defineTitle2NodeModel(editor: LexicalEditor) {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
       $patchStyleText(selection, {
-        "font-size": "26px",
+        "font-size": "20px",
       });
-      $setBlocksType(selection, () => $createHeadingNode("h1"));
+      $setBlocksType(selection, () => $createHeadingNode("h2"));
     }
   });
 }
@@ -83,9 +84,9 @@ function defineTitle3NodeModel(editor: LexicalEditor) {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
       $patchStyleText(selection, {
-        "font-size": "26px",
+        "font-size": "18px",
       });
-      $setBlocksType(selection, () => $createHeadingNode("h1"));
+      $setBlocksType(selection, () => $createHeadingNode("h3"));
     }
   });
 }
@@ -94,11 +95,11 @@ function defineSubtitleNodeModel(editor: LexicalEditor) {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
       $patchStyleText(selection, {
-        "font-size": "26px",
+        "font-size": "18px",
       });
       $setBlocksType(selection, () => $createHeadingNode("h1"));
     }
   });
 }
 
-export { handleDefineTextNodeModel };
+export { handleDefineFontSize };
